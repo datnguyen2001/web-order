@@ -6,15 +6,6 @@ use App\Http\Controllers\Controller;
 
 class HomeController extends Controller
 {
-    public function register()
-    {
-        return view('web.register');
-    }
-    public function login()
-    {
-        return view('web.login');
-    }
-
     public function home()
     {
         return view('web.home.index');
