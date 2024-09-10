@@ -1,0 +1,97 @@
+.box-profile{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    align-items: start;
+}
+.menu-profile{
+    width: 25%;
+    background: white;
+    padding: 16px 24px;
+    border-radius: .5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.content-profile{
+    width: 75%;
+    background: white;
+    padding: 24px;
+    border-radius: .5rem;
+}
+.menu-item-profile{
+    font-size: 14px;
+    color: #7D7E7E;
+}
+.menu-item-profile i{
+    margin-right: 5px;
+}
+.menu-item-profile:hover{
+    color: #F9471B;
+}
+.menu-profile-active{
+    color: #F9471B;
+}
+.box-avatar{
+    position: absolute;
+    border: 5px solid white;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    bottom: -70px;
+    left: 40px;
+}
+.box-avatar img{
+    width: 100%;
+    object-fit: cover;
+}
+.camera-icon{
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #EBEBEB;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    right: 0;
+    bottom: 5px;
+    cursor: pointer;
+}
+.camera-icon i{
+    font-size: 14px;
+}
+.content-info-profile{
+    margin-left: 170px;
+    padding-top: 20px;
+}
+.name-user{
+    font-size: 20px;
+    color: #1a1a1a;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+.edit-info{
+    font-size: 14px;
+    color: #377DBD;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+.edit-info i{
+    font-size: 16px;
+}
+.title-info-user{
+    font-size: 14px;
+    color: #7D7E7E;
+    width: 150px;
+}
+.name-info-user{
+    font-size: 14px;
+    color: #1a1a1a;
+}
+.line-profile{
+    border-top: 1px solid #bbbcbc;
+    width: 60%;
+    margin-bottom: 16px;
+}

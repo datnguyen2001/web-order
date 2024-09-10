@@ -1,0 +1,229 @@
+.box-content-detail-sp{
+    width: 100%;
+    background-color: white;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    padding: 20px 0px;
+}
+.box-img-detail{
+    width: 40%;
+
+}
+.box-content-detail{
+    width: 58%;
+}
+.img-detail-sp{
+    width: 100%;
+}
+.name-detail-sp{
+    font-weight: 600;
+    font-size: 1.125rem;
+    margin-bottom: 20px;
+}
+.box-price-detail{
+    margin-top: 20px;
+    padding: 12px 16px;
+    background-color: rgb(249 249 250 / 1);
+    border-radius: .5rem;
+}
+.title-price-detail{
+    color: rgb(177 177 177 / 1);
+    font-size: .875rem;
+    width: 20%;
+}
+.price-detail-big{
+    font-size: 22px;
+    color: #F9471B;
+}
+.title-minimum{
+    font-size: 14px;
+    color: black;
+}
+.price-detail-small{
+    font-size: 16px;
+    color: #F9471B;
+}
+.title-quantity-sp{
+    font-size: 14px;
+    color: #B1B1B1;
+    margin-left: 16px;
+    margin-right: 30px;
+}
+.content-quantity-sp{
+    font-size: 14px;
+    color: #1a1a1a;
+    font-weight: 500;
+}
+.title-color{
+    color: rgb(177 177 177 / 1);
+    font-size: 14px;
+    padding: 0px 0 0 16px;
+    width: 140px;
+    display: inline-block;
+}
+.box-color{
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.box-item-color{
+    display: flex;
+    align-items: center;
+    padding: 5px 10px;
+    border-radius: 4px;
+    border: 1px solid #e9ecef;
+    font-size: 12px;
+    cursor: pointer;
+}
+.box-item-color-active{
+    border: 1px solid #F9471B;
+}
+.img-color{
+    width: 36px;
+    height: 36px;
+    object-fit: cover;
+    margin-right: 8px;
+    border-radius: 4px;
+}
+.box-size{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.box-item-size{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+.title-size-item{
+    font-size: 14px;
+    color: #1a1a1a;
+    width: 40%;
+}
+.title-price-size{
+    width: 15%;
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+}
+.price_cn{
+    margin-bottom: 0px;
+    font-size: 14px;
+    color: #1a1a1a;
+}
+.price_vn{
+    margin-bottom: 0px;
+    font-size: 14px;
+    color: #7D7E7E;
+}
+.title-note{
+    width: 25%;
+    font-size: 12px;
+    color: #7D7E7E;
+    text-align: right;
+}
+.box-quantity-fa{
+    width: 20%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid #e9ecef;
+    border-radius: 4px;
+    height: fit-content;
+}
+.input-quntity{
+    width: 100%;
+    border: none;
+    outline: unset;
+    padding: 3px 0;
+    text-align: center;
+    font-size: 14px;
+}
+.btn-minus-plus{
+    border: none;
+    outline: unset;
+    background-color: white;
+    padding: 0px 8px;
+    font-size: 14px;
+}
+.btn-add-cart{
+    color: white;
+    background-color: #F9471B;
+    padding: 10px 20px;
+    border: none;
+    outline: unset;
+    border-radius: 4px;
+    font-size: 14px;
+}
+.title-add-to-cart{
+    width: 71%;
+    color: rgb(90 90 90 / 1);
+    padding: 10px 1rem;
+    background-color: rgb(249 249 250 / 1);
+    border-radius: .5rem;
+    font-size: 14px;
+}
+.box-content-describe{
+    width: 100%;
+    padding: 28px 36px;
+    background-color: white;
+    border-radius: .5rem;
+   margin-top: 18px;
+}
+.content-describe img{
+    width: 100%;
+    object-fit: cover;
+}
+.title-content-detail{
+    font-size: 16px;
+    color: #1a1a1a;
+    font-weight: 600;
+}
+@media (max-width: 1200px) {
+    .box-content-detail-sp {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+    .title-add-to-cart{
+        width: calc(100% - 205px);
+    }
+}
+@media (max-width: 992px) {
+    .box-img-detail{
+        width: 100%;
+        margin-bottom: 20px;
+    }
+    .box-content-detail{
+        width: 100%;
+    }
+}
+@media (max-width: 767px) {
+    .box-content-describe{
+        padding: 20px;
+    }
+    .btn-add-cart,.title-add-to-cart{
+        width: 100%;
+    }
+    .box-attribute{
+        flex-wrap: wrap;
+    }
+    .box-color,.box-size{
+        margin-top: 10px;
+    }
+    .title-color{
+        padding: 0px;
+    }
+    .title-size-item{
+        width: 35%;
+    }
+    .box-quantity-fa{
+        width: 25%;
+    }
+}
