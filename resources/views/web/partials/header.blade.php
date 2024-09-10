@@ -10,8 +10,8 @@
                 <a href="">Góp ý dịch vụ</a>
             </div>
             <div class="header-content-item">
-                <a href="">Đăng nhập</a>
-                <a href="">Đăng ký</a>
+                <a href="{{route('login')}}">Đăng nhập</a>
+                <a href="{{route('register')}}">Đăng ký</a>
                 <a href="" class="position-relative">Giỏ hàng <i class="fa-solid fa-cart-shopping"></i> <div class="circle-cart">2</div></a>
             </div>
         </div>
