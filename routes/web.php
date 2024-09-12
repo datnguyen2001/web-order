@@ -25,6 +25,8 @@ Route::get('gio-hang', [HomeController::class, 'cart'])->name('cart');
 Route::get('xac-nhan-don', [HomeController::class, 'confirmApplication'])->name('confirm-application');
 Route::get('thanh-toan', [HomeController::class, 'payment'])->name('pay');
 Route::get('thong-tin-ca-nhan', [HomeController::class, 'profile'])->name('profile');
+Route::get('danh-sach-don-hang', [HomeController::class, 'order'])->name('order');
+Route::get('vi', [HomeController::class, 'wallet'])->name('wallet');
 
 Route::middleware('auth')->group(function () {
 

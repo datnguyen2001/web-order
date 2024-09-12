@@ -54,5 +54,13 @@ class HomeController extends Controller
     {
         return view('web.profile.index');
     }
+    public function order()
+    {
+        return view('web.profile.order');
+    }
+    public function wallet()
+    {
+        return view('web.wallet.index');
+    }
 
 }
