@@ -48,27 +48,37 @@
     </div>
 </div>
 <main>
-    <div class="box-login">
-        <img src="https://id.sabomall.com/images/sabo-id-feature.svg" class="img-login">
-        <div class="box-content-login">
-            <div class="line-header-login">
-                <a href=""><i class="fa-solid fa-chevron-left" style="color: black;font-size: 24px"></i></a>
-                <img src="https://m.sabomall.com/img/login/logo.svg" style="margin:0 auto">
-            </div>
-            <p class="title-login">Chào mừng bạn đến với <span style="color: #f9471d">SaboMall</span></p>
-            <div class="mb-3 w-100 d-flex flex-column">
-                <lable class="title-big-login">Tên đăng nhập</lable>
-                <input placeholder="Tên đăng nhập" class="form-register-item-input" type="text" value="" name="username">
-            </div>
-            <div class="mb-3 w-100 d-flex flex-column">
-                <lable class="title-big-login">Mật khẩu</lable>
-                <input placeholder="Tên đăng nhập" class="form-register-item-input" type="password" value="" name="password">
-            </div>
+    <form method="POST" action="{{ route('submit.login') }}">
+        @csrf
+        <div class="box-login">
+            <img src="https://id.sabomall.com/images/sabo-id-feature.svg" class="img-login">
+            <div class="box-content-login">
+                <div class="line-header-login">
+                    <a href=""><i class="fa-solid fa-chevron-left" style="color: black;font-size: 24px"></i></a>
+                    <img src="https://m.sabomall.com/img/login/logo.svg" style="margin:0 auto">
+                </div>
+                <p class="title-login">Chào mừng bạn đến với <span style="color: #f9471d">SaboMall</span></p>
 
-            <button class="btn-register">Đăng nhập</button>
+                <div class="mb-3 w-100 d-flex flex-column">
+                    <label class="title-big-login">Tên đăng nhập</label>
+                    <input placeholder="Tên đăng nhập" class="form-register-item-input" type="text" name="username" value="{{ old('username') }}">
+                    @error('username')
+                    <small class="text-danger">{{ $message }}</small>
+                    @enderror
+                </div>
+
+                <div class="mb-3 w-100 d-flex flex-column">
+                    <label class="title-big-login">Mật khẩu</label>
+                    <input placeholder="Mật khẩu" class="form-register-item-input" type="password" name="password">
+                    @error('password')
+                    <small class="text-danger">{{ $message }}</small>
+                    @enderror
+                </div>
+
+                <button class="btn-register">Đăng nhập</button>
+            </div>
         </div>
-
-    </div>
+    </form>
 </main><!-- End #main -->
 
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"

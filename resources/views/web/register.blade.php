@@ -48,39 +48,73 @@
     </div>
 </div>
 <main>
-    <div class="box-login">
-        <img src="https://id.sabomall.com/images/sabo-id-feature.svg" class="img-login">
-        <div class="box-content-login">
-            <div class="line-header-login">
-                <a href=""><i class="fa-solid fa-chevron-left" style="color: black;font-size: 20px"></i></a>
-                <img src="https://m.sabomall.com/img/login/logo.svg" style="margin:0 auto">
-            </div>
-            <p class="title-login">Đăng ký tài khoản</p>
-            <div class="mb-3 w-100 d-flex flex-column">
-                <lable class="title-big-login">Tên đăng nhập</lable>
-                <input placeholder="Tên đăng nhập" class="form-register-item-input" type="text" value="" name="username">
-            </div>
-            <div class="mb-3 w-100 d-flex flex-column">
-                <lable class="title-big-login">Email</lable>
-                <input placeholder="Tên đăng nhập" class="form-register-item-input" type="text" value="" name="email">
-            </div>
-            <div class="mb-3 w-100 d-flex flex-column">
-                <lable class="title-big-login">Số điện thoại</lable>
-                <input placeholder="Tên đăng nhập" class="form-register-item-input" type="text" value="" name="phone">
-            </div>
-            <div class="mb-3 w-100 d-flex flex-column">
-                <lable class="title-big-login">Họ và tên</lable>
-                <input placeholder="Tên đăng nhập" class="form-register-item-input" type="text" value="" name="name">
-            </div>
-            <div class="mb-3 w-100 d-flex flex-column">
-                <lable class="title-big-login">Mật khẩu</lable>
-                <input placeholder="Tên đăng nhập" class="form-register-item-input" type="password" value="" name="password">
-            </div>
+    <form method="POST" action="{{ route('submit.register') }}">
+        @csrf
+        <div class="box-login">
+            <img src="https://id.sabomall.com/images/sabo-id-feature.svg" class="img-login">
+            <div class="box-content-login">
+                <div class="line-header-login">
+                    <a href=""><i class="fa-solid fa-chevron-left" style="color: black;font-size: 20px"></i></a>
+                    <img src="https://m.sabomall.com/img/login/logo.svg" style="margin:0 auto">
+                </div>
+                <p class="title-login">Đăng ký tài khoản</p>
 
-            <button class="btn-register">Đăng ký</button>
+                <!-- Username -->
+                <div class="mb-3 w-100 d-flex flex-column">
+                    <label class="title-big-login">Tên đăng nhập</label>
+                    <input placeholder="Tên đăng nhập" class="form-register-item-input" type="text" name="username" value="{{ old('username') }}">
+                    @error('username')
+                    <small class="text-danger">{{ $message }}</small>
+                    @enderror
+                </div>
+
+                <!-- Email -->
+                <div class="mb-3 w-100 d-flex flex-column">
+                    <label class="title-big-login">Email</label>
+                    <input placeholder="Email" class="form-register-item-input" type="email" name="email" value="{{ old('email') }}">
+                    @error('email')
+                    <small class="text-danger">{{ $message }}</small>
+                    @enderror
+                </div>
+
+                <!-- Phone -->
+                <div class="mb-3 w-100 d-flex flex-column">
+                    <label class="title-big-login">Số điện thoại</label>
+                    <input placeholder="Số điện thoại" class="form-register-item-input" type="text" name="phone" value="{{ old('phone') }}">
+                    @error('phone')
+                    <small class="text-danger">{{ $message }}</small>
+                    @enderror
+                </div>
+
+                <!-- Full Name -->
+                <div class="mb-3 w-100 d-flex flex-column">
+                    <label class="title-big-login">Họ và tên</label>
+                    <input placeholder="Họ và tên" class="form-register-item-input" type="text" name="full_name" value="{{ old('full_name') }}">
+                    @error('full_name')
+                    <small class="text-danger">{{ $message }}</small>
+                    @enderror
+                </div>
+
+                <!-- Password -->
+                <div class="mb-3 w-100 d-flex flex-column">
+                    <label class="title-big-login">Mật khẩu</label>
+                    <input placeholder="Mật khẩu" class="form-register-item-input" type="password" name="password">
+                    @error('password')
+                    <small class="text-danger">{{ $message }}</small>
+                    @enderror
+                </div>
+
+                <!-- Password Confirmation -->
+                <div class="mb-3 w-100 d-flex flex-column">
+                    <label class="title-big-login">Xác nhận mật khẩu</label>
+                    <input placeholder="Xác nhận mật khẩu" class="form-register-item-input" type="password" name="password_confirmation">
+                </div>
+
+                <button class="btn-register">Đăng ký</button>
+            </div>
         </div>
+    </form>
 
-    </div>
 </main><!-- End #main -->
 
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
