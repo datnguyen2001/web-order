@@ -29,12 +29,48 @@
     object-fit: cover;
 }
 .item-category{
-    font-weight: 300;
+    font-weight: 400;
     font-size: .875rem;
     color: rgb(26 26 26 / 1);
 }
+.category-wrapper:hover .item-category{
+    color: #F9471B;
+}
 .list-banner{
     border-radius: .5rem;
+}
+.title-hello{
+    font-size: 13px;
+    color: #7D7E7E;
+}
+.title-hello span{
+    color: #F9471B;
+    font-weight: 500;
+}
+.unit-price{
+    width: 24px;
+    height: 24px;
+    color: rgb(58 161 117/ 1);
+    background: rgba(58, 161, 117, .1);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.price-wallet{
+    font-weight: 500;
+    font-size: 14px;
+    color: #1a1a1a;
+}
+.unit-price-2{
+    width: 24px;
+    height: 24px;
+    color: rgb(249 71 27/ 1);
+    background: rgba(249, 71, 27, .1);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .box-banner{
     width: 100%;
@@ -48,7 +84,7 @@
 .box-distributor{
     padding: 12.5px 1rem;
     border-radius: .5rem;
-    margin-top: 20px;
+    margin-top: 15px;
 }
 .title-distributor{
     font-size: 14px;
@@ -57,8 +93,8 @@
     font-weight: 500;
 }
 .img-distributor{
-    width: 40px!important;
-    height: 40px;
+    width: 90%!important;
+    height: 45px;
     object-fit: cover;
     margin: 0 auto;
 }

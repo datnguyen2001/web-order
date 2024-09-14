@@ -45,6 +45,6 @@ class LoginController extends Controller
             'password' => Hash::make($validated['password']),
         ]);
 
-        return redirect()->route('home')->with('success', 'Đăng ký tài khoản thành công!');
+        return redirect()->route('login')->with('success', 'Đăng ký tài khoản thành công!');
     }
 }

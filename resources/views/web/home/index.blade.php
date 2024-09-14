@@ -15,32 +15,35 @@
                     <span class="title-menu">Danh mục</span>
                 </div>
                 <div class="box-category position-relative">
-                    @for($i=0;$i<10;$i++)
+                    @foreach($category as $cate)
                         <div class="category-wrapper">
                         <a href="" class="d-flex align-center gap-3 py-1">
-                            <img src="{{asset('assets/images/Thoi_trang.png')}}" alt="" class="img-category">
-                            <span class="item-category">Thời Trang</span>
+{{--                            <img src="{{asset('assets/images/Thoi_trang.png')}}" alt="" class="img-category">--}}
+                            <span class="item-category">{{$cate->name}}</span>
                         </a>
                         <div class="sub-category">
-                            <a href="" class="title-big-category">Thời trang nữ</a>
+                            @foreach($cate->category_sub_2 as $cate2)
+                            <a href="" class="title-big-category">{{$cate2->name}}</a>
                             <div class="d-flex align-items-center flex-wrap mb-2">
-                                <a href="#" class="title-small-category">Váy</a>
-                                <a href="#" class="title-small-category">Váy</a>
+                                @foreach($cate2->category_sub_3 as $cate3)
+                                <a href="#" class="title-small-category">{{$cate3->name}}</a>
+                                @endforeach
                             </div>
+                                @endforeach
                         </div>
                         </div>
-                    @endfor
+                    @endforeach
                 </div>
             </div>
             <div class="box-banner">
                 <div class="list-banner custom-shadow w-100">
                     <div class="swiper bannerSwiper">
                         <div class="swiper-wrapper">
-                            @for($i=0;$i<5;$i++)
-                                <div class="swiper-slide"><img
-                                        src="https://sabomall-chapi-dream.s3.ap-southeast-1.amazonaws.com/600x250_8_2d1302e753.jpg"
-                                        alt=""></div>
-                            @endfor
+                            @foreach($banner as $banners)
+                                <div class="swiper-slide"><a @if($banners->link) href="{{$banners->link}}" @endif>
+                                        <img src="{{$banners->src}}" class="w-100" style="object-fit: cover">
+                                    </a></div>
+                            @endforeach
                         </div>
                         <div class="swiper-button-next"></div>
                         <div class="swiper-button-prev"></div>
@@ -50,15 +53,15 @@
                 <div class=" bg-white box-distributor d-flex gap-5 align-items-center">
                     <div class="swiper distributorSwiper">
                         <div class="swiper-wrapper">
-                            @for($i=0;$i<10;$i++)
+                            @foreach($eCommerce as $eCommerces)
                                 <div class="swiper-slide">
-                                    <a href="#" class="d-flex flex-column align-center justify-content-center">
+                                    <a @if($eCommerces->link) href="{{$eCommerces->link}}" @endif class="d-flex flex-column align-center justify-content-center">
                                         <img
-                                            src="https://sabomall-chapi-dream.s3.ap-southeast-1.amazonaws.com/O1_CN_01_M4w_D_Lz1plhv_D5_Di_AV_6000000005401_2_tps_96_96_4321bc7aa6.png"
+                                            src="{{asset($eCommerces->src)}}"
                                             alt="" class="img-distributor">
-                                        <span class="title-distributor">Sabo học viện</span>
+                                        <span class="title-distributor">{{@$eCommerces->name}}</span>
                                     </a></div>
-                            @endfor
+                            @endforeach
                         </div>
                         <div class="swiper-button-next next-distributor"></div>
                         <div class="swiper-button-prev prev-distributor"></div>
@@ -69,25 +72,46 @@
                 <div class="bg-white info-top p-3 custom-shadow ">
                     <div class="d-flex gap-3 align-items-center">
                         <img src="{{asset('assets/images/icon-avatar-signup.svg')}}" alt="">
-                        <span class="title-info-top">Đăng nhập ngay để bắt đầu mua sắm!!!</span>
+                        @if(!\Illuminate\Support\Facades\Auth::check())
+                            <span class="title-info-top">Đăng nhập ngay để bắt đầu mua sắm!!!</span>
+                            @else
+                            <div class="d-flex flex-column">
+                                <div class="title-hello">Xin chào <span>{{\Illuminate\Support\Facades\Auth::user()->full_name}}</span></div>
+                                <div class="text-tg">
+                                    <span>Tỷ giá hôm nay:</span>
+                                    <span style="color: rgb(249,71,27,1);margin-left: 5px">¥1 = {{number_format(@$setting->exchange_rate)}}₫</span>
+                                </div>
+                            </div>
+
+                        @endif
                     </div>
                     <div class="ant-divider my-3"></div>
+                    @if(!\Illuminate\Support\Facades\Auth::check())
                     <div class="text-tg">
                         <span>Tỷ giá hôm nay:</span>
-                        <span style="color: rgb(249,71,27,1);margin-left: 5px">¥1 = 3.645₫</span>
+                        <span style="color: rgb(249,71,27,1);margin-left: 5px">¥1 = {{number_format(@$setting->exchange_rate)}}₫</span>
                     </div>
+                        @else
+                        <div class="d-flex flex-column gap-2">
+                            <div class="title-hello">Tài khoản trả trước:</div>
+                            <div class="d-flex align-items-center gap-4">
+                                <div class="d-flex align-items-center gap-2"> <span class="unit-price">đ</span> <span class="price-wallet">0đ</span></div>
+                                <div class="d-flex align-items-center gap-2"> <span class="unit-price-2">đ</span> <span class="price-wallet">0đ</span></div>
+                            </div>
+                        </div>
+                    @endif
+                    @if(!\Illuminate\Support\Facades\Auth::check())
                     <div class="w-100 box-btn">
-                        <a href="" class="btn-link-dn">Đăng nhập</a>
-                        <a href="" class="btn-link-dk">Đăng ký</a>
+                        <a href="{{route('login')}}" class="btn-link-dn">Đăng nhập</a>
+                        <a href="{{route('register')}}" class="btn-link-dk">Đăng ký</a>
                     </div>
+                        @endif
                 </div>
                 <div class="info-bottom custom-shadow p-3 bg-white">
                     <span style="color:  rgb(26 26 26 / 1);font-size: .785rem;font-weight: 600">Về SaboMall</span>
-                    <div class="content-info-shop">SaboMall là đối tác chính thức của 1688.com tại Việt Nam. Cùng
-                        1688.com, chúng tôi giúp bạn tìm kiếm những nguồn hàng chất lượng cao và mang đến trải nghiệm
-                        mua sắm, thanh toán thuận tiện, an toàn, nhanh chóng.
+                    <div class="content-info-shop custom-content-4-line">{!! @$setting->about_shop !!}
                     </div>
-                    <a href="#" class="link-more-info">Xem thêm về chúng tôi <i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="{{route('about')}}" class="link-more-info">Xem thêm về chúng tôi <i class="fa-solid fa-arrow-right"></i></a>
                 </div>
             </div>
         </div>

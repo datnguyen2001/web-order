@@ -202,6 +202,13 @@ a{
     display: -webkit-box;
     -webkit-box-orient: vertical;
 }
+.custom-content-4-line {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 4;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+}
 .text-price-big-red{
     font-weight: 500;
     font-size: 1.125rem;
@@ -293,6 +300,9 @@ a{
     color: #7D7E7E;
     font-weight: 400;
     margin-bottom: 10px;
+}
+.content-footer-item p{
+    margin-bottom: .25rem;
 }
 .content-footer-left a:hover{
     color: #F9471B;

@@ -2,7 +2,7 @@
     <div class="header-top">
         <div class="box-content header-content header-content-top">
             <div class="header-content-item">
-                <a href="">Trang chủ</a>
+                <a href="{{route('home')}}">Trang chủ</a>
                 <a href="">Biểu phí</a>
                 <a href="">Tải công cụ đặt hàng</a>
                 <a href="">1688.com</a>
@@ -10,16 +10,20 @@
                 <a href="">Góp ý dịch vụ</a>
             </div>
             <div class="header-content-item">
+                @if(!\Illuminate\Support\Facades\Auth::check())
                 <a href="{{route('login')}}">Đăng nhập</a>
                 <a href="{{route('register')}}">Đăng ký</a>
+                    @else
+                    <a href="">{{\Illuminate\Support\Facades\Auth::user()->full_name}}</a>
+                @endif
                 <a href="" class="position-relative">Giỏ hàng <i class="fa-solid fa-cart-shopping"></i> <div class="circle-cart">2</div></a>
             </div>
         </div>
     </div>
     <div class="header-bottom">
         <div class="box-content header-content header-content-bottom">
-            <a href="#">
-                <img src="{{asset('assets/images/logo_new.png')}}" alt="" class="img-logo">
+            <a href="{{route('home')}}">
+                <img src="{{asset(@$setting->logo)}}" alt="" class="img-logo">
             </a>
             <div class="content-bottom-header">
                 <div class="box-search">
@@ -46,8 +50,8 @@
 </div>
 
 <div class="box-header-mobile">
-    <a href="#" class="link-logo-page">
-        <img src="{{asset('assets/images/logo_new.png')}}" alt="" class="img-logo">
+    <a href="{{route('home')}}" class="link-logo-page">
+        <img src="{{asset(@$setting->logo)}}" alt="" class="img-logo">
     </a>
     <div class="content-bottom-header">
         <div class="box-search">
@@ -75,27 +79,30 @@
     </div>
     <div class="offcanvas-body pt-0">
         <div class="accordion" id="accordionExample">
-            @for($i=0;$i<5;$i++)
+            @foreach($category as $index => $cate)
             <div class="accordion-item">
-                <h2 class="accordion-header" id="heading_{{$i}}">
-                    <button class="accordion-button accordion-menu " type="button" data-bs-toggle="collapse" data-bs-target="#collapse_{{$i}}" aria-expanded="false" aria-controls="collapse_{{$i}}">
+                <h2 class="accordion-header" id="heading_{{$index}}">
+                    <button class="accordion-button accordion-menu " type="button" data-bs-toggle="collapse" data-bs-target="#collapse_{{$index}}" aria-expanded="false" aria-controls="collapse_{{$index}}">
                         <a href="" class="d-flex align-center gap-3 py-1">
-                            <img src="{{asset('assets/images/Thoi_trang.png')}}" alt="" class="img-category">
-                            <span class="item-category">Thời Trang</span>
+{{--                            <img src="{{asset('assets/images/Thoi_trang.png')}}" alt="" class="img-category">--}}
+                            <span class="item-category">{{$cate->name}}</span>
                         </a>
                     </button>
                 </h2>
-                <div id="collapse_{{$i}}" class="accordion-collapse collapse" aria-labelledby="heading_{{$i}}" data-bs-parent="#accordionExample">
+                <div id="collapse_{{$index}}" class="accordion-collapse collapse" aria-labelledby="heading_{{$index}}" data-bs-parent="#accordionExample">
                     <div class="accordion-body">
-                        <a href="" class="title-big-category">Thời trang nữ</a>
+                        @foreach($cate->category_sub_2 as $cate2)
+                        <a href="" class="title-big-category">{{$cate2->name}}</a>
                         <div class="d-flex align-items-center flex-wrap mb-2">
-                            <a href="#" class="title-small-category">Váy</a>
-                            <a href="#" class="title-small-category">Váy</a>
+                            @foreach($cate2->category_sub_3 as $cate3)
+                            <a href="#" class="title-small-category">{{$cate3->name}}</a>
+                            @endforeach
                         </div>
+                            @endforeach
                     </div>
                 </div>
             </div>
-            @endfor
+            @endforeach
         </div>
     </div>
 </div>
