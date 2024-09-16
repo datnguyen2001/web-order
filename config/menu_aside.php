@@ -42,5 +42,13 @@ return [
             'submenu' => [],
             'number' => 2
         ],
+        [
+            'name' => 'wallet',
+            'title' => 'Nạp tiền',
+            'icon' => 'bi bi-grid',
+            'route' => 'admin.wallet.index',
+            'submenu' => [],
+            'number' => 2
+        ],
 ]
 ];

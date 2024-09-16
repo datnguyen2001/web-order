@@ -433,6 +433,9 @@ input[type="number"] {
 .box-footer-mobile{
     display: none;
 }
+input:disabled {
+    background: #ededed;
+}
 @media (max-width: 1200px) {
     .box-header{
         display: none;

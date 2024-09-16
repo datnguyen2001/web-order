@@ -7,6 +7,9 @@ use App\Models\BannerModel;
 use App\Models\EcommercePlatformModel;
 use App\Models\PostModel;
 use App\Models\SettingModel;
+use App\Models\WalletHistoriesModel;
+use App\Models\WalletsModel;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
@@ -15,7 +18,14 @@ class HomeController extends Controller
     {
         $banner = BannerModel::where('display',1)->get();
         $eCommerce = EcommercePlatformModel::where('display',1)->get();
-        return view('web.home.index',compact('banner','eCommerce'));
+        $user = Auth::user();
+        $wallet = null;
+        if ($user){
+            $wallet = WalletsModel::where('user_id',$user->id)->first();
+        }
+
+
+        return view('web.home.index',compact('banner','eCommerce','wallet'));
     }
 
 
@@ -45,23 +55,13 @@ class HomeController extends Controller
     {
         return view('web.pay.payment');
     }
-    public function profile()
-    {
-        return view('web.profile.index');
-    }
-    public function order()
-    {
-        return view('web.profile.order');
-    }
-    public function wallet()
-    {
-        return view('web.wallet.index');
-    }
+
     public function about()
     {
         $data = SettingModel::first();
         return view('web.about.index',compact('data'));
     }
+
     public function post($slug)
     {
         $data = PostModel::where('slug',$slug)->first();

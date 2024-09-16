@@ -44,6 +44,7 @@
     flex-direction: column;
     justify-content: space-between;
     min-height: 163px;
+    border: 2px solid white;
 }
 .title-price{
     width: 40px;
@@ -76,6 +77,7 @@
     display: flex;
     align-items: center;
     gap: 15px;
+    flex-wrap: wrap;
 }
 .title-transaction-history{
     font-size: 16px;
@@ -151,6 +153,9 @@
 }
 .link-recharge:hover{
     color: #F9471B;
+}
+.wallet-active{
+    border: 2px solid #ffce64 ;
 }
 @media (max-width: 992px) {
     .box-header-wallet{

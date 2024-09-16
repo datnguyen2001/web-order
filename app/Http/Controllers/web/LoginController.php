@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Models\User;
+use App\Models\WalletsModel;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
@@ -36,6 +37,16 @@ class LoginController extends Controller
     public function submitRegister(RegisterRequest $request)
     {
         $validated = $request->validated();
+        $email = User::where('email',$validated['email'])->first();
+        if ($email){
+            toastr()->error('Email đã tồn tại');
+            return back();
+        }
+        $phone = User::where('phone',$validated['phone'])->first();
+        if ($phone){
+            toastr()->error('Số điện thoại đã tồn tại');
+            return back();
+        }
 
         $user = User::create([
             'username' => $validated['username'],
@@ -45,6 +56,21 @@ class LoginController extends Controller
             'password' => Hash::make($validated['password']),
         ]);
 
+        $wallet = WalletsModel::create([
+            'user_id' => $user->id,
+            'vietnamese_money' => 0,
+            'middle_money' => 0,
+        ]);
+
         return redirect()->route('login')->with('success', 'Đăng ký tài khoản thành công!');
     }
+
+    public function logout()
+    {
+        Auth::logout();
+        return redirect()
+            ->route('home')
+            ->with(['alert' => 'success', 'message' => 'Đăng xuất thành công']);
+    }
+
 }

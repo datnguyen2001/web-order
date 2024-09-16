@@ -32,7 +32,7 @@
     <div class="header-top">
         <div class="box-content header-content header-content-top">
             <div class="header-content-item">
-                <a href="">Trang chủ</a>
+                <a href="{{route('home')}}">Trang chủ</a>
                 <a href="">Biểu phí</a>
                 <a href="">Tải công cụ đặt hàng</a>
                 <a href="">1688.com</a>
@@ -40,8 +40,8 @@
                 <a href="">Góp ý dịch vụ</a>
             </div>
             <div class="header-content-item">
-                <a href="">Đăng nhập</a>
-                <a href="">Đăng ký</a>
+                <a href="{{route('login')}}">Đăng nhập</a>
+                <a href="{{route('register')}}">Đăng ký</a>
                 <a href="">Giỏ hàng <i class="fa-solid fa-cart-shopping"></i></a>
             </div>
         </div>

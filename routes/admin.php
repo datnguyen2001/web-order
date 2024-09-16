@@ -7,6 +7,7 @@ use \App\Http\Controllers\admin\BannerController;
 use \App\Http\Controllers\admin\EcommercePlatformController;
 use \App\Http\Controllers\admin\SettingController;
 use \App\Http\Controllers\admin\PostController;
+use \App\Http\Controllers\admin\WalletController;
 
 
 Route::get('/login', [LoginController::class, 'login'])->name('login');
@@ -46,6 +47,12 @@ Route::middleware('check-admin-auth')->group(function () {
         Route::get('delete/{id}', [PostController::class, 'delete']);
         Route::get('edit/{id}', [PostController::class, 'edit']);
         Route::post('update/{id}', [PostController::class, 'update']);
+    });
+
+    Route::prefix('wallet')->name('wallet.')->group(function () {
+        Route::get('', [WalletController::class, 'index'])->name('index');
+        Route::get('create', [WalletController::class, 'create'])->name('create');
+        Route::post('store', [WalletController::class, 'store'])->name('store');
     });
 
 });

@@ -14,7 +14,17 @@
                 <a href="{{route('login')}}">Đăng nhập</a>
                 <a href="{{route('register')}}">Đăng ký</a>
                     @else
-                    <a href="">{{\Illuminate\Support\Facades\Auth::user()->full_name}}</a>
+                    <div class="dropdown">
+                        <a data-bs-toggle="dropdown" aria-expanded="false" style="display: inline-block;padding-bottom: 3px">
+                            {{\Illuminate\Support\Facades\Auth::user()->full_name}} <i class="fa-solid fa-angle-down" style="color:#F9471B;"></i>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{{route('profile')}}"><i class="fa-regular fa-user" style="padding-right: 5px"></i> Thông tin cá nhân</a></li>
+                            <li><a class="dropdown-item" href="{{route('order')}}"><i class="fa-regular fa-clipboard" style="padding-right: 5px"></i> Quản lý đơn hàng</a></li>
+                            <li><a class="dropdown-item" href="{{url('lich-su-giao-dich/vi')}}"><i class="fa-regular fa-credit-card" style="padding-right: 5px"></i> Tài khoản trả trước</a></li>
+                            <li><a class="dropdown-item" href="{{route('logout')}}"><i class="fa-solid fa-arrow-right-from-bracket" style="padding-right: 5px"></i> Đăng xuất</a></li>
+                        </ul>
+                    </div>
                 @endif
                 <a href="" class="position-relative">Giỏ hàng <i class="fa-solid fa-cart-shopping"></i> <div class="circle-cart">2</div></a>
             </div>

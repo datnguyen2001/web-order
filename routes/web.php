@@ -4,6 +4,7 @@ use App\Http\Controllers\web\LoginController;
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\web\HomeController;
 use \App\Http\Controllers\web\CategoryController;
+use \App\Http\Controllers\web\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,9 +25,6 @@ Route::get('chi-tiet-san-pham', [HomeController::class, 'detailProduct'])->name(
 Route::get('gio-hang', [HomeController::class, 'cart'])->name('cart');
 Route::get('xac-nhan-don', [HomeController::class, 'confirmApplication'])->name('confirm-application');
 Route::get('thanh-toan', [HomeController::class, 'payment'])->name('pay');
-Route::get('thong-tin-ca-nhan', [HomeController::class, 'profile'])->name('profile');
-Route::get('danh-sach-don-hang', [HomeController::class, 'order'])->name('order');
-Route::get('vi', [HomeController::class, 'wallet'])->name('wallet');
 Route::get('ve-chung-toi', [HomeController::class, 'about'])->name('about');
 Route::get('bai-viet/{slug}', [HomeController::class, 'post'])->name('post');
 
@@ -34,7 +32,12 @@ Route::get('dang-ky', [LoginController::class, 'register'])->name('register');
 Route::post('dang-ky', [LoginController::class, 'submitRegister'])->name('submit.register');
 Route::get('dang-nhap', [LoginController::class, 'login'])->name('login');
 Route::post('dang-nhap', [LoginController::class, 'submitLogin'])->name('submit.login');
+Route::get('dang-xuat', [LoginController::class, 'logout'])->name('logout');
 
 Route::middleware('auth')->group(function () {
-
+    Route::get('thong-tin-ca-nhan', [ProfileController::class, 'profile'])->name('profile');
+    Route::post('save-profile', [ProfileController::class, 'saveProfile'])->name('save-profile');
+    Route::post('change-avatar', [ProfileController::class, 'changeAvatar'])->name('change-avatar');
+    Route::get('danh-sach-don-hang', [ProfileController::class, 'order'])->name('order');
+    Route::get('lich-su-giao-dich/{name}', [ProfileController::class, 'wallet'])->name('wallet');
 });

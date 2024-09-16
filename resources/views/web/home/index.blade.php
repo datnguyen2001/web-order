@@ -95,8 +95,8 @@
                         <div class="d-flex flex-column gap-2">
                             <div class="title-hello">Tài khoản trả trước:</div>
                             <div class="d-flex align-items-center gap-4">
-                                <div class="d-flex align-items-center gap-2"> <span class="unit-price">đ</span> <span class="price-wallet">0đ</span></div>
-                                <div class="d-flex align-items-center gap-2"> <span class="unit-price-2">đ</span> <span class="price-wallet">0đ</span></div>
+                                <div class="d-flex align-items-center gap-2"> <span class="unit-price">đ</span> <span class="price-wallet">{{number_format($wallet->vietnamese_money)}}đ</span></div>
+                                <div class="d-flex align-items-center gap-2"> <span class="unit-price-2">¥</span> <span class="price-wallet">¥{{number_format($wallet->middle_money)}}</span></div>
                             </div>
                         </div>
                     @endif
