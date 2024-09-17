@@ -33,7 +33,10 @@ class CategoryController extends Controller
             $productValue = ProductValuesModel::where('product_id',$pro->id)->first();
             $pro->src = ProductImagesModel::where('product_id',$pro->id)->first()->src;
             if ($productValue){
-                $pro->price = ProductAttributesModel::where('product_value_id',$productValue->id)->first()->price;
+                $attribute = ProductAttributesModel::where('product_value_id',$productValue->id)->first();
+                if ($attribute){
+                    $pro->price = $attribute->price;
+                }
             }
         }
 
@@ -59,7 +62,10 @@ class CategoryController extends Controller
             $productValue = ProductValuesModel::where('product_id',$pro->id)->first();
             $pro->src = ProductImagesModel::where('product_id',$pro->id)->first()->src;
             if ($productValue){
-                $pro->price = ProductAttributesModel::where('product_value_id',$productValue->id)->first()->price;
+                $attribute = ProductAttributesModel::where('product_value_id',$productValue->id)->first();
+                if ($attribute){
+                    $pro->price = $attribute->price;
+                }
             }
         }
 
@@ -82,7 +88,10 @@ class CategoryController extends Controller
             $productValue = ProductValuesModel::where('product_id',$pro->id)->first();
             $pro->src = ProductImagesModel::where('product_id',$pro->id)->first()->src;
             if ($productValue){
-                $pro->price = ProductAttributesModel::where('product_value_id',$productValue->id)->first()->price;
+                $attribute = ProductAttributesModel::where('product_value_id',$productValue->id)->first();
+                if ($attribute){
+                    $pro->price = $attribute->price;
+                }
             }
         }
 

@@ -22,7 +22,10 @@ class ProductController extends Controller
             $value = ProductValuesModel::where('product_id',$pro->id)->first();
             $pro->src = ProductImagesModel::where('product_id',$pro->id)->first()->src;
             if ($value){
-                $pro->price = ProductAttributesModel::where('product_value_id',$value->id)->first()->price;
+                $attribute = ProductAttributesModel::where('product_value_id',$value->id)->first();
+                if ($attribute){
+                    $pro->price = $attribute->price;
+                }
             }
         }
 
