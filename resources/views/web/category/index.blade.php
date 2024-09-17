@@ -123,7 +123,7 @@
                     @if(count($listData)>0)
                     <div class="content-category-sp">
                        @foreach($listData as $pro)
-                            <a class="box-product-item">
+                            <a href="{{route('detail-product',$pro->slug)}}" class="box-product-item">
                                 <div class="w-100 position-relative">
                                     <img
                                         src="{{$pro->src}}"

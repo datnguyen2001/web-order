@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\web\HomeController;
 use \App\Http\Controllers\web\CategoryController;
 use \App\Http\Controllers\web\ProfileController;
+use \App\Http\Controllers\web\ProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,7 +24,7 @@ Route::get('danh-muc/{status}/{name}',[CategoryController::class, 'categoryTwo']
 Route::get('danh-muc/{status}/{name}/{slug}',[CategoryController::class, 'categoryThree'])->name('category.three');
 Route::get('tim-kiem', [HomeController::class, 'search'])->name('search');
 Route::get('xem-them', [HomeController::class, 'more'])->name('more');
-Route::get('chi-tiet-san-pham', [HomeController::class, 'detailProduct'])->name('detail-product');
+Route::get('chi-tiet-san-pham/{slug}', [ProductController::class, 'detailProduct'])->name('detail-product');
 Route::get('gio-hang', [HomeController::class, 'cart'])->name('cart');
 Route::get('xac-nhan-don', [HomeController::class, 'confirmApplication'])->name('confirm-application');
 Route::get('thanh-toan', [HomeController::class, 'payment'])->name('pay');

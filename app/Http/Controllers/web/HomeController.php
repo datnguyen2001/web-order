@@ -37,10 +37,6 @@ class HomeController extends Controller
     {
         return view('web.search.more');
     }
-    public function detailProduct()
-    {
-        return view('web.product.index');
-    }
 
     public function cart()
     {

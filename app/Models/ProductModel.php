@@ -13,6 +13,6 @@ class ProductModel extends Model
         'name',
         'slug',
         'category_id',
-        'content'
+        'description'
     ];
 }
