@@ -9,9 +9,12 @@ class ProductValuesModel extends Model
 {
     use HasFactory;
     protected $table = 'product_values';
+
     protected $fillable = [
+        'api_id',
         'product_id',
         'name',
-        'src'
+        'src',
+        'PID'
     ];
 }
