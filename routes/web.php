@@ -18,7 +18,9 @@ use \App\Http\Controllers\web\ProfileController;
 */
 
 Route::get('/', [HomeController::class, 'home'])->name('home');
-Route::get('danh-muc', [CategoryController::class, 'category'])->name('category');
+Route::get('danh-muc/{status}', [CategoryController::class, 'category'])->name('category');
+Route::get('danh-muc/{status}/{name}',[CategoryController::class, 'categoryTwo'])->name('category.two');
+Route::get('danh-muc/{status}/{name}/{slug}',[CategoryController::class, 'categoryThree'])->name('category.three');
 Route::get('tim-kiem', [HomeController::class, 'search'])->name('search');
 Route::get('xem-them', [HomeController::class, 'more'])->name('more');
 Route::get('chi-tiet-san-pham', [HomeController::class, 'detailProduct'])->name('detail-product');

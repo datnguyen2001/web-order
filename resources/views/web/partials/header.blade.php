@@ -92,20 +92,20 @@
             @foreach($category as $index => $cate)
             <div class="accordion-item">
                 <h2 class="accordion-header" id="heading_{{$index}}">
-                    <button class="accordion-button accordion-menu " type="button" data-bs-toggle="collapse" data-bs-target="#collapse_{{$index}}" aria-expanded="false" aria-controls="collapse_{{$index}}">
-                        <a href="" class="d-flex align-center gap-3 py-1">
+                    <button class="accordion-button accordion-menu" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_{{$index}}" aria-expanded="false" aria-controls="collapse_{{$index}}">
+                        <a href="{{route('category',$cate->slug)}}" class="d-flex align-center gap-3 py-1">
 {{--                            <img src="{{asset('assets/images/Thoi_trang.png')}}" alt="" class="img-category">--}}
-                            <span class="item-category">{{$cate->name}}</span>
+                            <span class="item-category" style="color: black">{{$cate->name}}</span>
                         </a>
                     </button>
                 </h2>
                 <div id="collapse_{{$index}}" class="accordion-collapse collapse" aria-labelledby="heading_{{$index}}" data-bs-parent="#accordionExample">
                     <div class="accordion-body">
                         @foreach($cate->category_sub_2 as $cate2)
-                        <a href="" class="title-big-category">{{$cate2->name}}</a>
-                        <div class="d-flex align-items-center flex-wrap mb-2">
+                        <a href="{{url('danh-muc/'.$cate->slug.'/'.$cate2->slug)}}" class="title-big-category" style="font-weight: 600;color: #1a1a1a">{{$cate2->name}}</a>
+                        <div class="d-flex align-items-center flex-wrap mb-2 gap-2">
                             @foreach($cate2->category_sub_3 as $cate3)
-                            <a href="#" class="title-small-category">{{$cate3->name}}</a>
+                            <a href="{{url('danh-muc/'.$cate->slug.'/'.$cate2->slug.'/'.$cate3->slug)}}" class="title-small-category">{{$cate3->name}}</a>
                             @endforeach
                         </div>
                             @endforeach

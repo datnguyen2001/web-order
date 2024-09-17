@@ -155,48 +155,6 @@
 
         <div class="box-list-content">
             <div class="line-home-title">
-                <div class="title-big-shop">Sản Phẩm Khác Của Shop</div>
-            </div>
-            <div class="box-slide-product">
-                <div class="swiper productSwiper">
-                    <div class="swiper-wrapper">
-                        @for($i=0;$i<10;$i++)
-                            <div class="swiper-slide">
-                                <a class="box-product-item">
-                                    <div class="w-100 position-relative">
-                                        <img
-                                            src="https://sabomall-chapi-dream.s3.ap-southeast-1.amazonaws.com/O1_CN_01_Mm2_U2d1d1_CV_4ce9_EL_2217660303675_0_cib_d2fd824122.jpg"
-                                            class="w-100" style="object-fit: cover">
-                                    </div>
-                                    <div class="content-item-sp">
-                                        <div class="title-product-item custom-content-2-line">
-                                            <img src="https://m.sabomall.com/icons/icon-1688-tag.svg" alt="">
-                                            Ly giữ nhiệt bằng thép không gỉ 304 xuất khẩu, ly cà phê Mỹ đá đẹp mắt, cốc cầm
-                                            tay có ống hút
-                                            tiện lợi
-                                        </div>
-                                        <div class="d-flex align-items-baseline">
-                                            <div class="text-price-big-red">¥25,90</div>
-                                            <div class="text-price-red">¥44,60</div>
-                                        </div>
-                                        <div class="d-flex align-items-baseline">
-                                            <div class="text-price-big">¥25,90</div>
-                                            <div class="text-price-small">¥44,60</div>
-                                        </div>
-                                        <div class="title-sold">Đã bán 4.2k sản phẩm</div>
-                                    </div>
-                                </a>
-                            </div>
-                        @endfor
-                    </div>
-                    <div class="swiper-button-next next-distributor"></div>
-                    <div class="swiper-button-prev prev-distributor"></div>
-                </div>
-            </div>
-        </div>
-
-        <div class="box-list-content">
-            <div class="line-home-title">
                 <div class="title-big-shop">Sản Phẩm Tương tự</div>
             </div>
             <div class="box-slide-product">

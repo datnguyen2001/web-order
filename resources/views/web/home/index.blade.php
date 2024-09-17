@@ -17,16 +17,16 @@
                 <div class="box-category position-relative">
                     @foreach($category as $cate)
                         <div class="category-wrapper">
-                        <a href="" class="d-flex align-center gap-3 py-1">
+                        <a href="{{route('category',$cate->slug)}}" class="d-flex align-center gap-3 py-1">
 {{--                            <img src="{{asset('assets/images/Thoi_trang.png')}}" alt="" class="img-category">--}}
                             <span class="item-category">{{$cate->name}}</span>
                         </a>
                         <div class="sub-category">
                             @foreach($cate->category_sub_2 as $cate2)
-                            <a href="" class="title-big-category">{{$cate2->name}}</a>
+                            <a href="{{url('danh-muc/'.$cate->slug.'/'.$cate2->slug)}}" class="title-big-category">{{$cate2->name}}</a>
                             <div class="d-flex align-items-center flex-wrap mb-2">
                                 @foreach($cate2->category_sub_3 as $cate3)
-                                <a href="#" class="title-small-category">{{$cate3->name}}</a>
+                                <a href="{{url('danh-muc/'.$cate->slug.'/'.$cate2->slug.'/'.$cate3->slug)}}" class="title-small-category">{{$cate3->name}}</a>
                                 @endforeach
                             </div>
                                 @endforeach

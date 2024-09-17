@@ -62,7 +62,7 @@
         <i class="fa-solid fa-store icon-menu-footer"></i>
         <span>Đơn hàng</span>
     </a>
-    <a href="#" class="item-menu-footer">
+    <a href="{{route('profile')}}" class="item-menu-footer">
         <i class="fa-regular fa-user icon-menu-footer"></i>
         <span>Tài khoản</span>
     </a>

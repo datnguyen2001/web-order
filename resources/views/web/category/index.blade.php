@@ -80,18 +80,18 @@
 
         <div class="box-list-content-category">
             <div class="box-content-category-left">
-                <a href="" class="title-big-category-left">Thời Trang</a>
+                <a href="{{route('category',$cate->slug)}}" class="title-big-category-left @if(!$name && !$slug && $status == $cate->slug) link-menu-active @endif">{{$cate->name}}</a>
                 <div class="box-left-item-menu">
+                    @foreach($dataCategory as $cateTwo)
                     <div class="box-item-category-left">
-                        <a href="" class="title-small-category-left">Thời Trang Nữ</a>
+                        <a href="{{url('danh-muc/'.$cate->slug.'/'.$cateTwo->slug)}}" class="title-small-category-left @if($name == $cateTwo->slug && !$slug ) link-menu-active @endif">{{$cateTwo->name}}</a>
                         <div class="box-item-menu-left">
-                            <a href="" class="link-item-category link-menu-active">Chân Váy Nữ</a>
-                            <a href="" class="link-item-category">Chân Váy Nữ</a>
-                            <a href="" class="link-item-category">Chân Váy Nữ</a>
-                            <a href="" class="link-item-category">Chân Váy Nữ</a>
-                            <a href="" class="link-item-category">Chân Váy Nữ</a>
+                            @foreach($cateTwo->categoryThree as $cateThree)
+                            <a href="{{url('danh-muc/'.$cate->slug.'/'.$cateTwo->slug.'/'.$cateThree->slug)}}" class="link-item-category @if($slug == $cateThree->slug) link-menu-active @endif">{{$cateThree->name}}</a>
+                            @endforeach
                         </div>
                     </div>
+                    @endforeach
                 </div>
             </div>
             <div class="box-content-category-right">
@@ -118,36 +118,42 @@
                 </div>
                 <div class="box-list-content">
                     <div class="line-home-title">
-                        <div class="title-big-shop">Chân Váy Nữ</div>
+                        <div class="title-big-shop">{{$name_category}}</div>
                     </div>
+                    @if(count($listData)>0)
                     <div class="content-category-sp">
-                        @for($i=0;$i<18;$i++)
+                       @foreach($listData as $pro)
                             <a class="box-product-item">
                                 <div class="w-100 position-relative">
                                     <img
-                                        src="https://sabomall-chapi-dream.s3.ap-southeast-1.amazonaws.com/O1_CN_01_Mm2_U2d1d1_CV_4ce9_EL_2217660303675_0_cib_d2fd824122.jpg"
+                                        src="{{$pro->src}}"
                                         class="w-100" style="object-fit: cover">
                                 </div>
                                 <div class="content-item-sp">
                                     <div class="title-product-item custom-content-2-line">
-                                        <img src="https://m.sabomall.com/icons/icon-1688-tag.svg" alt="">
-                                        Ly giữ nhiệt bằng thép không gỉ 304 xuất khẩu, ly cà phê Mỹ đá đẹp mắt, cốc cầm
-                                        tay có ống hút
-                                        tiện lợi
+                                       {{$pro->name}}
                                     </div>
                                     <div class="d-flex align-items-baseline">
-                                        <div class="text-price-big-red">¥25,90</div>
-                                        <div class="text-price-red">¥44,60</div>
+                                        <div class="text-price-big-red">¥{{number_format($pro->price)}}</div>
+{{--                                        <div class="text-price-red">¥44,60</div>--}}
                                     </div>
                                     <div class="d-flex align-items-baseline">
-                                        <div class="text-price-big">¥25,90</div>
-                                        <div class="text-price-small">¥44,60</div>
+                                        <div class="text-price-big">{{number_format($pro->price*$setting->exchange_rate)}}đ</div>
+{{--                                        <div class="text-price-small">¥44,60</div>--}}
                                     </div>
-                                    <div class="title-sold">Đã bán 4.2k sản phẩm</div>
+                                    <div class="title-sold">Đã bán {{$pro->sold}} sản phẩm</div>
                                 </div>
                             </a>
-                        @endfor
+                        @endforeach
                     </div>
+                    <div class="d-flex justify-content-center mt-2">
+                        {{ $listData->appends(request()->all())->links('admin.pagination_custom.index') }}
+                    </div>
+                        @else
+                        <div class="d-flex justify-content-center mt-2" style="color: #F9471B">
+                            Không có dữ liệu
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>
@@ -162,18 +168,18 @@
         </div>
         <div class="offcanvas-body pt-3">
             <div class=" w-100">
-                <a href="" class="title-big-category-left">Thời Trang</a>
+                <a href="{{route('category',$cate->slug)}}" class="title-big-category-left @if(!$name && !$slug && $status == $cate->slug) link-menu-active @endif">{{$cate->name}}</a>
                 <div class="box-left-item-menu">
+                    @foreach($dataCategory as $cateTwo)
                     <div class="box-item-category-left">
-                        <a href="" class="title-small-category-left">Thời Trang Nữ</a>
+                        <a href="{{url('danh-muc/'.$cate->slug.'/'.$cateTwo->slug)}}" class="title-small-category-left @if($name == $cateTwo->slug && !$slug ) link-menu-active @endif">{{$cateTwo->name}}</a>
                         <div class="box-item-menu-left">
-                            <a href="" class="link-item-category link-menu-active">Chân Váy Nữ</a>
-                            <a href="" class="link-item-category">Chân Váy Nữ</a>
-                            <a href="" class="link-item-category">Chân Váy Nữ</a>
-                            <a href="" class="link-item-category">Chân Váy Nữ</a>
-                            <a href="" class="link-item-category">Chân Váy Nữ</a>
+                            @foreach($cateTwo->categoryThree as $cateThree)
+                            <a href="{{url('danh-muc/'.$cate->slug.'/'.$cateTwo->slug.'/'.$cateThree->slug)}}" class="link-item-category @if($slug == $cateThree->slug) link-menu-active @endif">{{$cateThree->name}}</a>
+                            @endforeach
                         </div>
                     </div>
+                        @endforeach
                 </div>
             </div>
             <span class="title-item-search-menu">Khoảng giá:</span>
