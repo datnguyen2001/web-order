@@ -8,12 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class CategoryModel extends Model
 {
     use HasFactory;
-    protected $table = 'category';
+    protected $table = 'categories';
     protected $fillable = [
+        'api_id',
         'name',
         'slug',
         'type',
         'parent_id',
-        'child_id'
+        'child_id',
     ];
 }
