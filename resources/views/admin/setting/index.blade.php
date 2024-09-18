@@ -13,14 +13,14 @@
             <form action="{{ route('admin.setting.update') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="row mt-3">
-                    <div class="col-3">Tỷ giá:</div>
-                    <div class="col-8">
+                    <div class="col-2">Tỷ giá:</div>
+                    <div class="col-10">
                         <input class="form-control" name="exchange_rate" value="{{@$data->exchange_rate}}" type="number">
                     </div>
                 </div>
                 <div class="row mt-3">
-                    <div class="col-3">Logo :</div>
-                    <div class="col-8">
+                    <div class="col-2">Logo :</div>
+                    <div class="col-10">
                         @if(@$data->logo != null)
                             <div class="form-control position-relative div-parent" style="padding-top: 50%">
                                 <div class="position-absolute w-100 h-100 div-file" style="top: 0; left: 0;z-index: 10">
@@ -38,8 +38,8 @@
                     </div>
                 </div>
                 <div class="row mt-3">
-                    <div class="col-3">Ảnh Qr :</div>
-                    <div class="col-8">
+                    <div class="col-2">Ảnh Qr :</div>
+                    <div class="col-10">
                         @if(@$data->img_qr != null)
                             <div class="form-control position-relative div-parent2" style="padding-top: 50%">
                                 <div class="position-absolute w-100 h-100 div-file2" style="top: 0; left: 0;z-index: 10">
@@ -57,41 +57,41 @@
                     </div>
                 </div>
                 <div class="row mt-3">
-                    <div class="col-3">Về shop:</div>
-                    <div class="col-8">
+                    <div class="col-2">Về shop:</div>
+                    <div class="col-10">
                         <textarea name="about_shop" id="about_shop" required
                                   class="ckeditor">{!! @$data->about_shop !!}</textarea>
                     </div>
                 </div>
                 <div class="row mt-3">
-                    <div class="col-3">Nội dung footer 1:</div>
-                    <div class="col-8">
+                    <div class="col-2">Nội dung footer 1:</div>
+                    <div class="col-10">
                         <textarea name="content_footer_one" id="content_footer_one" required
                                   class="ckeditor">{!! @$data->content_footer_one !!}</textarea>
                     </div>
                 </div>
                 <div class="row mt-3">
-                    <div class="col-3">Nội dung footer 2:</div>
-                    <div class="col-8">
+                    <div class="col-2">Nội dung footer 2:</div>
+                    <div class="col-10">
                          <textarea name="content_footer_two" id="content_footer_two" required
                                    class="ckeditor">{!! @$data->content_footer_two !!}</textarea>
                     </div>
                 </div>
                 <div class="row mt-3">
-                    <div class="col-3">Facebook :</div>
-                    <div class="col-8">
+                    <div class="col-2">Facebook :</div>
+                    <div class="col-10">
                         <input class="form-control" name="facebook" value="{{@$data->facebook}}" type="text" >
                     </div>
                 </div>
                 <div class="row mt-3">
-                    <div class="col-3">TikTok :</div>
-                    <div class="col-8">
+                    <div class="col-2">TikTok :</div>
+                    <div class="col-10">
                         <input class="form-control" name="tiktok" value="{{@$data->tiktok}}" type="text" >
                     </div>
                 </div>
                 <div class="row mt-3">
-                    <div class="col-3">Youtube :</div>
-                    <div class="col-8">
+                    <div class="col-2">Youtube :</div>
+                    <div class="col-10">
                         <input class="form-control" name="youtube" value="{{@$data->youtube}}" type="text" >
                     </div>
                 </div>
@@ -158,6 +158,7 @@
             }
         }
         $(document).on("click", "button.clear", function () {
+            parent = $(this).closest(".div-parent");
             $(".div-file").remove();
             let html = '<button type="button" class="position-absolute border-0 bg-transparent select-image" style="top: 50%;left: 50%;transform: translate(-50%,-50%)">\n' +
                 '                                    <i style="font-size: 30px" class="bi bi-download"></i>\n' +
@@ -194,11 +195,12 @@
             }
         }
         $(document).on("click", "button.clear2", function () {
+            parent2 = $(this).closest(".div-parent2");
             $(".div-file2").remove();
-            let html = '<button type="button" class="position-absolute border-0 bg-transparent select-image2" style="top: 50%;left: 50%;transform: translate(-50%,-50%)">\n' +
+            let html2 = '<button type="button" class="position-absolute border-0 bg-transparent select-image2" style="top: 50%;left: 50%;transform: translate(-50%,-50%)">\n' +
                 '                                    <i style="font-size: 30px" class="bi bi-download"></i>\n' +
                 '                                </button>';
-            parent2.html(html);
+            parent2.html(html2);
             $('input[type="img_qr"]').val("");
         });
     </script>
