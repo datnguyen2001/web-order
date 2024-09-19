@@ -63,7 +63,7 @@
                 @if(count($productAttribute)>0)
                 <div class="d-flex box-attribute mt-4">
                     <div class="title-color">Thuộc tính</div>
-                    <div class="box-size">
+                    <div class="box-size" id="box-size">
                         @foreach($productAttribute as $item)
                             <div class="box-item-size">
                                 <span class="title-size-item">{{$item->name}}</span>
@@ -83,6 +83,7 @@
                         @endforeach
                     </div>
                 </div>
+                    <button class="btn-show-more" id="show-more">Xem thêm</button>
                     @else
                     <div class="box-quantity-fa mt-2">
                         <button class="btn-minus-plus"><i class="fa-solid fa-minus"></i></button>
@@ -164,6 +165,21 @@
         $(document).ready(function() {
             $('.content-describe a').on('click', function(event) {
                 event.preventDefault();
+            });
+            var $boxSize = $('#box-size');
+            var $showMoreButton = $('#show-more');
+
+            if ($boxSize[0].scrollHeight > $boxSize.outerHeight()) {
+                $showMoreButton.show();
+            }
+
+            $showMoreButton.on('click', function() {
+                $boxSize.toggleClass('expanded');
+                if ($boxSize.hasClass('expanded')) {
+                    $showMoreButton.text('Thu gọn');
+                } else {
+                    $showMoreButton.text('Xem thêm');
+                }
             });
         });
     </script>

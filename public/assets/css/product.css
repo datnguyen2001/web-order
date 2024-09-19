@@ -94,7 +94,27 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    max-height: 220px;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
 }
+
+.box-size.expanded {
+    max-height: none;
+}
+
+.btn-show-more {
+    background: #f1f1f1;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    display: none;
+}
+
+.box-size.expanded .btn-show-more {
+    display: none; /* Ẩn nút khi đã mở rộng */
+}
+
 .box-item-size{
     width: 100%;
     display: flex;
