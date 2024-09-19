@@ -13,11 +13,11 @@ class ProductController extends Controller
 {
     public function detailProduct($slug)
     {
-        $productAttribute=null;
+        $productAttribute=[];
         $data = ProductModel::where('slug',$slug)->first();
         $productImg = ProductImagesModel::where('product_id',$data->id)->get();
         $productValue = ProductValuesModel::where('product_id',$data->id)->get();
-        if ($productValue){
+        if (count($productValue)>0){
             $productAttribute = ProductAttributesModel::where('product_value_id',$productValue[0]->id)->get();
         }
         $SimilarProducts = ProductModel::where('id','!=',$data->id)->inRandomOrder()->take(10)->get();
