@@ -16,6 +16,18 @@ class ProductModel extends Model
         'category_id',
         'description',
         'quantity',
-        'price'
+        'price',
+        'sold'
     ];
+
+    public function productValues()
+    {
+        return $this->hasMany(ProductValuesModel::class, 'product_id');
+    }
+
+    public function productImages()
+    {
+        return $this->hasMany(ProductImagesModel::class, 'product_id');
+    }
+
 }

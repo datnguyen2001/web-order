@@ -24,13 +24,11 @@ class DataServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $category = CategoryModel::where('type',1)->get();
-        foreach ($category as $item){
-            $item->category_sub_2 = CategoryModel::where('parent_id',$item->id)->get();
-            foreach ($item->category_sub_2 as $cate){
-                $cate->category_sub_3 = CategoryModel::where('child_id',$cate->id)->get();
-            }
-        }
+        $category = CategoryModel::where('type', 1)
+            ->with([
+                'children.grandchildren'
+            ])
+            ->get();
         $setting = SettingModel::first();
         $post1 = PostModel::where('type',1)->get();
         $post2 = PostModel::where('type',2)->get();

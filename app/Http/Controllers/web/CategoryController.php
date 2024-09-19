@@ -12,30 +12,36 @@ use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
-    public function category($status)
+    public function category($status,Request $request)
     {
         $name = null;
         $slug = null;
-        $cate = CategoryModel::where('slug', $status)->first();
-        $dataCategory = CategoryModel::where('parent_id',$cate->id)->get();
+        $cate = CategoryModel::where('slug', $status)->select('id', 'name', 'slug')->first();
+        $dataCategory = CategoryModel::where('parent_id',$cate->id)->select('id', 'name', 'slug')->get();
         $cate_2 = [];
         $cate_3 = [];
         foreach ($dataCategory as $item){
             $cate_2[] = $item->id;
-            $item->categoryThree = CategoryModel::where('child_id',$item->id)->get();
+            $item->categoryThree = CategoryModel::where('child_id',$item->id)->select('id', 'name', 'slug')->get();
             foreach ($item->categoryThree as $value){
                 $cate_3[] = $value->id;
             }
         }
         $name_category = $cate->name;
-        $listData = ProductModel::whereIn('category_id',$cate_2)->orWhereIn('category_id',$cate_3)->paginate(24);
+        $minPrice = $request->input('min_price', 0);
+        $maxPrice = $request->input('max_price', PHP_INT_MAX);
+        $listData = ProductModel::whereIn('category_id',$cate_2)->orWhereIn('category_id',$cate_3)
+            ->paginate(24);
+
         foreach ($listData as $pro){
-            $productValue = ProductValuesModel::where('product_id',$pro->id)->first();
+            $productValue = ProductValuesModel::where('product_id',$pro->id)->select('id')->first();
             $pro->src = ProductImagesModel::where('product_id',$pro->id)->first()->src;
             if ($productValue){
-                $attribute = ProductAttributesModel::where('product_value_id',$productValue->id)->first();
+                $attribute = ProductAttributesModel::where('product_value_id',$productValue->id)->select('id','price')->first();
                 if ($attribute){
-                    $pro->price = $attribute->price;
+                    $pro->price = floatval($attribute->price);
+                }else{
+                    $pro->price = floatval($pro->price);
                 }
             }
         }
@@ -43,26 +49,31 @@ class CategoryController extends Controller
         return view('web.category.index',compact('cate','dataCategory','listData','status','name','slug','name_category'));
     }
 
-    public function categoryTwo($status,$name)
+    public function categoryTwo($status,$name,Request $request)
     {
         $slug = null;
-        $cate = CategoryModel::where('slug', $status)->first();
-        $dataCategory = CategoryModel::where('parent_id',$cate->id)->get();
+        $cate = CategoryModel::where('slug', $status)->select('id', 'name', 'slug')->first();
+        $dataCategory = CategoryModel::where('parent_id',$cate->id)->select('id', 'name', 'slug')->get();
         $cate_2 = CategoryModel::where('slug', $name)->first();
         $cate_3 = [];
         foreach ($dataCategory as $item){
-            $item->categoryThree = CategoryModel::where('child_id',$item->id)->get();
+            $item->categoryThree = CategoryModel::where('child_id',$item->id)->select('id', 'name', 'slug')->get();
             foreach ($item->categoryThree as $value){
                 $cate_3[] = $value->id;
             }
         }
         $name_category = $cate_2->name;
-        $listData = ProductModel::where('category_id',$cate_2->id)->orWhereIn('category_id',$cate_3)->paginate(24);
+        $minPrice = $request->input('min_price', 0);
+        $maxPrice = $request->input('max_price', PHP_INT_MAX);
+
+        $listData = ProductModel::where('category_id',$cate_2->id)->orWhereIn('category_id',$cate_3)->select('id', 'name', 'slug','price','sold')
+            ->paginate(24);
+
         foreach ($listData as $pro){
-            $productValue = ProductValuesModel::where('product_id',$pro->id)->first();
+            $productValue = ProductValuesModel::where('product_id',$pro->id)->select('id')->first();
             $pro->src = ProductImagesModel::where('product_id',$pro->id)->first()->src;
             if ($productValue){
-                $attribute = ProductAttributesModel::where('product_value_id',$productValue->id)->first();
+                $attribute = ProductAttributesModel::where('product_value_id',$productValue->id)->select('id','price')->first();
                 if ($attribute){
                     $pro->price = $attribute->price;
                 }
@@ -72,23 +83,26 @@ class CategoryController extends Controller
         return view('web.category.index',compact('cate','dataCategory','listData','status','name','slug','name_category'));
     }
 
-    public function categoryThree($status,$name,$slug)
+    public function categoryThree($status,$name,$slug,Request $request)
     {
-        $cate = CategoryModel::where('slug', $status)->first();
-        $dataCategory = CategoryModel::where('parent_id',$cate->id)->get();
+        $cate = CategoryModel::where('slug', $status)->select('id', 'name', 'slug')->first();
+        $dataCategory = CategoryModel::where('parent_id',$cate->id)->select('id', 'name', 'slug')->get();
         $cate_2 = [];
         $cate_3 = CategoryModel::where('slug', $slug)->first();
         foreach ($dataCategory as $item){
             $cate_2[] = $item->id;
-            $item->categoryThree = CategoryModel::where('child_id',$item->id)->get();
+            $item->categoryThree = CategoryModel::where('child_id',$item->id)->select('id', 'name', 'slug')->get();
         }
         $name_category = $cate_3->name;
-        $listData = ProductModel::whereIn('category_id',$cate_2)->orWhere('category_id',$cate_3->id)->paginate(24);
+        $minPrice = $request->input('min_price', 0);
+        $maxPrice = $request->input('max_price', PHP_INT_MAX);
+        $listData = ProductModel::where('category_id',$cate_3->id)->select('id', 'name', 'slug','price','sold')
+           ->paginate(24);
         foreach ($listData as $pro){
-            $productValue = ProductValuesModel::where('product_id',$pro->id)->first();
+            $productValue = ProductValuesModel::where('product_id',$pro->id)->select('id')->first();
             $pro->src = ProductImagesModel::where('product_id',$pro->id)->first()->src;
             if ($productValue){
-                $attribute = ProductAttributesModel::where('product_value_id',$productValue->id)->first();
+                $attribute = ProductAttributesModel::where('product_value_id',$productValue->id)->select('id','price')->first();
                 if ($attribute){
                     $pro->price = $attribute->price;
                 }

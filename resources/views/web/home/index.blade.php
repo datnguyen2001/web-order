@@ -18,14 +18,13 @@
                     @foreach($category as $cate)
                         <div class="category-wrapper">
                         <a href="{{route('category',$cate->slug)}}" class="d-flex align-center gap-3 py-1">
-{{--                            <img src="{{asset('assets/images/Thoi_trang.png')}}" alt="" class="img-category">--}}
                             <span class="item-category">{{$cate->name}}</span>
                         </a>
                         <div class="sub-category">
-                            @foreach($cate->category_sub_2 as $cate2)
+                            @foreach($cate->children as $cate2)
                             <a href="{{url('danh-muc/'.$cate->slug.'/'.$cate2->slug)}}" class="title-big-category">{{$cate2->name}}</a>
                             <div class="d-flex align-items-center flex-wrap mb-2">
-                                @foreach($cate2->category_sub_3 as $cate3)
+                                @foreach($cate2->grandchildren as $cate3)
                                 <a href="{{url('danh-muc/'.$cate->slug.'/'.$cate2->slug.'/'.$cate3->slug)}}" class="title-small-category">{{$cate3->name}}</a>
                                 @endforeach
                             </div>
@@ -71,10 +70,11 @@
             <div class="box-info">
                 <div class="bg-white info-top p-3 custom-shadow ">
                     <div class="d-flex gap-3 align-items-center">
-                        <img src="{{asset('assets/images/icon-avatar-signup.svg')}}" alt="">
                         @if(!\Illuminate\Support\Facades\Auth::check())
+                            <img src="{{asset('assets/images/icon-avatar-signup.svg')}}" alt="">
                             <span class="title-info-top">Đăng nhập ngay để bắt đầu mua sắm!!!</span>
                             @else
+                            <img src="{{asset(\Illuminate\Support\Facades\Auth::user()->avatar)}}" alt="" style="border-radius: 50%;width: 40px;height: 40px;object-fit: cover">
                             <div class="d-flex flex-column">
                                 <div class="title-hello">Xin chào <span>{{\Illuminate\Support\Facades\Auth::user()->full_name}}</span></div>
                                 <div class="text-tg">
@@ -121,19 +121,19 @@
 
         <div class="box-list-content">
             <div class="line-home-title">
-                <div class="title-big-deal">SABO DEAL</div>
-                <a href="" class="link-more-deal">Xem thêm <i class="fa-solid fa-chevron-right"
+                <div class="title-big-deal">DEAL HOT</div>
+                <a href="{{route('deal-hot')}}" class="link-more-deal">Xem thêm <i class="fa-solid fa-chevron-right"
                                                               style="padding-left: 7px"></i></a>
             </div>
             <div class="box-slide-product">
                 <div class="swiper productSwiper">
                     <div class="swiper-wrapper">
-                        @for($i=0;$i<10;$i++)
+                        @foreach($hotDealProducts as $hotDeal)
                             <div class="swiper-slide">
-                                <a class="box-product-item">
+                                <a href="{{route('detail-product',$hotDeal->slug)}}" class="box-product-item">
                                     <div class="w-100 position-relative">
                                         <img
-                                            src="https://sabomall-chapi-dream.s3.ap-southeast-1.amazonaws.com/O1_CN_01_Mm2_U2d1d1_CV_4ce9_EL_2217660303675_0_cib_d2fd824122.jpg"
+                                            src="{{$hotDeal->src}}"
                                             class="w-100" style="object-fit: cover">
                                         <div class="box-super-cheap">
                                             <img src="https://sabomall.com/tag.png" alt="" class="icon-cheap">
@@ -142,24 +142,19 @@
                                     </div>
                                     <div class="content-item-sp">
                                         <div class="title-product-item custom-content-2-line">
-                                            <img src="https://m.sabomall.com/icons/icon-1688-tag.svg" alt="">
-                                            Ly giữ nhiệt bằng thép không gỉ 304 xuất khẩu, ly cà phê Mỹ đá đẹp mắt, cốc cầm
-                                            tay có ống hút
-                                            tiện lợi
+                                            {{$hotDeal->name}}
                                         </div>
                                         <div class="d-flex align-items-baseline">
-                                            <div class="text-price-big-red">¥25,90</div>
-                                            <div class="text-price-red">¥44,60</div>
+                                            <div class="text-price-big-red">¥{{number_format($hotDeal->price,2)}}</div>
                                         </div>
                                         <div class="d-flex align-items-baseline">
-                                            <div class="text-price-big">¥25,90</div>
-                                            <div class="text-price-small">¥44,60</div>
+                                            <div class="text-price-big">{{number_format($hotDeal->price * $setting->exchange_rate)}}đ</div>
                                         </div>
-                                        <div class="title-sold">Đã bán 4.2k sản phẩm</div>
+                                        <div class="title-sold">Đã bán {{number_format($hotDeal->sold)}} sản phẩm</div>
                                     </div>
                                 </a>
                             </div>
-                        @endfor
+                        @endforeach
                     </div>
                     <div class="swiper-button-next next-distributor"></div>
                     <div class="swiper-button-prev prev-distributor"></div>
@@ -167,206 +162,41 @@
             </div>
         </div>
 
-        <div class="box-list-content">
-            <div class="line-home-title">
-                <div class="title-big-shop">SABO SHOP</div>
-                <a href="" class="link-more-deal">Xem thêm <i class="fa-solid fa-chevron-right"
-                                                              style="padding-left: 7px"></i></a>
-            </div>
-            <div class="box-slide-product">
-                <div class="swiper productShopSwiper">
-                    <div class="swiper-wrapper">
-                        @for($i=0;$i<10;$i++)
-                            <div class="swiper-slide">
-                                <a class="box-product-shop-item">
-                                    <div class="w-100 img-product-shop-item">
-                                        <img
-                                            src="https://sabomall-chapi-dream.s3.ap-southeast-1.amazonaws.com/O1_CN_016fra_Fd1_Bs2x5q_Lfeb_0_0_cib_21564e9472.jpg"
-                                            class="w-100" style="object-fit: cover">
-                                    </div>
-                                    <div class="title-product-shop-item custom-content-2-line">
-                                        Công Ty TNHH Công Nghiệp Bàn Chải Dương Châu
-                                    </div>
-                                </a>
-                            </div>
-                        @endfor
-                    </div>
-                    <div class="swiper-button-next next-distributor"></div>
-                    <div class="swiper-button-prev prev-distributor"></div>
-                </div>
-            </div>
-        </div>
-
-        <div class="box-list-content">
-            <div class="line-home-title line-bottom-chkd">
-                <div class="title-big-shop"> Cơ Hội Kinh Doanh Từ 1688</div>
-                <div class="d-flex align-items-center box-line-menu-chkd-desktop">
-                    <div class="tab-menu-category active" data-index="0">Sản phẩm mới nổi 1688</div>
-                    <div class="tab-menu-category" data-index="1">Sản phẩm hot 1688</div>
-                    <div class="tab-menu-category" data-index="2">Sản phẩm gợi ý 1688</div>
-                </div>
-                <a href="" class="link-more-deal">Xem thêm <i class="fa-solid fa-chevron-right"
-                                                              style="padding-left: 7px"></i></a>
-            </div>
-            <div class="d-flex align-items-center box-line-menu-chkd-mobile">
-                <div class="tab-menu-category active" data-index="0">Sản phẩm mới nổi 1688</div>
-                <div class="tab-menu-category" data-index="1">Sản phẩm hot 1688</div>
-                <div class="tab-menu-category" data-index="2">Sản phẩm gợi ý 1688</div>
-            </div>
-            <div class="box-slide-product box-tab-menu-product" data-index="0">
-                <div class="swiper productSwiper">
-                    <div class="swiper-wrapper">
-                        @for($i=0;$i<10;$i++)
-                            <div class="swiper-slide">
-                                <a class="box-product-item">
-                                    <div class="w-100 position-relative">
-                                        <img
-                                            src="https://sabomall-chapi-dream.s3.ap-southeast-1.amazonaws.com/O1_CN_01_Mm2_U2d1d1_CV_4ce9_EL_2217660303675_0_cib_d2fd824122.jpg"
-                                            class="w-100" style="object-fit: cover">
-                                        <div class="box-super-top">
-                                            {{$i+1}}
-                                        </div>
-                                    </div>
-                                    <div class="content-item-sp">
-                                        <div class="title-product-item custom-content-2-line">
-                                            <img src="https://m.sabomall.com/icons/icon-1688-tag.svg" alt="">
-                                            Ly giữ nhiệt bằng thép không gỉ 304 xuất khẩu, ly cà phê Mỹ đá đẹp mắt, cốc cầm
-                                            tay có ống hút
-                                            tiện lợi
-                                        </div>
-                                        <div class="d-flex align-items-baseline">
-                                            <div class="text-price-big-red">¥25,90</div>
-                                            <div class="text-price-red">¥44,60</div>
-                                        </div>
-                                        <div class="d-flex align-items-baseline">
-                                            <div class="text-price-big">¥25,90</div>
-                                            <div class="text-price-small">¥44,60</div>
-                                        </div>
-                                        <div class="title-sold">Đã bán 4.2k sản phẩm</div>
-                                    </div>
-                                </a>
-                            </div>
-                        @endfor
-                    </div>
-                    <div class="swiper-button-next next-distributor"></div>
-                    <div class="swiper-button-prev prev-distributor"></div>
-                </div>
-            </div>
-            <div class="box-slide-product box-tab-menu-product" data-index="1">
-                <div class="swiper productSwiper">
-                    <div class="swiper-wrapper">
-                        @for($i=0;$i<10;$i++)
-                            <div class="swiper-slide">
-                                <a class="box-product-item">
-                                    <div class="w-100 position-relative">
-                                        <img
-                                            src="https://sabomall-chapi-dream.s3.ap-southeast-1.amazonaws.com/O1_CN_01_Mm2_U2d1d1_CV_4ce9_EL_2217660303675_0_cib_d2fd824122.jpg"
-                                            class="w-100" style="object-fit: cover">
-                                        <div class="box-super-top">
-                                            {{$i+1}}
-                                        </div>
-                                    </div>
-                                    <div class="content-item-sp">
-                                        <div class="title-product-item custom-content-2-line">
-                                            <img src="https://m.sabomall.com/icons/icon-1688-tag.svg" alt="">
-                                            Ly giữ nhiệt bằng thép không gỉ 304 xuất khẩu, ly cà phê Mỹ đá đẹp mắt, cốc cầm
-                                            tay có ống hút
-                                            tiện lợi
-                                        </div>
-                                        <div class="d-flex align-items-baseline">
-                                            <div class="text-price-big-red">¥25,90</div>
-                                            <div class="text-price-red">¥44,60</div>
-                                        </div>
-                                        <div class="d-flex align-items-baseline">
-                                            <div class="text-price-big">¥25,90</div>
-                                            <div class="text-price-small">¥44,60</div>
-                                        </div>
-                                        <div class="title-sold">Đã bán 4.2k sản phẩm</div>
-                                    </div>
-                                </a>
-                            </div>
-                        @endfor
-                    </div>
-                    <div class="swiper-button-next next-distributor"></div>
-                    <div class="swiper-button-prev prev-distributor"></div>
-                </div>
-            </div>
-            <div class="box-slide-product box-tab-menu-product" data-index="2">
-                <div class="swiper productSwiper">
-                    <div class="swiper-wrapper">
-                        @for($i=0;$i<10;$i++)
-                            <div class="swiper-slide">
-                                <a class="box-product-item">
-                                    <div class="w-100 position-relative">
-                                        <img
-                                            src="https://sabomall-chapi-dream.s3.ap-southeast-1.amazonaws.com/O1_CN_01_Mm2_U2d1d1_CV_4ce9_EL_2217660303675_0_cib_d2fd824122.jpg"
-                                            class="w-100" style="object-fit: cover">
-                                        <div class="box-super-top">
-                                            {{$i+1}}
-                                        </div>
-                                    </div>
-                                    <div class="content-item-sp">
-                                        <div class="title-product-item custom-content-2-line">
-                                            <img src="https://m.sabomall.com/icons/icon-1688-tag.svg" alt="">
-                                            Ly giữ nhiệt bằng thép không gỉ 304 xuất khẩu, ly cà phê Mỹ đá đẹp mắt, cốc cầm
-                                            tay có ống hút
-                                            tiện lợi
-                                        </div>
-                                        <div class="d-flex align-items-baseline">
-                                            <div class="text-price-big-red">¥25,90</div>
-                                            <div class="text-price-red">¥44,60</div>
-                                        </div>
-                                        <div class="d-flex align-items-baseline">
-                                            <div class="text-price-big">¥25,90</div>
-                                            <div class="text-price-small">¥44,60</div>
-                                        </div>
-                                        <div class="title-sold">Đã bán 4.2k sản phẩm</div>
-                                    </div>
-                                </a>
-                            </div>
-                        @endfor
-                    </div>
-                    <div class="swiper-button-next next-distributor"></div>
-                    <div class="swiper-button-prev prev-distributor"></div>
-                </div>
-            </div>
-        </div>
-
+        @if(count($randomProducts)>0)
         <div class="box-list-content">
             <div class="line-home-title">
                 <div class="title-big-shop">Đề xuất cho bạn</div>
-                <a href="" class="link-more-deal">Xem thêm <i class="fa-solid fa-chevron-right"
+                <a href="{{route('recommended-you')}}" class="link-more-deal">Xem thêm <i class="fa-solid fa-chevron-right"
                                                               style="padding-left: 7px"></i></a>
             </div>
             <div class="content-recommended">
-                @for($i=0;$i<18;$i++)
-                    <a class="box-product-item">
+                @foreach($randomProducts as $pro)
+                    <a href="{{route('detail-product',$pro->slug)}}" class="box-product-item">
                         <div class="w-100 position-relative">
                             <img
-                                src="https://sabomall-chapi-dream.s3.ap-southeast-1.amazonaws.com/O1_CN_01_Mm2_U2d1d1_CV_4ce9_EL_2217660303675_0_cib_d2fd824122.jpg"
+                                src="{{$pro->src}}"
                                 class="w-100" style="object-fit: cover">
                         </div>
                         <div class="content-item-sp">
                             <div class="title-product-item custom-content-2-line">
-                                <img src="https://m.sabomall.com/icons/icon-1688-tag.svg" alt="">
-                                Ly giữ nhiệt bằng thép không gỉ 304 xuất khẩu, ly cà phê Mỹ đá đẹp mắt, cốc cầm
-                                tay có ống hút
-                                tiện lợi
+                                {{$pro->name}}
                             </div>
                             <div class="d-flex align-items-baseline">
-                                <div class="text-price-big-red">¥25,90</div>
-                                <div class="text-price-red">¥44,60</div>
+                                <div class="text-price-big-red">¥{{number_format($pro->price,2)}}</div>
                             </div>
                             <div class="d-flex align-items-baseline">
-                                <div class="text-price-big">¥25,90</div>
-                                <div class="text-price-small">¥44,60</div>
+                                <div class="text-price-big">{{number_format($pro->price*$setting->exchange_rate)}}đ</div>
                             </div>
-                            <div class="title-sold">Đã bán 4.2k sản phẩm</div>
+                            <div class="title-sold">Đã bán {{number_format($pro->sold)}} sản phẩm</div>
                         </div>
                     </a>
-                    @endfor
+                    @endforeach
+            </div>
+            <div class="d-flex justify-content-center mt-3">
+                {{ $randomProducts->appends(request()->all())->links('admin.pagination_custom.index') }}
             </div>
         </div>
+            @endif
 
     </div>
 

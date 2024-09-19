@@ -36,7 +36,7 @@
                 <div class="box-price-detail">
                         <div class="d-flex mb-1">
                             <span class="title-price-detail">Giá gốc</span>
-                            <span class="price-detail-big">¥{{number_format($productAttribute[0]->price??$data->price)}}</span>
+                            <span class="price-detail-big">¥{{number_format($productAttribute[0]->price??$data->price,2)}}</span>
                         </div>
                     <div class="d-flex mb-2">
                         <span class="title-price-detail">Giá VNĐ</span>
@@ -68,7 +68,7 @@
                             <div class="box-item-size">
                                 <span class="title-size-item">{{$item->name}}</span>
                                 <div class="title-price-size">
-                                    <p class="price_cn">¥{{number_format($item->price)}}</p>
+                                    <p class="price_cn">¥{{number_format($item->price,2)}}</p>
                                     <p class="price_vn">{{number_format($item->price*$setting->exchange_rate)}}₫</p>
                                 </div>
                                 <div class="title-note">
@@ -84,7 +84,7 @@
                     </div>
                 </div>
                     @else
-                    <div class="box-quantity-fa">
+                    <div class="box-quantity-fa mt-2">
                         <button class="btn-minus-plus"><i class="fa-solid fa-minus"></i></button>
                         <input type="number" class="input-quntity" value="0">
                         <button class="btn-minus-plus"><i class="fa-solid fa-plus"></i></button>
@@ -128,12 +128,10 @@
                                             {{$similar->name}}
                                         </div>
                                         <div class="d-flex align-items-baseline">
-                                            <div class="text-price-big-red">¥{{number_format($similar->price)}}</div>
-{{--                                            <div class="text-price-red">¥44,60</div>--}}
+                                            <div class="text-price-big-red">¥{{number_format($similar->price,2)}}</div>
                                         </div>
                                         <div class="d-flex align-items-baseline">
                                             <div class="text-price-big">{{number_format($similar->price*$setting->exchange_rate)}}đ</div>
-{{--                                            <div class="text-price-small">¥44,60</div>--}}
                                         </div>
                                         <div class="title-sold">Đã bán {{number_format($similar->sold)}} sản phẩm</div>
                                     </div>
@@ -162,4 +160,11 @@
 @stop
 @section('script_page')
     <script src="{{asset('assets/js/product.js')}}"></script>
+    <script>
+        $(document).ready(function() {
+            $('.content-describe a').on('click', function(event) {
+                event.preventDefault();
+            });
+        });
+    </script>
 @stop

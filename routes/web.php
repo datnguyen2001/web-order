@@ -23,7 +23,8 @@ Route::get('danh-muc/{status}', [CategoryController::class, 'category'])->name('
 Route::get('danh-muc/{status}/{name}',[CategoryController::class, 'categoryTwo'])->name('category.two');
 Route::get('danh-muc/{status}/{name}/{slug}',[CategoryController::class, 'categoryThree'])->name('category.three');
 Route::get('tim-kiem', [HomeController::class, 'search'])->name('search');
-Route::get('xem-them', [HomeController::class, 'more'])->name('more');
+Route::get('deal-hot', [HomeController::class, 'dealHot'])->name('deal-hot');
+Route::get('de-xuat-cho-ban', [HomeController::class, 'recommendedYou'])->name('recommended-you');
 Route::get('chi-tiet-san-pham/{slug}', [ProductController::class, 'detailProduct'])->name('detail-product');
 Route::get('gio-hang', [HomeController::class, 'cart'])->name('cart');
 Route::get('xac-nhan-don', [HomeController::class, 'confirmApplication'])->name('confirm-application');

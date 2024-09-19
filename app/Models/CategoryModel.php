@@ -17,4 +17,14 @@ class CategoryModel extends Model
         'parent_id',
         'child_id',
     ];
+
+    public function children()
+    {
+        return $this->hasMany(CategoryModel::class, 'parent_id');
+    }
+
+    public function grandchildren()
+    {
+        return $this->hasMany(CategoryModel::class, 'child_id');
+    }
 }

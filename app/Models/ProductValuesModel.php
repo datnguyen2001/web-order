@@ -17,4 +17,9 @@ class ProductValuesModel extends Model
         'src',
         'PID'
     ];
+
+    public function productAttributes()
+    {
+        return $this->hasMany(ProductAttributesModel::class, 'product_value_id');
+    }
 }

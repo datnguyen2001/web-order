@@ -101,10 +101,10 @@
                 </h2>
                 <div id="collapse_{{$index}}" class="accordion-collapse collapse" aria-labelledby="heading_{{$index}}" data-bs-parent="#accordionExample">
                     <div class="accordion-body">
-                        @foreach($cate->category_sub_2 as $cate2)
+                        @foreach($cate->children as $cate2)
                         <a href="{{url('danh-muc/'.$cate->slug.'/'.$cate2->slug)}}" class="title-big-category" style="font-weight: 600;color: #1a1a1a">{{$cate2->name}}</a>
                         <div class="d-flex align-items-center flex-wrap mb-2 gap-2">
-                            @foreach($cate2->category_sub_3 as $cate3)
+                            @foreach($cate2->grandchildren as $cate3)
                             <a href="{{url('danh-muc/'.$cate->slug.'/'.$cate2->slug.'/'.$cate3->slug)}}" class="title-small-category">{{$cate3->name}}</a>
                             @endforeach
                         </div>
