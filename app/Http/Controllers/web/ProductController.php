@@ -22,10 +22,10 @@ class ProductController extends Controller
         }
         $SimilarProducts = ProductModel::where('id','!=',$data->id)->inRandomOrder()->take(10)->get();
         foreach ($SimilarProducts as $pro){
-            $value = ProductValuesModel::where('product_id',$pro->id)->first();
+            $value = ProductValuesModel::where('product_id',$pro->id)->pluck('id');
             $pro->src = ProductImagesModel::where('product_id',$pro->id)->first()->src;
             if ($value){
-                $attribute = ProductAttributesModel::where('product_value_id',$value->id)->first();
+                $attribute = ProductAttributesModel::whereIn('product_value_id',$value)->orderByRaw('CAST(price AS DECIMAL(10, 2)) ASC')->first();
                 if ($attribute){
                     $pro->price = $attribute->price;
                 }else{

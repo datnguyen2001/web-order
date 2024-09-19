@@ -28,16 +28,19 @@ class CategoryController extends Controller
             }
         }
         $name_category = $cate->name;
-        $minPrice = $request->input('min_price', 0);
-        $maxPrice = $request->input('max_price', PHP_INT_MAX);
-        $listData = ProductModel::whereIn('category_id',$cate_2)->orWhereIn('category_id',$cate_3)
+        $minPrice = intval($request->input('min_price', 0));
+        $maxPrice = intval($request->input('max_price', PHP_INT_MAX));
+        $listData = ProductModel::where(function ($query) use ($cate_2, $cate_3) {
+            $query->whereIn('category_id', $cate_2)
+                ->orWhereIn('category_id', $cate_3);
+        })->whereBetween('price', [$minPrice, $maxPrice])
             ->paginate(24);
 
-        foreach ($listData as $pro){
-            $productValue = ProductValuesModel::where('product_id',$pro->id)->select('id')->first();
+        foreach ($listData as $key => $pro){
+            $productValue = ProductValuesModel::where('product_id',$pro->id)->pluck('id');
             $pro->src = ProductImagesModel::where('product_id',$pro->id)->first()->src;
             if ($productValue){
-                $attribute = ProductAttributesModel::where('product_value_id',$productValue->id)->select('id','price')->first();
+                $attribute = ProductAttributesModel::whereIn('product_value_id',$productValue)->orderByRaw('CAST(price AS DECIMAL(10, 2)) ASC')->select('id','price')->first();
                 if ($attribute){
                     $pro->price = floatval($attribute->price);
                 }else{
@@ -66,14 +69,17 @@ class CategoryController extends Controller
         $minPrice = $request->input('min_price', 0);
         $maxPrice = $request->input('max_price', PHP_INT_MAX);
 
-        $listData = ProductModel::where('category_id',$cate_2->id)->orWhereIn('category_id',$cate_3)->select('id', 'name', 'slug','price','sold')
+        $listData = ProductModel::where(function ($query) use ($cate_2, $cate_3) {
+            $query->where('category_id', $cate_2->id)
+                ->orWhereIn('category_id', $cate_3);
+        })->whereBetween('price', [$minPrice, $maxPrice])
             ->paginate(24);
 
         foreach ($listData as $pro){
-            $productValue = ProductValuesModel::where('product_id',$pro->id)->select('id')->first();
+            $productValue = ProductValuesModel::where('product_id',$pro->id)->pluck('id');
             $pro->src = ProductImagesModel::where('product_id',$pro->id)->first()->src;
             if ($productValue){
-                $attribute = ProductAttributesModel::where('product_value_id',$productValue->id)->select('id','price')->first();
+                $attribute = ProductAttributesModel::whereIn('product_value_id',$productValue)->orderByRaw('CAST(price AS DECIMAL(10, 2)) ASC')->select('id','price')->first();
                 if ($attribute){
                     $pro->price = $attribute->price;
                 }
@@ -97,12 +103,12 @@ class CategoryController extends Controller
         $minPrice = $request->input('min_price', 0);
         $maxPrice = $request->input('max_price', PHP_INT_MAX);
         $listData = ProductModel::where('category_id',$cate_3->id)->select('id', 'name', 'slug','price','sold')
-           ->paginate(24);
+            ->whereBetween('price', [$minPrice, $maxPrice])->paginate(24);
         foreach ($listData as $pro){
-            $productValue = ProductValuesModel::where('product_id',$pro->id)->select('id')->first();
+            $productValue = ProductValuesModel::where('product_id',$pro->id)->pluck('id');
             $pro->src = ProductImagesModel::where('product_id',$pro->id)->first()->src;
             if ($productValue){
-                $attribute = ProductAttributesModel::where('product_value_id',$productValue->id)->select('id','price')->first();
+                $attribute = ProductAttributesModel::whereIn('product_value_id',$productValue)->orderByRaw('CAST(price AS DECIMAL(10, 2)) ASC')->select('id','price')->first();
                 if ($attribute){
                     $pro->price = $attribute->price;
                 }

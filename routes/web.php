@@ -26,9 +26,7 @@ Route::get('tim-kiem', [HomeController::class, 'search'])->name('search');
 Route::get('deal-hot', [HomeController::class, 'dealHot'])->name('deal-hot');
 Route::get('de-xuat-cho-ban', [HomeController::class, 'recommendedYou'])->name('recommended-you');
 Route::get('chi-tiet-san-pham/{slug}', [ProductController::class, 'detailProduct'])->name('detail-product');
-Route::get('gio-hang', [HomeController::class, 'cart'])->name('cart');
-Route::get('xac-nhan-don', [HomeController::class, 'confirmApplication'])->name('confirm-application');
-Route::get('thanh-toan', [HomeController::class, 'payment'])->name('pay');
+
 Route::get('ve-chung-toi', [HomeController::class, 'about'])->name('about');
 Route::get('bai-viet/{slug}', [HomeController::class, 'post'])->name('post');
 
@@ -39,6 +37,11 @@ Route::post('dang-nhap', [LoginController::class, 'submitLogin'])->name('submit.
 Route::get('dang-xuat', [LoginController::class, 'logout'])->name('logout');
 
 Route::middleware('auth')->group(function () {
+
+    Route::get('gio-hang', [HomeController::class, 'cart'])->name('cart');
+    Route::get('xac-nhan-don', [HomeController::class, 'confirmApplication'])->name('confirm-application');
+    Route::get('thanh-toan', [HomeController::class, 'payment'])->name('pay');
+
     Route::get('thong-tin-ca-nhan', [ProfileController::class, 'profile'])->name('profile');
     Route::post('save-profile', [ProfileController::class, 'saveProfile'])->name('save-profile');
     Route::post('change-avatar', [ProfileController::class, 'changeAvatar'])->name('change-avatar');

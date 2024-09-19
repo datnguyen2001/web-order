@@ -1,5 +1,5 @@
 @extends('web.index')
-@section('title','Xem thêm')
+@section('title',$nameCate)
 
 @section('style_page')
     <link rel="stylesheet" href="{{asset('assets/css/category.css')}}">

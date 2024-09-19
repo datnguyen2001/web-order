@@ -180,6 +180,12 @@
 .content-describe img{
     width: 100%;
     object-fit: cover;
+    margin: 0 auto;
+    max-width: 100%;
+}
+.content-describe div{
+    max-width: 100%;
+    margin: 0 auto;
 }
 .title-content-detail{
     font-size: 16px;

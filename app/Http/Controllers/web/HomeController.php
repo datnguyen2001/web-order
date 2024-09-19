@@ -75,7 +75,7 @@ class HomeController extends Controller
             ->leftJoin('product_values', 'products.id', '=', 'product_values.product_id')
             ->leftJoin('product_attributes', 'product_values.id', '=', 'product_attributes.product_value_id')
             ->select('products.*')
-            ->selectRaw('COALESCE(MIN(product_attributes.price), products.price) as lowest_price')
+            ->selectRaw('COALESCE(MIN(CAST(product_attributes.price AS DECIMAL(10,2))), products.price) as lowest_price')
             ->groupBy('products.id')
             ->orderBy('lowest_price', 'asc')
             ->paginate(25);

@@ -49,7 +49,7 @@
                 </div>
                 @if(count($productValue)>0)
                 <div class="d-flex box-attribute mt-4">
-                    <div class="title-color">Màu sắc</div>
+                    <div class="title-color">Đặc điểm</div>
                     <div class="box-color">
                         @foreach($productValue as $key => $val)
                         <div class="box-item-color @if($key==0) box-item-color-active @endif">
@@ -62,7 +62,7 @@
                 @endif
                 @if(count($productAttribute)>0)
                 <div class="d-flex box-attribute mt-4">
-                    <div class="title-color">Kích cỡ</div>
+                    <div class="title-color">Thuộc tính</div>
                     <div class="box-size">
                         @foreach($productAttribute as $item)
                             <div class="box-item-size">
