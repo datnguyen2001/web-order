@@ -83,7 +83,11 @@
                         @endforeach
                     </div>
                 </div>
-                    <button class="btn-show-more" id="show-more">Xem thêm</button>
+                <div class="d-flex align-items-start mt-3">
+                    <div class="line-left-more"></div>
+                    <button class="btn-show-more" id="show-more"><i class="fa-solid fa-angle-down"></i></button>
+                    <div class="line-right-more"></div>
+                </div>
                     @else
                     <div class="box-quantity-fa mt-2">
                         <button class="btn-minus-plus"><i class="fa-solid fa-minus"></i></button>
@@ -176,9 +180,10 @@
             $showMoreButton.on('click', function() {
                 $boxSize.toggleClass('expanded');
                 if ($boxSize.hasClass('expanded')) {
-                    $showMoreButton.text('Thu gọn');
+                    $showMoreButton.html('<i class="fa-solid fa-angle-up"></i>');
                 } else {
-                    $showMoreButton.text('Xem thêm');
+                    $showMoreButton.html('<i class="fa-solid fa-angle-down"></i>');
+                    $('html, body').animate({ scrollTop: 200 }, 200);
                 }
             });
         });

@@ -104,15 +104,24 @@
 }
 
 .btn-show-more {
-    background: #f1f1f1;
-    border: none;
-    padding: 5px 10px;
+    border: 1px solid #dedede;
+    border-top: none;
+    padding: 0px 10px 2px 10px;
     cursor: pointer;
     display: none;
+    background: white;
 }
 
 .box-size.expanded .btn-show-more {
-    display: none; /* Ẩn nút khi đã mở rộng */
+    display: none;
+}
+.line-left-more{
+    border-top:1px solid #dedede;
+    width: 17%;
+}
+.line-right-more{
+    border-top:1px solid #dedede;
+    width: 100%;
 }
 
 .box-item-size{

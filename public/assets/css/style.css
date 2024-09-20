@@ -415,6 +415,13 @@ input[type="number"] {
     outline: unset;
     height: 30px;
 }
+.btn-dismiss-address:hover{
+    background: white;
+}
+.btn-success-address:hover{
+    background: #F9471B;
+    border-color: #F9471B;
+}
 .btn-success-address{
     color: rgb(255 255 255/ 1!);
     background: #F9471B;

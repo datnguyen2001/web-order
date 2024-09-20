@@ -102,52 +102,54 @@
                     <h1 class="modal-title fs-5 title-add-address" id="staticBackdropLabel">Thêm địa chỉ nhận hàng</h1>
                     <button type="button" class="btn-close close-address" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+                <form id="address-form" method="POST">
+                    @csrf
                 <div class="modal-body pt-0">
                     <div class="w-100 d-flex flex-column mb-3">
                         <span class="title-form-address">Người nhận hàng <span style="color: #F9471B">*</span></span>
-                        <input type="text" class="input-form-address" placeholder="Tên người nhận hàng" required>
+                        <input type="text" class="input-form-address" name="name" placeholder="Tên người nhận hàng" required>
                     </div>
                     <div class="w-100 d-flex flex-column mb-3">
                         <span class="title-form-address">Số điện thoại <span style="color: #F9471B">*</span></span>
-                        <input type="text" class="input-form-address" placeholder="Số điện thoại" required>
+                        <input type="text" class="input-form-address" name="phone" placeholder="Số điện thoại" required>
                     </div>
                     <div class="w-100 d-flex flex-column mb-3">
                         <span class="title-form-address">Tỉnh/Thành phố <span style="color: #F9471B">*</span></span>
-                        <select name="" class="input-form-address" required>
+                        <select name="province_id" class="input-form-address" id="province" required>
                             <option value="">Chọn tỉnh/thành phố</option>
-                            <option value="">Hà Nội</option>
-                            <option value="">Hồ Chí Minh</option>
+                            @foreach($province as $provinces)
+                            <option value="{{$provinces->province_id }}">{{$provinces->name}}</option>
+                            @endforeach
                         </select>
                     </div>
                     <div class="w-100 d-flex flex-column mb-3">
                         <span class="title-form-address">Quận/Huyện <span style="color: #F9471B">*</span></span>
-                        <select name="" class="input-form-address" required>
+                        <select name="district_id" class="input-form-address" id="district" required>
                             <option value="">Chọn quận/huyện</option>
-                            <option value="">Hà Nội</option>
-                            <option value="">Hồ Chí Minh</option>
+
                         </select>
                     </div>
                     <div class="w-100 d-flex flex-column mb-3">
                         <span class="title-form-address">Phường/Xã <span style="color: #F9471B">*</span></span>
-                        <select name="" class="input-form-address" required>
+                        <select name="ward_id" class="input-form-address" id="ward" required>
                             <option value="">Chọn phường/xã</option>
-                            <option value="">Hà Nội</option>
-                            <option value="">Hồ Chí Minh</option>
+
                         </select>
                     </div>
                     <div class="w-100 d-flex flex-column mb-3">
                         <span class="title-form-address">Địa chỉ cụ thể <span style="color: #F9471B">*</span></span>
-                        <input type="text" class="input-form-address" placeholder="Địa chỉ cụ thể" required>
+                        <input type="text" class="input-form-address" name="detail_address" placeholder="Địa chỉ cụ thể" required>
                     </div>
                     <div class="w-100 d-flex align-items-center">
-                        <input type="checkbox" id="">
-                        <lable class="title-form-address mb-0 mx-2">Đặt làm địa chỉ giao hàng mặc định</lable>
+                        <input type="checkbox" id="is_default" name="is_default">
+                        <label for="is_default" class="title-form-address mb-0 mx-2">Đặt làm địa chỉ giao hàng mặc định</label>
                     </div>
                 </div>
                 <div class="modal-footer border-0">
                     <button type="button" class="btn btn-secondary btn-dismiss-address" data-bs-dismiss="modal">Hủy Bỏ</button>
-                    <button type="button" class="btn btn-primary btn-success-address">Xác Nhận</button>
+                    <button type="submit" class="btn btn-primary btn-success-address">Xác Nhận</button>
                 </div>
+                </form>
             </div>
         </div>
     </div>

@@ -112,20 +112,6 @@ class HomeController extends Controller
         return view('web.search.more',compact('listData','nameCate'));
     }
 
-    public function cart()
-    {
-        return view('web.cart.index');
-    }
-
-    public function confirmApplication()
-    {
-        return view('web.pay.index');
-    }
-    public function Payment()
-    {
-        return view('web.pay.payment');
-    }
-
     public function about()
     {
         $data = SettingModel::select('about_shop')->first();

@@ -6,6 +6,8 @@ use \App\Http\Controllers\web\HomeController;
 use \App\Http\Controllers\web\CategoryController;
 use \App\Http\Controllers\web\ProfileController;
 use \App\Http\Controllers\web\ProductController;
+use \App\Http\Controllers\web\AddressController;
+use \App\Http\Controllers\web\PaymentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,6 +32,9 @@ Route::get('chi-tiet-san-pham/{slug}', [ProductController::class, 'detailProduct
 Route::get('ve-chung-toi', [HomeController::class, 'about'])->name('about');
 Route::get('bai-viet/{slug}', [HomeController::class, 'post'])->name('post');
 
+Route::get('get-district/{province_id}', [AddressController::class, 'district']);
+Route::get('get-wards/{district_id}', [AddressController::class, 'wards']);
+
 Route::get('dang-ky', [LoginController::class, 'register'])->name('register');
 Route::post('dang-ky', [LoginController::class, 'submitRegister'])->name('submit.register');
 Route::get('dang-nhap', [LoginController::class, 'login'])->name('login');
@@ -38,9 +43,13 @@ Route::get('dang-xuat', [LoginController::class, 'logout'])->name('logout');
 
 Route::middleware('auth')->group(function () {
 
-    Route::get('gio-hang', [HomeController::class, 'cart'])->name('cart');
-    Route::get('xac-nhan-don', [HomeController::class, 'confirmApplication'])->name('confirm-application');
-    Route::get('thanh-toan', [HomeController::class, 'payment'])->name('pay');
+    Route::get('gio-hang', [PaymentController::class, 'cart'])->name('cart');
+    Route::get('xac-nhan-don', [PaymentController::class, 'confirmApplication'])->name('confirm-application');
+    Route::get('thanh-toan', [PaymentController::class, 'payment'])->name('pay');
+    Route::post('save-address', [AddressController::class, 'saveAddress'])->name('save-address');
+    Route::post('address-new', [AddressController::class, 'addressNew'])->name('address-new');
+    Route::post('/update-default-address', [AddressController::class, 'updateDefaultAddress']);
+    Route::get('/edit-address', [AddressController::class, 'editAddress']);
 
     Route::get('thong-tin-ca-nhan', [ProfileController::class, 'profile'])->name('profile');
     Route::post('save-profile', [ProfileController::class, 'saveProfile'])->name('save-profile');

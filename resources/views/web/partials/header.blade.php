@@ -26,7 +26,7 @@
                         </ul>
                     </div>
                 @endif
-                <a href="" class="position-relative">Giỏ hàng <i class="fa-solid fa-cart-shopping"></i> <div class="circle-cart">2</div></a>
+                <a href="{{route('cart')}}" class="position-relative">Giỏ hàng <i class="fa-solid fa-cart-shopping"></i> <div class="circle-cart">2</div></a>
             </div>
         </div>
     </div>

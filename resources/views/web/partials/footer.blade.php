@@ -50,7 +50,7 @@
         <img src="https://m.sabomall.com/favicon.ico" class="icon-menu-footer">
         <span class="active-menu-footer">Trang chủ</span>
     </a>
-    <a href="#" class="item-menu-footer">
+    <a href="{{route('cart')}}" class="item-menu-footer">
         <i class="fa-solid fa-cart-shopping icon-menu-footer"></i>
         <span>Giỏ hàng</span>
     </a>

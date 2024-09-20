@@ -96,4 +96,75 @@ $(document).ready(function() {
         $('#total_sp_all').prop('checked', allChecked);
     });
 
+    // Thêm địa chỉ
+    $('#province').on('change', function () {
+        var provinceId = $(this).val();
+        $('#district').html('<option value="">Chọn quận/huyện</option>');
+        $('#ward').html('<option value="">Chọn phường/xã</option>');
+
+        if (provinceId) {
+            $.ajax({
+                url: 'get-district/'+provinceId,
+                type: 'GET',
+                success: function (data) {
+                    if (data.status){
+                        var districtOptions = '<option value="">Chọn quận/huyện</option>';
+                        $.each(data.data, function (key, district) {
+                            districtOptions += '<option value="' + district.district_id + '">' + district.name + '</option>';
+                        });
+                        $('#district').html(districtOptions);
+                    }else {
+                        toastr.error(data.message);
+                    }
+                }
+            });
+        }
+    });
+
+    $('#district').on('change', function () {
+        var districtId = $(this).val();
+
+        $('#ward').html('<option value="">Chọn phường/xã</option>');
+
+        if (districtId) {
+            $.ajax({
+                url: 'get-wards/'+districtId,
+                type: 'GET',
+                success: function (data) {
+                    if (data.status) {
+                        var wardOptions = '<option value="">Chọn phường/xã</option>';
+                        $.each(data.data, function (key, ward) {
+                            wardOptions += '<option value="' + ward.wards_id + '">' + ward.name + '</option>';
+                        });
+                        $('#ward').html(wardOptions);
+                    }else {
+                        toastr.error(data.message);
+                    }
+                }
+            });
+        }
+    });
+
+    $('#address-form').on('submit', function(e) {
+        e.preventDefault();
+
+        $.ajax({
+            url: 'save-address',
+            type: 'POST',
+            data: $(this).serialize(),
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(response) {
+                if (response.status){
+                    $('#address-form')[0].reset();
+                    window.location.href = '/xac-nhan-don';
+                }else {
+                    toastr.error(response.message);
+                }
+
+            }
+        });
+    });
+
 });
