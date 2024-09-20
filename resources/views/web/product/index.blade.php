@@ -183,6 +183,7 @@
     <script src="{{asset('assets/js/product.js')}}"></script>
     <script>
         var cartUrl = "{{ route('cart') }}";
+        var loginUrl = "{{route('login')}}"
 
         $(document).ready(function() {
             $('.content-describe a').on('click', function(event) {

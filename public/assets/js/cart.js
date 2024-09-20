@@ -1,5 +1,27 @@
 $(document).ready(function() {
-    // Khi checkbox "Chọn tất cả" được thay đổi
+    // Function to calculate both Chinese and Vietnamese total prices
+    function calculateTotalPrice() {
+        let totalChinesePrice = 0;
+        let totalVietnamesePrice = 0;
+
+        $('.product-checkbox:checked').each(function() {
+            // Get the total Chinese and Vietnamese prices for the checked product
+            let chinesePrice = parseFloat($(this).data('product-chinese-price')) || 0;
+            let vietnamesePrice = parseFloat($(this).data('product-vietnamese-price')) || 0;
+
+            totalChinesePrice += chinesePrice;
+            totalVietnamesePrice += vietnamesePrice;
+        });
+
+        let formattedChinesePrice = Math.floor(totalChinesePrice);
+        let formattedVietnamesePrice = Math.floor(totalVietnamesePrice);
+
+        // Format the prices without decimals
+        $('#total-price-chinese').text('¥' + new Intl.NumberFormat('vi-VN').format(formattedChinesePrice));
+        $('#total-price-vnd').text('(' + new Intl.NumberFormat('vi-VN').format(formattedVietnamesePrice) + '₫)');
+    }
+
+    // "Chọn tất cả" checkbox changed
     $('.select_all').change(function() {
         // Lấy trạng thái của checkbox "Chọn tất cả"
         var isChecked = $(this).is(':checked');
@@ -10,6 +32,9 @@ $(document).ready(function() {
         // Đặt trạng thái cho tất cả các checkbox shop
         $('.shop-checkbox').prop('checked', isChecked);
         $('.select_all_bottom').prop('checked', isChecked);
+
+        // Recalculate the total price
+        calculateTotalPrice();
     });
 
     $('.select_all_bottom').change(function() {
@@ -23,6 +48,9 @@ $(document).ready(function() {
         // Đặt trạng thái cho tất cả các checkbox shop
         $('.shop-checkbox').prop('checked', isChecked);
         $('.select_all').prop('checked', isChecked);
+
+        // Recalculate the total price
+        calculateTotalPrice();
     });
 
     // Khi một checkbox sản phẩm thay đổi
@@ -33,23 +61,20 @@ $(document).ready(function() {
         // Cập nhật trạng thái của checkbox "Chọn tất cả" dựa trên tất cả checkbox sản phẩm
         $('.select_all').prop('checked', allChecked);
         $('.select_all_bottom').prop('checked', allChecked);
-    });
 
-    // Khi thay đổi trạng thái của bất kỳ checkbox sản phẩm nào
-    $(document).on('change', '.product-checkbox', function() {
-        // Kiểm tra xem tất cả checkbox sản phẩm có được chọn không
-        var allChecked = $('.product-checkbox').length === $('.product-checkbox:checked').length;
-
+        // Recalculate the total price
+        calculateTotalPrice();
     });
 
     // Khi thay đổi trạng thái của bất kỳ checkbox shop nào
     $(document).on('change', '.shop-checkbox', function() {
-        // Kiểm tra xem tất cả checkbox shop có được chọn không
         var allChecked = $('.shop-checkbox').length === $('.shop-checkbox:checked').length;
 
         // Cập nhật trạng thái của checkbox "Chọn tất cả" dựa trên trạng thái của các checkbox shop
         $('#total_sp_all').prop('checked', allChecked);
     });
+
+    calculateTotalPrice();
 
     // Thêm địa chỉ
     $('#province').on('change', function () {
