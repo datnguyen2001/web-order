@@ -4,6 +4,7 @@ namespace App\Http\Controllers\web;
 
 use App\Http\Controllers\Controller;
 use App\Models\AddressModel;
+use App\Models\Cart;
 use App\Models\ProvinceModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,7 +16,9 @@ class PaymentController extends Controller
     {
         $province = ProvinceModel::all();
 
-        return view('web.cart.index',compact('province'));
+        $cartItems = Cart::where('user_id', Auth::user()->id)->get();
+
+        return view('web.cart.index',compact('province', 'cartItems'));
     }
 
     public function confirmApplication()
