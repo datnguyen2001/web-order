@@ -71,6 +71,7 @@
     gap: 10px;
 }
 .box-item-color{
+    position: relative;
     display: flex;
     align-items: center;
     padding: 5px 10px;
@@ -220,6 +221,17 @@
     font-size: 16px;
     color: #1a1a1a;
     font-weight: 600;
+}
+.prop-item-total{
+    display: none;
+    position: absolute;
+    right: 0;
+    top: -10px;
+    border-radius: 6px;
+    background-color: #ff4000;
+    padding: 3px;
+    font-size: 12px;
+    color: #fff;
 }
 @media (max-width: 1200px) {
     .box-content-detail-sp {
