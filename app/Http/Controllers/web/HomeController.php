@@ -4,6 +4,7 @@ namespace App\Http\Controllers\web;
 
 use App\Http\Controllers\Controller;
 use App\Models\BannerModel;
+use App\Models\Cart;
 use App\Models\EcommercePlatformModel;
 use App\Models\PostModel;
 use App\Models\ProductImagesModel;
@@ -110,6 +111,15 @@ class HomeController extends Controller
         $nameCate = 'Đề xuất cho bạn';
 
         return view('web.search.more',compact('listData','nameCate'));
+    }
+
+    public function confirmApplication()
+    {
+        return view('web.pay.index');
+    }
+    public function Payment()
+    {
+        return view('web.pay.payment');
     }
 
     public function about()

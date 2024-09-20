@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\web\CartController;
 use App\Http\Controllers\web\LoginController;
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\web\HomeController;
@@ -56,4 +57,11 @@ Route::middleware('auth')->group(function () {
     Route::post('change-avatar', [ProfileController::class, 'changeAvatar'])->name('change-avatar');
     Route::get('danh-sach-don-hang', [ProfileController::class, 'order'])->name('order');
     Route::get('lich-su-giao-dich/{name}', [ProfileController::class, 'wallet'])->name('wallet');
+
+    Route::post('add-to-cart', [CartController::class, 'addToCart'])->name('add-to-cart');
+    Route::post('delete-attribute', [CartController::class, 'deleteAttribute'])->name('cart.delete-attribute');
+    Route::post('delete-product', [CartController::class, 'deleteProduct'])->name('cart.delete-product');
+    Route::post('delete-cart', [CartController::class, 'deleteCart'])->name('cart.delete-cart');
 });
+
+Route::get('/api/get-attribute/{value_id}', [ProductController::class, 'getAttribute'])->name('api.get-attribute');

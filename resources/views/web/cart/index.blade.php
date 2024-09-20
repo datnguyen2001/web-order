@@ -7,14 +7,13 @@
 {{--content of page--}}
 @section('content')
     <div class="box-content">
-
         <div class="d-flex justify-content-between align-items-center flex-wrap">
             <img src="https://sabomall.com/banner/banner-top.png" class="img-search-1">
             <img src="https://sabomall.com/banner/chrome-ext-2.png" class="img-search-2">
         </div>
 
         <div class="header-cart-detail custom-shadow">
-            <p class="title-total-sp">Tổng (4/200)</p>
+            <p class="title-total-sp">Tổng: {{ is_countable($cartItems) ? count($cartItems) : 0 }} sản phẩm</p>
             <div class="header-table-cart">
                 <div class="tick_sp_all">
                     <input type="checkbox" id="total_sp_all select_all" class="select_all" style="margin-right: 5px">
@@ -27,71 +26,86 @@
             </div>
         </div>
 
-        @for($i=0;$i<2;$i++)
+        @php
+            $groupedCartItems = $cartItems->groupBy('product_name');
+        @endphp
         <div class="header-cart-detail custom-shadow ">
-            <div class="shop_sp_all">
-                <input type="checkbox" id="total_sp_all" class="shop-checkbox">
-                <img src="https://sabomall.com/cart/icon_1688.png" style="width: 60px">
-                <lable>鸿源凯诺渔具厂(Hongyuan Kainuo Fishing Tackle Factory)</lable>
-            </div>
-            @for($i=0;$i<2;$i++)
+            @foreach($groupedCartItems as $productName => $items)
             <div class="line_item_cart">
                 <div class="d-flex align-items-center gap-2">
                     <input type="checkbox" class="product-checkbox">
-                    <img src="https://cbu01.alicdn.com/img/ibank/O1CN01pWZ1131CFrUEJK51s_!!2212814650052-0-cib.jpg" class="img-sp-cart">
-                    <a href="" class="title-detail-sp title-detail-sp-mobile">Cần câu LEO bằng carbon cắm vào cần câu LEO bằng cần câu miệng ngựa bán buôn cần câu bắn xa siêu nhẹ và cứng M</a>
+                    <img src="{{$items[0]->product_image}}" class="img-sp-cart">
+                    <a href="" class="title-detail-sp title-detail-sp-mobile">{{$productName ?? 'Product Name'}}</a>
                 </div>
                 <div class="content-line-cart-item position-relative">
-                    <a href="" class="title-detail-sp title-detail-sp-desktop">Cần câu LEO bằng carbon cắm vào cần câu LEO bằng cần câu miệng ngựa bán buôn cần câu bắn xa siêu nhẹ và cứng M</a>
-                    <div class="box-attribute-cart-sp ">
-                        <div class="line-item-detail-attribute">
-                            <img src="https://cbu01.alicdn.com/img/ibank/O1CN01J7Vomv1vvgQrlP7DS_!!3377416235-0-cib.jpg" class="img-sp-attribute">
-                            <div class="box-name-attribute-cart">Titan ba lớp sợi nhỏ [màu ngẫu nhiên] một cặp kích thước</div>
-                        </div>
-                        <div class="line-item-detail-quantity-attribute">
-                            <div class="box-quantity-fa">
-                                <button class="btn-minus-plus btn-minus"><i class="fa-solid fa-minus"></i></button>
-                                <input type="number" class="input-quantity" value="0">
-                                <button class="btn-minus-plus btn-plus"><i class="fa-solid fa-plus"></i></button>
+                    <a href="" class="title-detail-sp title-detail-sp-desktop">{{$productName ?? 'Product Name'}}</a>
+                    @foreach($items as $cartItem)
+                        <div class="box-attribute-cart-sp ">
+                            <div class="line-item-detail-attribute">
+                                <img src="{{$cartItem->product_value_image}}" class="img-sp-attribute">
+                                <div class="box-name-attribute-cart">{{($cartItem->product_value ?? 'Product Value') . " , " . ($cartItem->product_attribute ?? 'Product Attribute')}}</div>
                             </div>
-                            <button class="icon-item-delete-attribute"><i class="fa-regular fa-trash-can"></i></button>
-
+                            <div class="line-item-detail-quantity-attribute">
+                                <div class="box-quantity-fa">
+    {{--                                <button class="btn-minus-plus btn-minus"><i class="fa-solid fa-minus"></i></button>--}}
+                                    <input type="number" class="input-quantity" value="{{$cartItem->quantity ?? 0}}" readonly>
+    {{--                                <button class="btn-minus-plus btn-plus"><i class="fa-solid fa-plus"></i></button>--}}
+                                </div>
+                                <button class="icon-item-delete-attribute" data-product-name="{{$productName}}"
+                                        data-value-name="{{$cartItem->product_value}}" data-attribute-name="{{$cartItem->product_attribute}}">
+                                    <i class="fa-regular fa-trash-can"></i>
+                                </button>
+                            </div>
+                            <div class="line-item-detail-price-attribute">
+                                <span class="title-price-attribute">
+                                    ¥{{ number_format(floatval($cartItem->chinese_price ?? 0), 0, ',', '.') }}
+                                </span>
+                                <span class="title-price-small-attribute">
+                                    {{ number_format(floatval($cartItem->vietnamese_price ?? 0), 0, ',', '.') }}₫
+                                </span>
+                            </div>
+                            <div class="line-item-detail-price-attribute">
+                                <span class="title-price-attribute" style="color: #F9471B">
+                                    ¥{{ number_format(floatval($cartItem->chinese_price ?? 0) * ($cartItem->quantity ?? 1), 0, ',', '.') }}
+                                </span>
+                                <span class="title-price-small-attribute" style="color: #F9471B">
+                                    {{ number_format(floatval($cartItem->vietnamese_price ?? 0) * ($cartItem->quantity ?? 1), 0, ',', '.') }}₫
+                                </span>
+                            </div>
                         </div>
-                        <div class="line-item-detail-price-attribute">
-                            <span class="title-price-attribute">¥40,00</span>
-                            <span class="title-price-small-attribute">145.800₫</span>
-                        </div>
-                        <div class="line-item-detail-price-attribute">
-                            <span class="title-price-attribute" style="color: #F9471B">¥40,00</span>
-                            <span class="title-price-small-attribute" style="color: #F9471B">145.800₫</span>
-                        </div>
-                    </div>
-                    <button class="btn-delete-cart-shop"><i class="fa-regular fa-trash-can"></i></button>
+                    @endforeach
+                    <button class="btn-delete-cart-shop" data-product-name="{{$productName}}">
+                        <i class="fa-regular fa-trash-can"></i>
+                    </button>
                 </div>
             </div>
-            @endfor
-
+            @endforeach
         </div>
-@endfor
-
         <div class="box-bottom-pay-cart custom-shadow">
             <div class="d-flex align-items-center gap-4">
                 <div class="box-add-all-to-cart">
                     <input type="checkbox" id="total_sp_all select_all_bottom" class="select_all_bottom">
                     <lable for="select_all_bottom">Chọn tất cả</lable>
                 </div>
-                <button class="btn-delete-all-cart"><i class="fa-regular fa-trash-can" style="margin-right: 5px"></i> Xóa bỏ</button>
+                <button class="btn-delete-all-cart" data-user-id="{{\Illuminate\Support\Facades\Auth::user()->id}}">
+                    <i class="fa-regular fa-trash-can" style="margin-right: 5px"></i> Xóa bỏ
+                </button>
             </div>
+            @php
+                $totalPrice = 0;
+                foreach($cartItems as $cartItem) {
+                    $totalPrice += floatval($cartItem->vietnamese_price ?? 0) * ($cartItem->quantity ?? 1);
+                }
+            @endphp
+
             <div class="d-flex align-items-center justify-content-between line-all-price-pick gap-4">
                 <div class="title-total-price-all-cart">
-                    Tổng: <span>0</span>
-                    (0đ)
+                    Tổng: <span>{{ number_format($totalPrice, 0, ',', '.') }}</span>
+                    ({{ number_format($totalPrice, 0, ',', '.') }}đ)
                 </div>
                 <button class="btn-buy-cart" data-bs-toggle="modal" data-bs-target="#staticBackdropAddress">Mua Hàng</button>
             </div>
-
         </div>
-
     </div>
 
     <!-- Modal address-->
@@ -157,4 +171,10 @@
 @stop
 @section('script_page')
     <script src="{{asset('assets/js/cart.js')}}"></script>
+    <script>
+        var deleteAttributeURL = "{{ route('cart.delete-attribute') }}";
+        var deleteProductURL = "{{ route('cart.delete-product') }}";
+        var deleteCartURL = "{{ route('cart.delete-cart') }}";
+        var csrfToken = "{{ csrf_token() }}";
+    </script>
 @stop

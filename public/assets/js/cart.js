@@ -1,31 +1,8 @@
 $(document).ready(function() {
-    // Sự kiện tăng số lượng sản phẩm
-    $('.btn-plus').click(function() {
-        let quantityInput = $(this).siblings('.input-quantity');
-        let currentValue = parseInt(quantityInput.val());
-        quantityInput.val(currentValue + 1);
-
-        updateTotalPrice();
-    });
-
-    // Sự kiện giảm số lượng sản phẩm
-    $('.btn-minus').click(function() {
-        let quantityInput = $(this).siblings('.input-quantity');
-        let currentValue = parseInt(quantityInput.val());
-
-        if (currentValue > 1) {
-            quantityInput.val(currentValue - 1);
-        }
-
-        // Cập nhật giá trị tổng giá
-        updateTotalPrice();
-    });
-
     // Khi checkbox "Chọn tất cả" được thay đổi
     $('.select_all').change(function() {
         // Lấy trạng thái của checkbox "Chọn tất cả"
         var isChecked = $(this).is(':checked');
-
 
         // Đặt trạng thái cho tất cả các checkbox sản phẩm
         $('.product-checkbox').prop('checked', isChecked);
@@ -56,28 +33,6 @@ $(document).ready(function() {
         // Cập nhật trạng thái của checkbox "Chọn tất cả" dựa trên tất cả checkbox sản phẩm
         $('.select_all').prop('checked', allChecked);
         $('.select_all_bottom').prop('checked', allChecked);
-    });
-
-    // Khi một checkbox shop thay đổi
-    $('.shop-checkbox').change(function() {
-        // Kiểm tra xem tất cả các checkbox shop có được chọn không
-        var allShopChecked = $('.shop-checkbox').length === $('.shop-checkbox:checked').length;
-
-        // Cập nhật trạng thái của checkbox "Chọn tất cả" dựa trên tất cả checkbox shop
-        $('.select_all').prop('checked', allShopChecked);
-        $('.select_all_bottom').prop('checked', allShopChecked);
-    });
-
-    // Khi thay đổi trạng thái của checkbox "Chọn tất cả"
-    $('.shop-checkbox').change(function() {
-        // Lấy trạng thái của checkbox "Chọn tất cả"
-        var isChecked = $(this).is(':checked');
-
-        // Đặt trạng thái cho tất cả các checkbox sản phẩm
-        $('.product-checkbox').prop('checked', isChecked);
-
-        // Đặt trạng thái cho tất cả các checkbox shop
-        $('.shop-checkbox').prop('checked', isChecked);
     });
 
     // Khi thay đổi trạng thái của bất kỳ checkbox sản phẩm nào
@@ -167,4 +122,72 @@ $(document).ready(function() {
         });
     });
 
+});
+
+//Delete attribute
+$(document).on('click', '.icon-item-delete-attribute', function() {
+    var productName = $(this).data('product-name');
+    var productValue = $(this).data('value-name');
+    var productAttribute = $(this).data('attribute-name');
+
+    $.ajax({
+        url: deleteAttributeURL,
+        type: 'POST',
+        data: {
+            _token: csrfToken,
+            product_name: productName,
+            product_value: productValue,
+            product_attribute: productAttribute
+        },
+        success: function(response) {
+            alert('Xoá sản phẩm thành công');
+            location.reload();
+
+        },
+        error: function(xhr) {
+            alert('Error deleting attribute from the cart');
+        }
+    });
+});
+
+//Delete product
+$(document).on('click', '.btn-delete-cart-shop', function() {
+    var productName = $(this).data('product-name');
+
+    $.ajax({
+        url: deleteProductURL,
+        type: 'POST',
+        data: {
+            _token: csrfToken,
+            product_name: productName
+        },
+        success: function(response) {
+            alert('Xoá sản phẩm thành công');
+            location.reload();
+        },
+        error: function(xhr) {
+            alert('Error deleting the product from the cart');
+        }
+    });
+});
+
+//Delete all cart
+$(document).on('click', '.btn-delete-all-cart', function() {
+    var userId = $(this).data('user-id');
+
+    $.ajax({
+        url: deleteCartURL,
+        type: 'POST',
+        data: {
+            _token: csrfToken,
+            user_id: userId
+        },
+        success: function(response) {
+            alert('Xoá sản phẩm thành công');
+            location.reload();
+        },
+        error: function(xhr) {
+            alert('Error deleting the cart');
+        }
+    });
 });
