@@ -246,7 +246,7 @@ $.ajaxSetup({
 $('.btn-add-cart').click(function() {
     let cartItems = JSON.parse(localStorage.getItem('cart_items')) || [];
     if (cartItems.length === 0) {
-        alert('Giỏ hàng rỗng. Vui lòng chọn sản phẩm.');
+        alert('Vui lòng chọn sản phẩm.');
         return;
     }
 
@@ -267,7 +267,12 @@ $('.btn-add-cart').click(function() {
             }
         },
         error: function(xhr, status, error) {
-            console.error('AJAX error:', error);
+            if (xhr.status === 401) {
+                window.location.href = loginUrl;
+            } else {
+                console.error('AJAX error:', error);
+                alert('Có lỗi xảy ra: ' + error);
+            }
         }
     });
 });

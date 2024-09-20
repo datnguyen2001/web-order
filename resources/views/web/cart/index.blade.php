@@ -33,7 +33,16 @@
             @foreach($groupedCartItems as $productName => $items)
             <div class="line_item_cart">
                 <div class="d-flex align-items-center gap-2">
-                    <input type="checkbox" class="product-checkbox">
+                    @php
+                        $totalChinesePrice = 0;
+                        $totalVietnamesePrice = 0;
+
+                        foreach ($items as $item) {
+                            $totalChinesePrice += floatval($item->chinese_price ?? 0) * ($item->quantity ?? 1);
+                            $totalVietnamesePrice += floatval($item->vietnamese_price ?? 0) * ($item->quantity ?? 1);
+                        }
+                    @endphp
+                    <input type="checkbox" class="product-checkbox" data-product-chinese-price="{{$totalChinesePrice}}" data-product-vietnamese-price="{{$totalVietnamesePrice}}">
                     <img src="{{$items[0]->product_image}}" class="img-sp-cart">
                     <a href="" class="title-detail-sp title-detail-sp-mobile">{{$productName ?? 'Product Name'}}</a>
                 </div>
@@ -91,17 +100,12 @@
                     <i class="fa-regular fa-trash-can" style="margin-right: 5px"></i> Xóa bỏ
                 </button>
             </div>
-            @php
-                $totalPrice = 0;
-                foreach($cartItems as $cartItem) {
-                    $totalPrice += floatval($cartItem->vietnamese_price ?? 0) * ($cartItem->quantity ?? 1);
-                }
-            @endphp
 
             <div class="d-flex align-items-center justify-content-between line-all-price-pick gap-4">
                 <div class="title-total-price-all-cart">
-                    Tổng: <span>{{ number_format($totalPrice, 0, ',', '.') }}</span>
-                    ({{ number_format($totalPrice, 0, ',', '.') }}đ)
+                    Tổng:
+                    <span id="total-price-chinese"></span>
+                    <span id="total-price-vnd">()</span>
                 </div>
                 <button class="btn-buy-cart" data-bs-toggle="modal" data-bs-target="#staticBackdropAddress">Mua Hàng</button>
             </div>
