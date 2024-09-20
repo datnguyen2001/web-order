@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('setting', function (Blueprint $table) {
             $table->id();
             $table->string('logo')->nullable();
-            $table->integer('exchange_rate')->default(0);
+            $table->float('exchange_rate')->default(0);
             $table->longText('about_shop')->nullable();
             $table->string('facebook')->nullable();
             $table->string('tiktok')->nullable();
