@@ -149,4 +149,48 @@ class AddressController extends Controller
         ]);
     }
 
+    public function updateAddress(Request $request){
+        try{
+            $validated = $request->validate([
+                'name' => 'required|string|max:255',
+                'phone' => 'required|numeric|digits_between:10,11',
+                'detail_address' => 'required|string|max:255',
+            ], [
+                'name.required' => 'Tên người nhận không được bỏ trống.',
+                'name.string' => 'Tên người nhận phải là chuỗi ký tự.',
+                'name.max' => 'Tên người nhận không được quá :max ký tự.',
+                'phone.required' => 'Số điện thoại không được bỏ trống.',
+                'phone.numeric' => 'Số điện thoại phải là số.',
+                'phone.digits_between' => 'Số điện thoại phải có từ :min đến :max chữ số.',
+                'detail_address.required' => 'Địa chỉ cụ thể không được bỏ trống.',
+                'detail_address.string' => 'Địa chỉ cụ thể phải là chuỗi ký tự.',
+                'detail_address.max' => 'Địa chỉ cụ thể không được quá :max ký tự.',
+            ]);
+
+            $is_default = 0;
+            if ($request->is_default == 'on'){
+                $is_default = 1;
+                AddressModel::where('user_id', Auth::id())
+                    ->where('is_default', 1)
+                    ->update(['is_default' => 0]);
+            }
+
+            $address = AddressModel::where('user_id',Auth::id())->first();
+            $address->name = $request->get('name');
+            $address->phone = $request->get('phone');
+            $address->province_id = $request->get('province_id');
+            $address->district_id = $request->get('district_id');
+            $address->ward_id = $request->get('ward_id');
+            $address->detail_address = $request->get('detail_address');
+            $address->is_default = $is_default;
+            $address->save();
+
+            toastr()->success('Cập nhật địa chỉ thành công');
+            return back();
+        }catch (\Exception $e){
+            toastr()->success($e->getMessage());
+            return back();
+        }
+    }
+
 }

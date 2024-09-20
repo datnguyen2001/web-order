@@ -3,6 +3,35 @@
 
 @section('style_page')
     <link rel="stylesheet" href="{{asset('assets/css/pay.css')}}">
+    <style>
+        @media (max-width: 1200px) {
+            .main {
+                padding-bottom: 197px;
+            }
+            .box-menu-pay-footer{
+                bottom: 70px;
+            }
+        }
+        @media (max-width: 1100px) {
+            .main {
+                padding-bottom: 255px;
+            }
+        }
+        @media (max-width: 585px) {
+            .main {
+                padding-bottom: 280px;
+            }
+        }
+        @media (max-width: 531px) {
+            .main {
+                padding-bottom: 75px;
+            }
+            .box-menu-pay-footer{
+                position: unset;
+                margin-top: 18px;
+            }
+        }
+    </style>
 @stop
 {{--content of page--}}
 @section('content')
@@ -236,14 +265,14 @@
                                     {{$itemAddress->detail_address}}, {{$itemAddress->ward->name}}, {{$itemAddress->district->name}}, {{$itemAddress->province->name}}
                                     <br>
                                     @if($itemAddress->is_default == 1)
-                                    <span class="default-tag">Mặc định</span>
+                                    <span class="default-tag">Đang chọn</span>
                                     @endif
                                 </div>
                             </div>
                             <a class="update-link" data-bs-toggle="modal" data-bs-target="#staticUpdateAddress" data-id="{{ $itemAddress->id }}"
                                data-name="{{ $itemAddress->name }}" data-phone="{{ $itemAddress->phone }}"
                                data-province="{{ $itemAddress->province_id }}" data-district="{{ $itemAddress->district_id }}"
-                               data-ward="{{ $itemAddress->ward_id }}" data-detail="{{ $itemAddress->detail_address }}">Cập Nhật</a>
+                               data-ward="{{ $itemAddress->ward_id }}" data-detail="{{ $itemAddress->detail_address }}" data-is_default="{{ $itemAddress->is_default }}">Cập Nhật</a>
                         </div>
                         @endforeach
 
@@ -268,6 +297,8 @@
                     <h1 class="modal-title fs-5 title-add-address" id="staticBackdropLabel">Cập nhật địa chỉ nhận hàng</h1>
                     <button type="button" class="btn-close close-address" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+                <form id="address-form" action="{{route('update-address')}}" method="POST">
+                    @csrf
                 <div class="modal-body pt-0">
                     <div class="w-100 d-flex flex-column mb-3">
                         <span class="title-form-address">Người nhận hàng <span style="color: #F9471B">*</span></span>
@@ -279,13 +310,13 @@
                     </div>
                     <div class="w-100 d-flex flex-column mb-3">
                         <span class="title-form-address">Tỉnh/Thành phố <span style="color: #F9471B">*</span></span>
-                        <select name="province_id" class="input-form-address" required>
+                        <select name="province_id" class="input-form-address" id="provinceUpdate" required>
                             <option value="">Chọn tỉnh/thành phố</option>
                         </select>
                     </div>
                     <div class="w-100 d-flex flex-column mb-3">
                         <span class="title-form-address">Quận/Huyện <span style="color: #F9471B">*</span></span>
-                        <select name="district_id" class="input-form-address" required>
+                        <select name="district_id" class="input-form-address" id="districtUpdate" required>
                             <option value="">Chọn quận/huyện</option>
                         </select>
                     </div>
@@ -306,8 +337,9 @@
                 </div>
                 <div class="modal-footer border-0">
                     <button type="button" class="btn btn-secondary btn-dismiss-address" data-bs-dismiss="modal">Hủy Bỏ</button>
-                    <button type="button" class="btn btn-primary btn-success-address">Xác Nhận</button>
+                    <button type="submit" class="btn btn-primary btn-success-address">Xác Nhận</button>
                 </div>
+                </form>
             </div>
         </div>
     </div>

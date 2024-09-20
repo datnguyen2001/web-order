@@ -79,11 +79,15 @@ function submitSelectedAddress() {
 }
 
 $(document).ready(function() {
+    let district_id;
+    let ward_id;
     $('.update-link').on('click', function() {
         var id = $(this).data('id');
         var provinceId = $(this).data('province');
         var districtId = $(this).data('district');
         var wardId = $(this).data('ward');
+        district_id = districtId;
+        ward_id = wardId;
 
         $.ajax({
             url: '/edit-address',
@@ -97,19 +101,19 @@ $(document).ready(function() {
                 provinceSelect.empty().append('<option value="">Chọn tỉnh/thành phố</option>');
                 $.each(response.provinces, function(index, province) {
                     var province_selected = provinceId == province.id ? 'selected' : '';
-                    provinceSelect.append('<option value="' + province.id + '" ' + province_selected + '>' + province.name + '</option>');
+                    provinceSelect.append('<option value="' + province.province_id + '" ' + province_selected + '>' + province.name + '</option>');
                 });
 
                 districtSelect.empty().append('<option value="">Chọn quận/huyện</option>');
                 $.each(response.districts, function(index, district) {
-                    var district_selected = districtId == district.id ? 'selected' : '';
-                    districtSelect.append('<option value="' + district.id + '" ' + district_selected + '>' + district.name + '</option>');
+                    var district_selected = districtId == district.district_id ? 'selected' : '';
+                    districtSelect.append('<option value="' + district.district_id + '" ' + district_selected + '>' + district.name + '</option>');
                 });
 
                 wardSelect.empty().append('<option value="">Chọn phường/xã</option>');
                 $.each(response.wards, function(index, ward) {
-                    var ward_selected = wardId == ward.id ? 'selected' : '';
-                    wardSelect.append('<option value="' + ward.id + '" ' + ward_selected + '>' + ward.name + '</option>');
+                    var ward_selected = wardId == ward.wards_id ? 'selected' : '';
+                    wardSelect.append('<option value="' + ward.wards_id + '" ' + ward_selected + '>' + ward.name + '</option>');
                 });
 
                 $('#staticUpdateAddress').find('input[name="name"]').val($(this).data('name'));
@@ -124,87 +128,89 @@ $(document).ready(function() {
         });
     });
 
-
-    $('#staticUpdateAddress').find('select[name="province"]').on('change', function() {
+    $('#provinceUpdate').on('change', function () {
         var provinceId = $(this).val();
-        var districtSelect = $('#staticUpdateAddress').find('select[name="district"]');
-        var wardSelect = $('#staticUpdateAddress').find('select[name="ward"]');
+        var districtSelect = $('#staticUpdateAddress').find('select[name="district_id"]');
+        var wardSelect = $('#staticUpdateAddress').find('select[name="ward_id"]');
 
         $.ajax({
-            url: '/get-district',
+            url: '/get-district/'+provinceId,
             method: 'GET',
-            data: { province_id: provinceId },
             success: function(response) {
-                districtSelect.empty().append('<option value="">Chọn quận/huyện</option>');
-                $.each(response.districts, function(index, district) {
-                    districtSelect.append('<option value="' + district.id + '">' + district.name + '</option>');
-                });
+                if (response.status) {
+                    districtSelect.empty().append('<option value="">Chọn quận/huyện</option>');
+                    $.each(response.data, function (index, district) {
+                        var districted = district_id == district.district_id ? 'selected' : '';
+                        districtSelect.append('<option value="' + district.district_id + '"' + districted + '>' + district.name + '</option>');
+                    });
 
-                wardSelect.empty().append('<option value="">Chọn phường/xã</option>');
-            },
-            error: function(xhr, status, error) {
-                console.error('Error:', error);
-                alert('Có lỗi xảy ra khi lấy dữ liệu quận/huyện.');
+                    wardSelect.empty().append('<option value="">Chọn phường/xã</option>');
+                }else {
+                    toastr.error(data.message);
+                }
             }
+
         });
     });
 
-    $('#staticUpdateAddress').find('select[name="district"]').on('change', function() {
+    $('#districtUpdate').on('change', function () {
         var districtId = $(this).val();
-        var wardSelect = $('#staticUpdateAddress').find('select[name="ward"]');
+        var wardSelect = $('#staticUpdateAddress').find('select[name="ward_id"]');
 
         $.ajax({
-            url: '/get-wards',
+            url: '/get-wards/'+districtId,
             method: 'GET',
-            data: { district_id: districtId },
             success: function(response) {
-                wardSelect.empty().append('<option value="">Chọn phường/xã</option>');
-                $.each(response.wards, function(index, ward) {
-                    wardSelect.append('<option value="' + ward.id + '">' + ward.name + '</option>');
-                });
-            },
-            error: function(xhr, status, error) {
-                console.error('Error:', error);
-                alert('Có lỗi xảy ra khi lấy dữ liệu phường/xã.');
+                if (response.status) {
+                    wardSelect.empty().append('<option value="">Chọn phường/xã</option>');
+                    $.each(response.data, function(index, ward) {
+                        var wards = ward_id == ward.wards_id ? 'selected' : '';
+                        wardSelect.append('<option value="' + ward.wards_id + '"' + wards + '>' + ward.name + '</option>');
+                    });
+                }else {
+                    toastr.error(data.message);
+                }
             }
+
         });
     });
+
 });
 
-function updateAddress() {
-    var id = $('#address-id').val();
-    var name = $('#staticUpdateAddress').find('input[name="name"]').val();
-    var phone = $('#staticUpdateAddress').find('input[name="phone"]').val();
-    var provinceId = $('#staticUpdateAddress').find('select[name="province_id"]').val();
-    var districtId = $('#staticUpdateAddress').find('select[name="district_id"]').val();
-    var wardId = $('#staticUpdateAddress').find('select[name="ward_id"]').val();
-    var detailAddress = $('#staticUpdateAddress').find('input[name="detail_address"]').val();
-    var isDefault = $('#staticUpdateAddress').find('input[type="checkbox"]').is(':checked') ? 1 : 0;
-
-    $.ajax({
-        url: '/update-address/' + id,
-        method: 'POST',
-        data: {
-            _token: '{{ csrf_token() }}',
-            name: name,
-            phone: phone,
-            province_id: provinceId,
-            district_id: districtId,
-            ward_id: wardId,
-            detail_address: detailAddress,
-            is_default: isDefault
-        },
-        success: function(response) {
-            if (response.success) {
-                alert('Cập nhật địa chỉ thành công!');
-                location.reload();
-            } else {
-                alert('Có lỗi xảy ra khi cập nhật địa chỉ.');
-            }
-        },
-        error: function(xhr, status, error) {
-            console.error('Error:', error);
-            alert('Có lỗi xảy ra khi cập nhật địa chỉ.');
-        }
-    });
-}
+// function updateAddress() {
+//     var id = $('#address-id').val();
+//     var name = $('#staticUpdateAddress').find('input[name="name"]').val();
+//     var phone = $('#staticUpdateAddress').find('input[name="phone"]').val();
+//     var provinceId = $('#staticUpdateAddress').find('select[name="province_id"]').val();
+//     var districtId = $('#staticUpdateAddress').find('select[name="district_id"]').val();
+//     var wardId = $('#staticUpdateAddress').find('select[name="ward_id"]').val();
+//     var detailAddress = $('#staticUpdateAddress').find('input[name="detail_address"]').val();
+//     var isDefault = $('#staticUpdateAddress').find('input[type="checkbox"]').is(':checked') ? 1 : 0;
+//
+//     $.ajax({
+//         url: '/update-address/' + id,
+//         method: 'POST',
+//         data: {
+//             _token: '{{ csrf_token() }}',
+//             name: name,
+//             phone: phone,
+//             province_id: provinceId,
+//             district_id: districtId,
+//             ward_id: wardId,
+//             detail_address: detailAddress,
+//             is_default: isDefault
+//         },
+//         success: function(response) {
+//             if (response.success) {
+//                 alert('Cập nhật địa chỉ thành công!');
+//                 location.reload();
+//             } else {
+//                 alert('Có lỗi xảy ra khi cập nhật địa chỉ.');
+//             }
+//         },
+//         error: function(xhr, status, error) {
+//             console.error('Error:', error);
+//             alert('Có lỗi xảy ra khi cập nhật địa chỉ.');
+//         }
+//     });
+// }

@@ -373,6 +373,8 @@
     border: 2px solid #ddd;
     display: inline-block;
     position: relative;
+    min-width: 18px;
+    margin: 0;
 }
 .radio-btn.selected::before {
     content: "";
@@ -381,8 +383,8 @@
     height: 10px;
     background-color: #F9471B;
     border-radius: 50%;
-    top: 2px;
-    left: 2px;
+    top: 2.2px;
+    left: 2.2px;
 }
 .default-tag {
     background-color: rgb(249 71 27/ 0.1);

@@ -48,8 +48,9 @@ Route::middleware('auth')->group(function () {
     Route::get('thanh-toan', [PaymentController::class, 'payment'])->name('pay');
     Route::post('save-address', [AddressController::class, 'saveAddress'])->name('save-address');
     Route::post('address-new', [AddressController::class, 'addressNew'])->name('address-new');
-    Route::post('/update-default-address', [AddressController::class, 'updateDefaultAddress']);
-    Route::get('/edit-address', [AddressController::class, 'editAddress']);
+    Route::post('update-default-address', [AddressController::class, 'updateDefaultAddress']);
+    Route::get('edit-address', [AddressController::class, 'editAddress']);
+    Route::post('update-address', [AddressController::class, 'updateAddress'])->name('update-address');
 
     Route::get('thong-tin-ca-nhan', [ProfileController::class, 'profile'])->name('profile');
     Route::post('save-profile', [ProfileController::class, 'saveProfile'])->name('save-profile');

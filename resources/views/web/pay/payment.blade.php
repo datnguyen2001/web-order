@@ -63,7 +63,7 @@
                         <img src="{{asset('assets/images/icon-payment-method-prepaid.png')}}" alt="Wallet" class="payment-method-icon">
                         <div class="payment-method-info">
                             <strong>Tài khoản trả trước</strong>
-                            <small>Số dư: 0₫ Thiết lập mật khẩu thanh toán</small>
+                            <small>Số dư: 0₫ </small>
                         </div>
                         <span class="checkmark"></span>
                     </div>
@@ -133,13 +133,13 @@
         <div class="modal-dialog" style="max-width: 525px">
             <div class="modal-content" >
                 <div class="modal-body d-flex flex-column align-items-center">
-                    <img src="https://sabomall.com/checkout/deposit-waiting.svg" class="icon-complete-banking">
+                    <img src="{{asset('assets/images/deposit-waiting.svg')}}" class="icon-complete-banking">
                     <p class="title-banking-complete">Giao dịch đang được xử lý</p>
                     <p class="name-banking-complete">Việc chuyển khoản có thể mất một thời gian ngắn để được xác nhận và xử lý </p>
                 </div>
                 <div class="modal-footer border-0 pt-0 d-flex justify-content-center align-items-center gap-2">
-                    <a href="#" class="btn btn-management" data-bs-dismiss="modal">Quản Lý Đơn</a>
-                    <a href="#" class="btn btn-shopping">Tiếp Tục Mua Hàng</a>
+                    <a href="{{route('order')}}" class="btn btn-management">Quản Lý Đơn</a>
+                    <a href="{{route('home')}}" class="btn btn-shopping">Tiếp Tục Mua Hàng</a>
                 </div>
             </div>
         </div>
