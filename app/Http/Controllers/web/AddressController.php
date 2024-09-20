@@ -48,9 +48,8 @@ class AddressController extends Controller
                 'detail_address.max' => 'Địa chỉ cụ thể không được quá :max ký tự.',
             ]);
 
-            $is_default = 0;
+            $is_default = 1;
             if ($request->is_default == 'on'){
-                $is_default = 1;
                 AddressModel::where('user_id', Auth::id())
                     ->where('is_default', 1)
                     ->update(['is_default' => 0]);

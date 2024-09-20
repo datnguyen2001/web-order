@@ -8,7 +8,12 @@
             min-height: 100vh;
             height: 100%;
             background: white;
-            padding-bottom: 20px!important;
+            padding-bottom: 20px;
+        }
+        @media (max-width: 1200px) {
+            .main {
+                padding-bottom: 85px;
+            }
         }
     </style>
 @stop
@@ -109,16 +114,20 @@
                         </div>
                     </div>
                     <div class="line-info-banking">
-                        Số tiền: <input type="number" class="input-money-banking" value="100.000">
+                        Số tiền: <input type="text" class="input-money-banking" id="amountInput" value="100.000" readonly>
+                        <button class="btn-copy" onclick="copyToClipboard('amountInput')"><i class="fa-regular fa-copy"></i></button>
                     </div>
                     <div class="line-info-banking">
-                        Ngân hàng: <span>Ngân hàng TMCP Đầu tư và Phát triển Việt Nam</span>
+                        Ngân hàng: <span id="bankName">Ngân hàng TMCP Đầu tư và Phát triển Việt Nam</span>
+                        <button class="btn-copy" onclick="copyToClipboardText('bankName')"><i class="fa-regular fa-copy"></i></button>
                     </div>
                     <div class="line-info-banking">
-                        Số tài khoản: <span>8850377934</span>
+                        Số tài khoản: <span id="accountNumber">8850377934</span>
+                        <button class="btn-copy" onclick="copyToClipboardText('accountNumber')"><i class="fa-regular fa-copy"></i></button>
                     </div>
                     <div class="line-info-banking">
-                        Nội dung: <span>CK ZGZ6C1YGQYQWT</span>
+                        Nội dung: <span id="transferNote">CK ZGZ6C1YGQYQWT</span>
+                        <button class="btn-copy" onclick="copyToClipboardText('transferNote')"><i class="fa-regular fa-copy"></i></button>
                     </div>
                 </div>
                 <div class="modal-footer border-0 d-flex justify-content-center">
@@ -155,6 +164,22 @@
             });
             element.classList.add('selected');
             element.querySelector('.checkmark').classList.add('selected');
+        }
+
+        function copyToClipboard(elementId) {
+            var copyText = document.getElementById(elementId);
+            copyText.select();
+            copyText.setSelectionRange(0, 99999);
+            document.execCommand("copy");
+        }
+
+        function copyToClipboardText(elementId) {
+            var textToCopy = document.getElementById(elementId).innerText;
+            navigator.clipboard.writeText(textToCopy).then(function() {
+                console.log("Copied:", textToCopy);
+            }).catch(function(err) {
+                console.error("Failed to copy text: ", err);
+            });
         }
     </script>
 @stop

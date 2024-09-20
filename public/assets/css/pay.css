@@ -706,6 +706,14 @@
     color: #F9471B;
     border: 1px solid #F9471B;
 }
+.btn-copy{
+    border: none;
+    outline: unset;
+    background: white;
+    font-size: 16px;
+    cursor: pointer;
+    margin-left: 15px;
+}
 @media (max-width: 1200px) {
     .box-menu-pay-footer{
         left: 0;
