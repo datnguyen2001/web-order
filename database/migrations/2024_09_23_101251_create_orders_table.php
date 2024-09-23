@@ -25,7 +25,8 @@ return new class extends Migration
             $table->float('vietnam_domestic_shipping_fee')->nullable()->comment('Phí vận chuyển nội địa Việt Nam');
             $table->float('insurance_fee')->nullable()->comment('Phí dịch vụ đảm bảo hàng hoá');
             $table->float('partial_payment_fee')->nullable()->comment('Phí thanh toán 1 phần');
-            $table->float('total_payment')->nullable()->comment('Tổng Chi Phí');
+            $table->float('total_payment_chinese')->nullable()->comment('Tổng Chi Phí TQ');
+            $table->float('total_payment_vietnamese')->nullable()->comment('Tổng Chi Phí VN');
             $table->integer('payment_currency')->default(1)->comment('Tiền tệ thanh toán (1: VND, 2:CNY)');
             $table->string('deposit')->nullable()->comment('Đặt cọc trước vốn hàng hóa (%)');
             $table->float('deposit_money')->nullable()->comment('Số tiền đặt cọc');
