@@ -36,13 +36,15 @@
                     @php
                         $totalChinesePrice = 0;
                         $totalVietnamesePrice = 0;
-
+                        $productID = [];
                         foreach ($items as $item) {
                             $totalChinesePrice += floatval($item->chinese_price ?? 0) * ($item->quantity ?? 1);
                             $totalVietnamesePrice += floatval($item->vietnamese_price ?? 0) * ($item->quantity ?? 1);
+                            $productID[] = $item->id;
                         }
+                        $productIDsString = implode(',', $productID);
                     @endphp
-                    <input type="checkbox" class="product-checkbox" data-product-chinese-price="{{$totalChinesePrice}}" data-product-vietnamese-price="{{$totalVietnamesePrice}}">
+                    <input type="checkbox" class="product-checkbox" data-product-id="{{$productIDsString}}" data-product-chinese-price="{{$totalChinesePrice}}" data-product-vietnamese-price="{{$totalVietnamesePrice}}">
                     <img src="{{$items[0]->product_image}}" class="img-sp-cart">
                     <a href="" class="title-detail-sp title-detail-sp-mobile">{{$productName ?? 'Product Name'}}</a>
                 </div>
@@ -107,7 +109,7 @@
                     <span id="total-price-chinese"></span>
                     <span id="total-price-vnd">()</span>
                 </div>
-                <button class="btn-buy-cart" data-bs-toggle="modal" data-bs-target="#staticBackdropAddress">Mua Hàng</button>
+                <button class="btn-buy-cart btn-cart-disable">Mua Hàng</button>
             </div>
         </div>
     </div>
@@ -179,6 +181,8 @@
         var deleteAttributeURL = "{{ route('cart.delete-attribute') }}";
         var deleteProductURL = "{{ route('cart.delete-product') }}";
         var deleteCartURL = "{{ route('cart.delete-cart') }}";
+        var confirmApplicationURL = "{{route('confirm-application')}}";
+        var updateStatus = "{{route('cart.update-status')}}"
         var csrfToken = "{{ csrf_token() }}";
     </script>
 @stop

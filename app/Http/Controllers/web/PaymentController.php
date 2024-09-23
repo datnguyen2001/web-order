@@ -34,7 +34,10 @@ class PaymentController extends Controller
 
         $province = ProvinceModel::all();
 
-        return view('web.pay.index',compact('address','province','listAddress'));
+        $selectedProducts = Cart::where('user_id', Auth::id())
+            ->where('is_buying_selected', true)
+            ->get();
+        return view('web.pay.index',compact('address','province','listAddress', 'selectedProducts'));
     }
 
     public function Payment()

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\web;
 
 use App\Http\Controllers\Controller;
+use App\Models\AddressModel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class CartController extends Controller
@@ -91,4 +93,36 @@ class CartController extends Controller
 
         return response()->json(['success' => true]);
     }
+
+    public function checkAddress()
+    {
+        $addressExists = AddressModel::where('user_id', Auth::id())->exists();
+
+        return response()->json([
+            'address_exists' => $addressExists
+        ]);
+    }
+
+    public function updateStatus(Request $request)
+    {
+        $userId = Auth::id();
+
+        try {
+            // First, mark all products as not selected (is_buying_selected = false)
+            DB::table('carts')
+                ->where('user_id', $userId)
+                ->update(['is_buying_selected' => false]);
+
+            DB::table('carts')
+                    ->where('user_id', $userId)
+                    ->whereIn('id', $request->product_ids)
+                    ->update(['is_buying_selected' => true]);
+
+            return response()->json(['status' => 'success']);
+
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'error', 'message' => 'An error occurred: ' . $e->getMessage()], 500);
+        }
+    }
+
 }

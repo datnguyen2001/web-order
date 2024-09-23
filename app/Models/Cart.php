@@ -18,5 +18,6 @@ class Cart extends Model
         'quantity',
         'chinese_price',
         'vietnamese_price',
+        'is_buying_selected'
     ];
 }
