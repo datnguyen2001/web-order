@@ -64,16 +64,15 @@
            </div>
        </div>
 
-        @for($a=0;$a<2;$a++)
         <div class="box-order-item shadow-lg">
             <div class="item-order-left">
-                <p class="title-order-number">Đơn hàng 1</p>
-                <div class="line-title-shop">
-                    <img src="https://sabomall.com/cart/icon_1688.png" style="width: 56px">
-                    <a href="">
-                        义乌市涵许电子商务商行 <span>(Công ty thương mại điện tử Hanxu thành phố Nghĩa Ô)</span>
-                    </a>
-                </div>
+{{--                <p class="title-order-number">Đơn hàng 1</p>--}}
+{{--                <div class="line-title-shop">--}}
+{{--                    <img src="https://sabomall.com/cart/icon_1688.png" style="width: 56px">--}}
+{{--                    <a href="">--}}
+{{--                        义乌市涵许电子商务商行 <span>(Công ty thương mại điện tử Hanxu thành phố Nghĩa Ô)</span>--}}
+{{--                    </a>--}}
+{{--                </div>--}}
                 <div class="line-table-header">
                     <span>Sản phẩm</span>
                     <span>Đơn giá</span>
@@ -81,44 +80,57 @@
                     <span>Thành tiền</span>
                 </div>
 
-                @for($i=0;$i<2;$i++)
+                @php
+                    $groupedProducts = $selectedProducts->groupBy('product_name');
+                @endphp
+
+                @foreach($groupedProducts as $productName => $products)
                 <div class="item-product-order mb-4">
                     <div class="w-100 d-flex gap-2 align-items-center mb-2">
-                        <span>1</span>
-                        <img src="https://global-img-cdn.1688.com/img/ibank/O1CN01PgvQMg1IloidmbXdn_!!2208204380934-0-cib.jpg" class="img-sp-order">
+                        <span>{{ $loop->iteration }}</span>
+                        <img src="{{$products[0]->product_image}}" class="img-sp-order">
                         <div class="d-flex flex-column">
-                            <div class="name-product-item custom-content-2-line">Xuyên biên giới Trạm độc lập Amazon Hữu nghị Mặt dây chuyền gỗ Cây Giáng sinh Trang trí Mặt Dây chuyền Giáng sinh Gia đình Ô tô Mặt dây chuyền</div>
+                            <div class="name-product-item custom-content-2-line">{{$productName}}</div>
                             <div class="d-flex align-items-center justify-content-between">
-                                <div class="title-menu-order">Số lượng: <b>3</b></div>
-                                <div class="title-menu-order">Thuộc tính: <b>2</b></div>
+                                <div class="title-menu-order">Số lượng: <b>{{ $products->sum('quantity') }}</b></div>
+                                <div class="title-menu-order">Thuộc tính: <b>{{ $products->count() }}</b></div>
+                                @php
+                                    $totalChinesePrice = $products->sum(function($product) {
+                                        return floatval($product->chinese_price ?? 0) * ($product->quantity ?? 1);
+                                    });
+                                    $totalVietnamesePrice = $products->sum(function($product) {
+                                        return floatval($product->vietnamese_price ?? 0) * ($product->quantity ?? 1);
+                                    });
+                                @endphp
                                 <div class="d-flex flex-column align-items-end">
-                                    <span class="price-sale-total-sp">¥8,40</span>
-                                    <span class="price-total-sp">30.618₫</span>
+                                    <span class="price-sale-total-sp">¥{{ number_format($totalChinesePrice, 0, ',', '.') }}</span>
+                                    <span class="price-total-sp">{{ number_format($totalVietnamesePrice, 0, ',', '.') }}₫</span>
                                 </div>
+
                             </div>
                         </div>
                     </div>
-                    @for($j=0;$j<2;$j++)
+                    @foreach($products as $product)
                     <div class="item-attribute-product mb-2">
-                        <div class="d-flex align-items-center gap-3">
-                            <img src="https://global-img-cdn.1688.com/img/ibank/O1CN01PgvQMg1IloidmbXdn_!!2208204380934-0-cib.jpg" class="img-sp-attr-order">
+                        <div class="d-flex align-items-center gap-3" style="width: 50%;">
+                            <img src="{{$product->product_value_image}}" class="img-sp-attr-order">
                             <div class="name-attr-sp">
-                                Màu sắc: <b>Đỏ</b>
+                                Đặc điểm: <b>{{$product->product_value ?? 'N/A'}}</b>
                             </div>
                         </div>
                         <div class="d-flex flex-column align-items-end">
-                            <span class="price-total-sp" style="font-weight: 600">¥8,40</span>
-                            <span class="price-total-sp">30.618₫</span>
+                            <span class="price-total-sp" style="font-weight: 600">¥{{number_format(floatval($product->chinese_price ?? 0), 0, ',', '.')}}</span>
+                            <span class="price-total-sp">{{number_format(floatval($product->vietnamese_price ?? 0), 0, ',', '.')}}₫</span>
                         </div>
-                        <div style="font-size: 14px;color: #6F6F6F">2</div>
+                        <div style="font-size: 14px;color: #6F6F6F">{{$product->quantity ?? 0}}</div>
                         <div class="d-flex flex-column align-items-end">
-                            <span class="price-total-sp" style="font-weight: 600">¥8,40</span>
-                            <span class="price-total-sp">30.618₫</span>
+                            <span class="price-total-sp" style="font-weight: 600">¥{{ number_format(floatval($product->chinese_price ?? 0) * ($product->quantity ?? 1), 0, ',', '.') }}</span>
+                            <span class="price-total-sp">{{ number_format(floatval($product->vietnamese_price ?? 0) * ($product->quantity ?? 1), 0, ',', '.') }}₫</span>
                         </div>
                     </div>
-                    @endfor
+                    @endforeach
                 </div>
-                @endfor
+                @endforeach
                 <div class="d-flex align-items-center">
                     <input type="checkbox">
                     <label for="" style="color: #1a1a1a;font-size: 12px;margin-left: 5px;margin-bottom: 1px"> Kiểm hàng</label>
@@ -128,6 +140,11 @@
                     <textarea name="" class="note-order" rows="5" placeholder="Ghi chú (Enter để xuống dòng)"></textarea>
                 </div>
             </div>
+            @php
+                $totalChinesePriceAllProducts = $selectedProducts->sum(function($product) {
+                    return floatval($product->chinese_price ?? 0) * ($product->quantity ?? 1);
+                });
+            @endphp
             <div class="item-order-right">
                 <div class="item-child-price">
                     <div class="d-flex justify-content-between align-items-center w-100">
@@ -139,7 +156,7 @@
                     </div>
                     <div class="line-title-item-child-price">
                         <span>1. Tiền hàng</span>
-                        <span>¥59,40</span>
+                        <span>¥{{ number_format($totalChinesePriceAllProducts, 0, ',', '.') }}</span>
                     </div>
                     <div class="line-title-item-child-price">
                         <span>2. Phí vận chuyển nội địa TQ</span>
@@ -186,7 +203,6 @@
                 </div>
             </div>
         </div>
-            @endfor
 
         <div class="box-footer-bottom-total shadow-lg">
             <div class="line-one-left-bottom ">

@@ -63,6 +63,8 @@ Route::middleware('auth')->group(function () {
     Route::post('delete-attribute', [CartController::class, 'deleteAttribute'])->name('cart.delete-attribute');
     Route::post('delete-product', [CartController::class, 'deleteProduct'])->name('cart.delete-product');
     Route::post('delete-cart', [CartController::class, 'deleteCart'])->name('cart.delete-cart');
+    Route::get('check-address', [CartController::class, 'checkAddress'])->name('cart.check-address');
+    Route::post('update-status', [CartController::class, 'updateStatus'])->name('cart.update-status');
 });
 
 Route::get('/api/get-attribute/{value_id}', [ProductController::class, 'getAttribute'])->name('api.get-attribute');

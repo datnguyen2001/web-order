@@ -4,6 +4,8 @@ $(document).ready(function() {
         let totalChinesePrice = 0;
         let totalVietnamesePrice = 0;
 
+        let hasCheckedProduct = false;
+
         $('.product-checkbox:checked').each(function() {
             // Get the total Chinese and Vietnamese prices for the checked product
             let chinesePrice = parseFloat($(this).data('product-chinese-price')) || 0;
@@ -11,6 +13,8 @@ $(document).ready(function() {
 
             totalChinesePrice += chinesePrice;
             totalVietnamesePrice += vietnamesePrice;
+
+            hasCheckedProduct = true;
         });
 
         let formattedChinesePrice = Math.floor(totalChinesePrice);
@@ -19,6 +23,16 @@ $(document).ready(function() {
         // Format the prices without decimals
         $('#total-price-chinese').text('¥' + new Intl.NumberFormat('vi-VN').format(formattedChinesePrice));
         $('#total-price-vnd').text('(' + new Intl.NumberFormat('vi-VN').format(formattedVietnamesePrice) + '₫)');
+
+        if (hasCheckedProduct) {
+            // At least one product is checked, enable the active button
+            $('.btn-buy-cart').removeClass('btn-cart-disable').addClass('btn-cart-active');
+            $('.btn-buy-cart').prop('disabled', false);
+        } else {
+            // No product is checked, disable the button
+            $('.btn-buy-cart').removeClass('btn-cart-active').addClass('btn-cart-disable');
+            $('.btn-buy-cart').prop('disabled', true);
+        }
     }
 
     // "Chọn tất cả" checkbox changed
@@ -138,7 +152,7 @@ $(document).ready(function() {
             success: function(response) {
                 if (response.status){
                     $('#address-form')[0].reset();
-                    window.location.href = '/xac-nhan-don';
+                    window.location.href = confirmApplicationURL;
                 }else {
                     toastr.error(response.message);
                 }
@@ -216,3 +230,55 @@ $(document).on('click', '.btn-delete-all-cart', function() {
         }
     });
 });
+
+//Check cart address and move to confirm route
+$('.btn-buy-cart').on('click', function(event) {
+    event.preventDefault();
+
+    let selectedProductIds = [];
+
+    // Collect selected product IDs
+    $('.product-checkbox:checked').each(function() {
+        let productId = $(this).data('product-id');
+
+        if (typeof productId === 'string' && productId.includes(',')) {
+            let multipleIds = productId.split(',');
+            selectedProductIds = selectedProductIds.concat(multipleIds.map(id => parseInt(id))); // Convert to integer
+        } else {
+            selectedProductIds.push(parseInt(productId));
+        }
+    });
+
+    $.ajax({
+        url: '/check-address',
+        type: 'GET',
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function(data) {
+            if (data.address_exists) {
+                $.ajax({
+                    url: updateStatus,
+                    type: 'POST',
+                    data: {
+                        product_ids: selectedProductIds
+                    },
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function() {
+                        window.location.href = confirmApplicationURL;
+                    }
+                });
+            } else {
+                // If address doesn't exist, show the modal
+                $('#staticBackdropAddress').modal('show');
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('Error:', error);
+        }
+    });
+});
+
+
