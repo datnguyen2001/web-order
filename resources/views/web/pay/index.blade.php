@@ -39,16 +39,6 @@
 
        <div class="box-shipping-unit shadow-lg">
            <p class="title-shipping-unit">Vận chuyển Trung Quốc - Việt Nam</p>
-           <div class="d-flex align-items-center mb-2">
-               <div class="d-flex align-items-center">
-                   <input type="radio" id="" style="margin-right: 7px">
-                   <label for="" class="title-unit">Qua đối tác do SaboMall chỉ định</label>
-               </div>
-               <div class="d-flex align-items-center" style="margin-left: 20px">
-                   <input type="radio" style="margin-right: 7px">
-                   <label class="title-unit">Tự chọn đơn vị vận chuyển</label>
-               </div>
-           </div>
            <div class="w-100 d-flex align-items-center">
                <span class="title-delivered">Giao đến: </span>
                <i class="fa-solid fa-truck" style="color: #0f5132;font-size: 16px;margin-right: 8px"></i>
@@ -89,7 +79,7 @@
                     <div class="w-100 d-flex gap-2 align-items-center mb-2">
                         <span>{{ $loop->iteration }}</span>
                         <img src="{{$products[0]->product_image}}" class="img-sp-order">
-                        <div class="d-flex flex-column">
+                        <div class="d-flex flex-column w-100">
                             <div class="name-product-item custom-content-2-line">{{$productName}}</div>
                             <div class="d-flex align-items-center justify-content-between">
                                 <div class="title-menu-order">Số lượng: <b>{{ $products->sum('quantity') }}</b></div>
