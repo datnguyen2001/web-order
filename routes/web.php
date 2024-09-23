@@ -57,6 +57,8 @@ Route::middleware('auth')->group(function () {
     Route::post('save-profile', [ProfileController::class, 'saveProfile'])->name('save-profile');
     Route::post('change-avatar', [ProfileController::class, 'changeAvatar'])->name('change-avatar');
     Route::get('danh-sach-don-hang', [ProfileController::class, 'order'])->name('order');
+    Route::get('get-order/{status}', [ProfileController::class, 'getOrder'])->name('get-order');
+    Route::get('chi-tiet-don-hang', [ProfileController::class, 'detailOrder'])->name('detail-order');
     Route::get('lich-su-giao-dich/{name}', [ProfileController::class, 'wallet'])->name('wallet');
 
     Route::post('add-to-cart', [CartController::class, 'addToCart'])->name('add-to-cart');

@@ -24,4 +24,9 @@ class OrderItemModel extends Model
         'total_chinese_price',
         'total_vietnamese_price',
     ];
+
+    public function order()
+    {
+        return $this->belongsTo(OrderModel::class, 'order_id', 'id');
+    }
 }

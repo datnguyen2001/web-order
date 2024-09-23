@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\web;
 
 use App\Http\Controllers\Controller;
+use App\Models\OrderModel;
 use App\Models\User;
 use App\Models\WalletHistoriesModel;
 use App\Models\WalletsModel;
@@ -46,6 +47,25 @@ class ProfileController extends Controller
     public function order()
     {
         return view('web.profile.order');
+    }
+
+    public function getOrder(Request $request,$status){
+        try{
+            $query = OrderModel::query();
+            if ($status != 'all'){
+                $query = $query->where('status',$status);
+            }
+            $listData = $query->with('orderItems')->get();
+
+            return response()->json(['message'=>'Lấy thông tin thành công','data'=>$listData,'status'=>true]);
+        }catch (\Exception $e){
+            return response()->json(['message'=>$e->getMessage(),'status'=>false]);
+        }
+    }
+
+    public function detailOrder()
+    {
+        return view('web.profile.detail-order');
     }
 
     public function wallet(Request $request,$name)

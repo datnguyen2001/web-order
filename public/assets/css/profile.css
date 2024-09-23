@@ -218,7 +218,6 @@
     font-size: 12px;
     color: #7D7E7E;
     padding-right: 10px;
-    border-right: 1px solid #bcbdbd;
 }
 .name-shop{
     font-size: 12px;
@@ -316,6 +315,45 @@
     background: #F9471B;
     border-color: #F9471B;
 }
+.title-search-order{
+    font-size: 14px;
+    color: #1a1a1a;
+    font-weight: 600;
+    margin-bottom: 0;
+}
+.title-info-order{
+    font-size: 14px;
+    color: #1a1a1a;
+    font-weight: 600;
+    margin-bottom: .625rem;
+}
+.content-info-order{
+    font-size: 12px;
+    color:  rgb(111 111 111/ 1);
+    margin-bottom: 5px;
+}
+.price-info-order{
+    font-size: 16px;
+    color: #F9471B;
+    font-weight: 500;
+}
+.box-menu-status-order{
+    display: -webkit-inline-box;
+    width: 100%;
+    overflow-x: scroll;
+}
+.box-menu-status-order::-webkit-scrollbar {
+    height: 5px;
+}
+
+.box-menu-status-order::-webkit-scrollbar-thumb {
+    background-color: rgba(120, 120, 120, 0.5);
+    border-radius: 10px;
+}
+
+.box-menu-status-order::-webkit-scrollbar-track {
+    background-color: #f1f1f1;
+}
 @media (max-width: 992px) {
     .box-avatar{
         width: 90px;
@@ -340,11 +378,6 @@
     }
     .box-input-search-order{
         flex-wrap: wrap;
-    }
-    .box-menu-status-order{
-        display: -webkit-inline-box;
-        width: 100%;
-        overflow-x: scroll;
     }
 }
 @media (max-width: 850px) {

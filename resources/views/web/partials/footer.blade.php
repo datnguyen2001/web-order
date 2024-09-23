@@ -54,11 +54,11 @@
         <i class="fa-solid fa-cart-shopping icon-menu-footer"></i>
         <span>Giỏ hàng</span>
     </a>
-    <a href="#" class="item-menu-footer">
-        <i class="fa-regular fa-bell icon-menu-footer"></i>
-        <span>Thông báo</span>
+    <a href="{{url('lich-su-giao-dich/vi')}}" class="item-menu-footer">
+        <i class="fa-solid fa-wallet icon-menu-footer"></i>
+        <span>Ví</span>
     </a>
-    <a href="#" class="item-menu-footer">
+    <a href="{{route('order')}}" class="item-menu-footer">
         <i class="fa-solid fa-store icon-menu-footer"></i>
         <span>Đơn hàng</span>
     </a>
