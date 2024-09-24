@@ -24,12 +24,13 @@ class OrderModel extends Model
         'vietnam_domestic_shipping_fee',
         'insurance_fee',
         'partial_payment_fee',
-        'total_payment_chinese',
-        'total_payment_vietnamese',
+        'tally_fee',
         'payment_currency',
         'deposit',
         'deposit_money',
         'payment_type',
+        'total_payment_chinese',
+        'total_payment_vietnamese',
         'status_id'
     ];
 }

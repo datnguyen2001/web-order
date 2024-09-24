@@ -24,13 +24,14 @@ return new class extends Migration
             $table->float('international_shipping_fee')->nullable()->comment('Phí vận chuyển quốc tế');
             $table->float('vietnam_domestic_shipping_fee')->nullable()->comment('Phí vận chuyển nội địa Việt Nam');
             $table->float('insurance_fee')->nullable()->comment('Phí dịch vụ đảm bảo hàng hoá');
-            $table->float('partial_payment_fee')->nullable()->comment('Phí thanh toán 1 phần');
-            $table->float('total_payment_chinese')->nullable()->comment('Tổng Chi Phí TQ');
-            $table->float('total_payment_vietnamese')->nullable()->comment('Tổng Chi Phí VN');
+            $table->float('partial_payment_fee')->nullable()->comment('Tiền phí trả thêm với cọc (45% phí 1%, 70% phí 0,3%, 100% phí 0)');
+            $table->float('tally_fee')->nullable()->comment('Tiền kiểm hàng');
             $table->integer('payment_currency')->default(1)->comment('Tiền tệ thanh toán (1: VND, 2:CNY)');
             $table->string('deposit')->nullable()->comment('Đặt cọc trước vốn hàng hóa (%)');
             $table->float('deposit_money')->nullable()->comment('Số tiền đặt cọc');
             $table->integer('payment_type')->nullable()->comment('Phương Thức Thanh Toán (1: Ví, 2: Chuyển khoản)');
+            $table->float('total_payment_chinese')->nullable()->comment('Tổng Chi Phí TQ');
+            $table->float('total_payment_vietnamese')->nullable()->comment('Tổng Chi Phí VN');
             $table->unsignedBigInteger('status_id')->nullable();
             $table->timestamps();
         });

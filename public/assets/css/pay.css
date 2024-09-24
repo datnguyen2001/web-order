@@ -244,6 +244,7 @@
     color: #1a1a1a;
     display: flex;
     align-items: center;
+    cursor: pointer;
 }
 .btn-money-vn span{
     display: flex;
@@ -266,6 +267,7 @@
     color: #1a1a1a;
     display: flex;
     align-items: center;
+    cursor: pointer;
 }
 .btn-money-tq span{
     display: flex;
@@ -283,7 +285,11 @@
     color: #F9471B;
     margin-left: 4px;
 }
+.btn-money-active{
+    border: 1px solid #F9471B;
+}
 .name-price-percent{
+    display: flex;
     margin-left: 5px;
     color: #F9471B;
     font-weight: 500;
@@ -306,6 +312,7 @@
     justify-content: center;
     font-weight: 500;
     width: 135px;
+    border: none;
 }
 .main{
     padding-bottom: 130px;

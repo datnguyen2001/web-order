@@ -44,4 +44,22 @@ class PaymentController extends Controller
     {
         return view('web.pay.payment');
     }
+
+    public function createOrder(Request $request)
+    {
+        $userID = Auth::id();
+
+        $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        $orderCode = '';
+        for ($i = 0; $i < 9; $i++) {
+            $orderCode .= $characters[rand(0, strlen($characters) - 1)];
+        }
+
+        $addressID = $request->input('address_id');
+        $isTally = $request->has('is_tally') ? true : false;
+        $orderNote = $request->input('note');
+        $goodsMoney = $request->input('goods_money');
+
+        dd($request->all(), );
+    }
 }
