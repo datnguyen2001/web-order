@@ -35,222 +35,249 @@
 @stop
 {{--content of page--}}
 @section('content')
-    <div class="box-content">
+    <form action="{{route('create-order')}}" method="POST">
+    @csrf
+        <div class="box-content">
 
-       <div class="box-shipping-unit shadow-lg">
-           <p class="title-shipping-unit">Vận chuyển Trung Quốc - Việt Nam</p>
-           <div class="w-100 d-flex align-items-center">
-               <span class="title-delivered">Giao đến: </span>
-               <i class="fa-solid fa-truck" style="color: #0f5132;font-size: 16px;margin-right: 8px"></i>
-               @if($address)
-               <div class="d-flex align-items-center text-detail-address">
-                   <b style="margin-right: 3px">{{$address->name}}</b>
-                   <span>{{$address->detail_address}}, {{$address->ward->name}}, {{$address->district->name}}, {{$address->province->name}}, {{$address->phone}}</span>
-               </div>
-               <div class="text-change" data-bs-toggle="modal" data-bs-target="#staticBackdropSelectAddress">Thay đổi</div>
-                   @else
-                   <div class="text-change" data-bs-toggle="modal" data-bs-target="#staticBackdropAddress">Thêm địa chỉ nhận hàng</div>
-               @endif
-           </div>
-       </div>
-
-        <div class="box-order-item shadow-lg">
-            <div class="item-order-left">
-{{--                <p class="title-order-number">Đơn hàng 1</p>--}}
-{{--                <div class="line-title-shop">--}}
-{{--                    <img src="https://sabomall.com/cart/icon_1688.png" style="width: 56px">--}}
-{{--                    <a href="">--}}
-{{--                        义乌市涵许电子商务商行 <span>(Công ty thương mại điện tử Hanxu thành phố Nghĩa Ô)</span>--}}
-{{--                    </a>--}}
-{{--                </div>--}}
-                <div class="line-table-header">
-                    <span>Sản phẩm</span>
-                    <span>Đơn giá</span>
-                    <span>Số lượng</span>
-                    <span>Thành tiền</span>
+            <div class="box-shipping-unit shadow-lg">
+                <p class="title-shipping-unit">Vận chuyển Trung Quốc - Việt Nam</p>
+                <div class="w-100 d-flex align-items-center">
+                    <span class="title-delivered">Giao đến: </span>
+                    <i class="fa-solid fa-truck" style="color: #0f5132;font-size: 16px;margin-right: 8px"></i>
+                    @if($address)
+                        <div class="d-flex align-items-center text-detail-address">
+                            <b style="margin-right: 3px">{{$address->name}}</b>
+                            <span>{{$address->detail_address}}, {{$address->ward->name}}, {{$address->district->name}}, {{$address->province->name}}, {{$address->phone}}</span>
+                            <input type="hidden" name="address_id" value="{{$address->id}}">
+                        </div>
+                        <div class="text-change" data-bs-toggle="modal" data-bs-target="#staticBackdropSelectAddress">Thay đổi</div>
+                    @else
+                        <div class="text-change" data-bs-toggle="modal" data-bs-target="#staticBackdropAddress">Thêm địa chỉ nhận hàng</div>
+                    @endif
                 </div>
+            </div>
 
-                @php
-                    $groupedProducts = $selectedProducts->groupBy('product_name');
-                @endphp
+            <div class="box-order-item shadow-lg">
+                <div class="item-order-left">
+                    {{--                <p class="title-order-number">Đơn hàng 1</p>--}}
+                    {{--                <div class="line-title-shop">--}}
+                    {{--                    <img src="https://sabomall.com/cart/icon_1688.png" style="width: 56px">--}}
+                    {{--                    <a href="">--}}
+                    {{--                        义乌市涵许电子商务商行 <span>(Công ty thương mại điện tử Hanxu thành phố Nghĩa Ô)</span>--}}
+                    {{--                    </a>--}}
+                    {{--                </div>--}}
+                    <div class="line-table-header">
+                        <span>Sản phẩm</span>
+                        <span>Đơn giá</span>
+                        <span>Số lượng</span>
+                        <span>Thành tiền</span>
+                    </div>
 
-                @foreach($groupedProducts as $productName => $products)
-                <div class="item-product-order mb-4">
-                    <div class="w-100 d-flex gap-2 align-items-center mb-2">
-                        <span>{{ $loop->iteration }}</span>
-                        <img src="{{$products[0]->product_image}}" class="img-sp-order">
-                        <div class="d-flex flex-column w-100">
-                            <div class="name-product-item custom-content-2-line">{{$productName}}</div>
-                            <div class="d-flex align-items-center justify-content-between">
-                                <div class="title-menu-order">Số lượng: <b>{{ $products->sum('quantity') }}</b></div>
-                                <div class="title-menu-order">Thuộc tính: <b>{{ $products->count() }}</b></div>
-                                @php
-                                    $totalChinesePrice = $products->sum(function($product) {
-                                        return floatval($product->chinese_price ?? 0) * ($product->quantity ?? 1);
-                                    });
-                                    $totalVietnamesePrice = $products->sum(function($product) {
-                                        return floatval($product->vietnamese_price ?? 0) * ($product->quantity ?? 1);
-                                    });
-                                @endphp
-                                <div class="d-flex flex-column align-items-end">
-                                    <span class="price-sale-total-sp">¥{{ number_format($totalChinesePrice, 0, ',', '.') }}</span>
-                                    <span class="price-total-sp">{{ number_format($totalVietnamesePrice, 0, ',', '.') }}₫</span>
+                    @php
+                        $groupedProducts = $selectedProducts->groupBy('product_name');
+                    @endphp
+
+                    @foreach($groupedProducts as $productName => $products)
+                        <div class="item-product-order mb-4">
+                            <div class="w-100 d-flex gap-2 align-items-center mb-2">
+                                <span>{{ $loop->iteration }}</span>
+                                <img src="{{$products[0]->product_image}}" class="img-sp-order">
+                                <div class="d-flex flex-column w-100">
+                                    <div class="name-product-item custom-content-2-line">{{$productName}}</div>
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div class="title-menu-order">Số lượng: <b>{{ $products->sum('quantity') }}</b></div>
+                                        <div class="title-menu-order">Thuộc tính: <b>{{ $products->count() }}</b></div>
+                                        @php
+                                            $totalChinesePrice = $products->sum(function($product) {
+                                                return floatval($product->chinese_price ?? 0) * ($product->quantity ?? 1);
+                                            });
+                                            $totalVietnamesePrice = $products->sum(function($product) {
+                                                return floatval($product->vietnamese_price ?? 0) * ($product->quantity ?? 1);
+                                            });
+                                        @endphp
+                                        <div class="d-flex flex-column align-items-end">
+                                            <span class="price-sale-total-sp">¥{{ number_format($totalChinesePrice, 2, ',', '.') }}</span>
+                                            <span class="price-total-sp">{{ number_format($totalVietnamesePrice, 0, ',', '.') }}₫</span>
+                                        </div>
+
+                                    </div>
                                 </div>
-
                             </div>
+                            @foreach($products as $product)
+                                <div class="item-attribute-product mb-2">
+                                    <div class="d-flex align-items-center gap-3" style="width: 50%;">
+                                        <img src="{{$product->product_value_image}}" class="img-sp-attr-order">
+                                        <div class="name-attr-sp">
+                                            Đặc điểm: <b>{{$product->product_value ?? 'N/A'}}</b>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex flex-column align-items-end">
+                                        <span class="price-total-sp" style="font-weight: 600">¥{{number_format(floatval($product->chinese_price ?? 0), 2, ',', '.')}}</span>
+                                        <span class="price-total-sp">{{number_format(floatval($product->vietnamese_price ?? 0), 0, ',', '.')}}₫</span>
+                                    </div>
+                                    <div style="font-size: 14px;color: #6F6F6F">{{$product->quantity ?? 0}}</div>
+                                    <div class="d-flex flex-column align-items-end">
+                                        <span class="price-total-sp" style="font-weight: 600">¥{{ number_format(floatval($product->chinese_price ?? 0) * ($product->quantity ?? 1), 2, ',', '.') }}</span>
+                                        <span class="price-total-sp">{{ number_format(floatval($product->vietnamese_price ?? 0) * ($product->quantity ?? 1), 0, ',', '.') }}₫</span>
+                                    </div>
+                                </div>
+                            @endforeach
                         </div>
-                    </div>
-                    @foreach($products as $product)
-                    <div class="item-attribute-product mb-2">
-                        <div class="d-flex align-items-center gap-3" style="width: 50%;">
-                            <img src="{{$product->product_value_image}}" class="img-sp-attr-order">
-                            <div class="name-attr-sp">
-                                Đặc điểm: <b>{{$product->product_value ?? 'N/A'}}</b>
-                            </div>
-                        </div>
-                        <div class="d-flex flex-column align-items-end">
-                            <span class="price-total-sp" style="font-weight: 600">¥{{number_format(floatval($product->chinese_price ?? 0), 0, ',', '.')}}</span>
-                            <span class="price-total-sp">{{number_format(floatval($product->vietnamese_price ?? 0), 0, ',', '.')}}₫</span>
-                        </div>
-                        <div style="font-size: 14px;color: #6F6F6F">{{$product->quantity ?? 0}}</div>
-                        <div class="d-flex flex-column align-items-end">
-                            <span class="price-total-sp" style="font-weight: 600">¥{{ number_format(floatval($product->chinese_price ?? 0) * ($product->quantity ?? 1), 0, ',', '.') }}</span>
-                            <span class="price-total-sp">{{ number_format(floatval($product->vietnamese_price ?? 0) * ($product->quantity ?? 1), 0, ',', '.') }}₫</span>
-                        </div>
-                    </div>
                     @endforeach
+                    <div class="d-flex align-items-center">
+                        <input type="checkbox" id="is-tally-checkbox" name="is_tally" value="1" {{ old('is_tally') ? 'checked' : '' }}>
+                        <label for="" style="color: #1a1a1a;font-size: 12px;margin-left: 5px;margin-bottom: 1px"> Kiểm hàng</label>
+                    </div>
+                    <div class="w-100 d-flex flex-column gap-1 mt-3 mb-3">
+                        <span style="font-size: 12px;color: #111827">Ghi chú đơn hàng</span>
+                        <textarea name="note" class="note-order" rows="5" placeholder="Ghi chú (Enter để xuống dòng)">{{ old('note') }}</textarea>
+                    </div>
                 </div>
-                @endforeach
-                <div class="d-flex align-items-center">
-                    <input type="checkbox">
-                    <label for="" style="color: #1a1a1a;font-size: 12px;margin-left: 5px;margin-bottom: 1px"> Kiểm hàng</label>
-                </div>
-                <div class="w-100 d-flex flex-column gap-1 mt-3 mb-3">
-                    <span style="font-size: 12px;color: #111827">Ghi chú đơn hàng</span>
-                    <textarea name="" class="note-order" rows="5" placeholder="Ghi chú (Enter để xuống dòng)"></textarea>
+                @php
+                    $totalChinesePriceAllProducts = $selectedProducts->sum(function($product) {
+                        return floatval($product->chinese_price ?? 0) * ($product->quantity ?? 1);
+                    });
+                @endphp
+                <div class="item-order-right">
+                    <div class="item-child-price">
+                        <div class="d-flex justify-content-between align-items-center w-100">
+                            <span class="title-item-child-price">Vốn Hàng Hóa (98%)</span>
+                            <div class="d-flex flex-column align-items-end">
+                                <span class="price-total-sp" id="commodity-cost-cn" style="font-weight: 600;font-size: 16px">¥0</span>
+                                <span class="price-total-sp" id="commodity-cost-vn">0₫</span>
+                            </div>
+                        </div>
+                        <div class="line-title-item-child-price">
+                            <span>1. Tiền hàng</span>
+                            <span>¥{{ number_format($totalChinesePriceAllProducts, 2, ',', '.') }}</span>
+                            <input type="hidden" name="goods_money" class="goods_money" value="{{$totalChinesePriceAllProducts}}"/>
+                        </div>
+                        <div class="line-title-item-child-price">
+                            <span>2. Phí vận chuyển nội địa TQ</span>
+                            <span>¥0</span>
+                            <input type="hidden" name="china_domestic_shipping_fee" class="china_domestic_shipping_fee" value="0" />
+                        </div>
+                        <div class="line-title-item-child-price">
+                            <span>3. Giảm giá</span>
+                            <span>¥0</span>
+                            <input type="hidden" name="discount" class="discount" value="0" />
+                        </div>
+                    </div>
+                    <div class="item-child-price line-top-child-price">
+                        <div class="d-flex justify-content-between align-items-center w-100">
+                            <span class="title-item-child-price">Phí nhập hàng (2%)</span>
+                            <div class="d-flex flex-column align-items-end">
+                                <span class="price-total-sp" id="import-cost-cn" style="font-weight: 600;font-size: 16px">¥0</span>
+                                <span class="price-total-sp" id="import-cost-vn">0₫</span>
+                            </div>
+                        </div>
+                        <div class="line-title-item-child-price">
+                            <span>1. Phí vận chuyển quốc tế</span>
+                            <span>¥0</span>
+                            <input type="hidden" name="international_shipping_fee" class="international_shipping_fee" value="0" />
+                        </div>
+                        <div class="line-title-item-child-price">
+                            <span>2. Phí vận chuyển nội địa Việt Nam</span>
+                            <span>¥0</span>
+                            <input type="hidden" name="vietnam_domestic_shipping_fee" class="vietnam_domestic_shipping_fee" value="0" />
+                        </div>
+                        <div class="line-title-item-child-price">
+                            <span>3. Phí dịch vụ đảm bảo hàng hoá</span>
+                            <span>¥{{ number_format($totalChinesePriceAllProducts * 0.008, 2, ',', '.') }}</span>
+                            <input type="hidden" name="insurance_fee" class="insurance_fee" value="{{$totalChinesePriceAllProducts * 0.008}}" />
+                        </div>
+                        <div class="line-title-item-child-price">
+                            <span>4. Phí thanh toán 1 phần</span>
+                            <span class="partial_payment_fee_display">¥0</span>
+                            <input type="hidden" name="partial_payment_fee" class="partial_payment_fee" value="0" />
+                        </div>
+                        <div class="line-title-item-child-price">
+                            <span>5. Phí kiểm hàng</span>
+                            <span class="tally_fee_display">¥0</span>
+                            <input type="hidden" name="tally_fee" class="tally_fee" value="0" />
+                        </div>
+                    </div>
+                    <div class="item-child-price line-top-child-price">
+                        <div class="d-flex justify-content-between align-items-center w-100">
+                            <span class="title-item-child-price-all">Tổng Chi Phí</span>
+                            <div class="d-flex flex-column align-items-end">
+                                <span class="price-total-sp-all-big" id="total-fee-chinese">¥0</span>
+                                <span class="price-total-sp-all" id="total-fee-vietnamese">0₫</span>
+                                <input type="hidden" name="total_payment_chinese" value="0" />
+                                <input type="hidden" name="total_payment_vietnamese" value="0" />
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             @php
-                $totalChinesePriceAllProducts = $selectedProducts->sum(function($product) {
-                    return floatval($product->chinese_price ?? 0) * ($product->quantity ?? 1);
-                });
+                $totalDepositPrice45CN = $totalChinesePriceAllProducts * 0.01;
+                $totalDepositPrice45VN = $totalChinesePriceAllProducts * $setting->exchange_rate * 0.01;
+                $totalDepositPrice70CN = $totalChinesePriceAllProducts * 0.003;
+                $totalDepositPrice70VN = $totalChinesePriceAllProducts * $setting->exchange_rate * 0.003;
             @endphp
-            <div class="item-order-right">
-                <div class="item-child-price">
-                    <div class="d-flex justify-content-between align-items-center w-100">
-                        <span class="title-item-child-price">Vốn Hàng Hóa (85%)</span>
-                        <div class="d-flex flex-column align-items-end">
-                            <span class="price-total-sp" style="font-weight: 600;font-size: 16px">¥8,40</span>
-                            <span class="price-total-sp">30.618₫</span>
+            <div class="box-menu-pay-footer shadow-lg">
+                <div class="d-flex flex-column gap-3">
+                    <div class="d-flex align-items-center gap-2 flex-wrap">
+                        <span class="name-pay">Thanh toán</span>
+                        <div class="btn-money-vn btn-currency">
+                            <span>đ</span>
+                            Việt Nan Đồng
                         </div>
+                        <div class="btn-money-tq btn-currency">
+                            <span>¥</span>
+                            Nhân Dân Tệ <div>(¥1 = {{number_format($setting->exchange_rate, 0, ',', '.')}}₫)</div>
+                        </div>
+                        <input type="hidden" name="payment_currency" id="payment_currency" value="1">
                     </div>
-                    <div class="line-title-item-child-price">
-                        <span>1. Tiền hàng</span>
-                        <span>¥{{ number_format($totalChinesePriceAllProducts, 0, ',', '.') }}</span>
-                    </div>
-                    <div class="line-title-item-child-price">
-                        <span>2. Phí vận chuyển nội địa TQ</span>
-                        <span>Đang cập nhật</span>
-                    </div>
-                    <div class="line-title-item-child-price">
-                        <span>3. Giảm giá</span>
-                        <span>Đang cập nhật</span>
+                    <div class="d-flex align-items-center gap-2 flex-wrap">
+                        <span class="name-pay">Đặt cọc trước vốn hàng hóa</span>
+                        <div class="d-flex align-items-center gap-3 flex-wrap">
+                            <div class="d-flex align-items-center">
+                                <input type="radio" name="deposit" value="45" id="deposit-45">
+                                <div class="name-price-percent">45%
+                                    <div id="fee-45">
+                                        <span>| Phí </span>
+                                        <b style="color:#1a1a1a;font-size: 12px">¥{{number_format($totalDepositPrice45CN, 2, ',', '.')}}</b>
+                                        <span>({{number_format($totalDepositPrice45VN, 0, ',', '.')}}₫)</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <input type="radio" name="deposit" value="70" id="deposit-70">
+                                <div class="name-price-percent">70%
+                                    <div id="fee-70">
+                                        <span>| Phí </span>
+                                        <b style="color:#1a1a1a;font-size: 12px">¥{{number_format($totalDepositPrice70CN, 2, ',', '.')}}</b>
+                                        <span>({{number_format($totalDepositPrice70VN, 0, ',', '.')}}₫)</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <input type="radio" name="deposit" value="100" id="deposit-100">
+                                <div class="name-price-percent">Toàn bộ vốn hàng hóa</div>
+                            </div>
+                            <input type="hidden" name="deposit_money" id="deposit_money" />
+                        </div>
                     </div>
                 </div>
-                <div class="item-child-price line-top-child-price">
-                    <div class="d-flex justify-content-between align-items-center w-100">
-                        <span class="title-item-child-price">Phí nhập hàng (15%)</span>
-                        <div class="d-flex flex-column align-items-end">
-                            <span class="price-total-sp" style="font-weight: 600;font-size: 16px">¥8,40</span>
-                            <span class="price-total-sp">30.618₫</span>
+
+                <div class="d-flex gap-3 justify-content-end line-mobile-pay-now">
+                    <div class="box-name-note-pay">
+                        <div class="text-note-pay d-flex align-items-center">
+                            Đặt cọc
+                            <span class="d-flex align-items-center">
+                                <b class="total-price-order" id="deposit_money_cn">¥0</b>
+                                <span id="deposit_money_vn">(0₫)</span>
+                            </span>
                         </div>
+                        <div class="text-end-note-pay">Tiền hàng còn lại và phí vận chuyển sẽ thanh toán khi nhận hàng</div>
                     </div>
-                    <div class="line-title-item-child-price">
-                        <span>1. Phí vận chuyển quốc tế</span>
-                        <span>¥59,40</span>
-                    </div>
-                    <div class="line-title-item-child-price">
-                        <span>2. Phí vận chuyển nội địa Việt Nam</span>
-                        <span>¥3,30</span>
-                    </div>
-                    <div class="line-title-item-child-price">
-                        <span>3. Phí dịch vụ đảm bảo hàng hoá</span>
-                        <span>¥0,47</span>
-                    </div>
-                    <div class="line-title-item-child-price">
-                        <span>3. Phí thanh toán 1 phần</span>
-                        <span>¥0,47</span>
-                    </div>
-                </div>
-                <div class="item-child-price line-top-child-price">
-                    <div class="d-flex justify-content-between align-items-center w-100">
-                        <span class="title-item-child-price-all">Tổng Chi Phí</span>
-                        <div class="d-flex flex-column align-items-end">
-                            <span class="price-total-sp-all-big">¥8,40</span>
-                            <span class="price-total-sp-all">30.618₫</span>
-                        </div>
-                    </div>
+                    <button type="submit" class="btn-buy-now">Lên Đơn Ngay</button>
                 </div>
             </div>
         </div>
-
-        <div class="box-footer-bottom-total shadow-lg">
-            <div class="line-one-left-bottom ">
-                <img src="https://sabomall.com/icons/icon-1688xsabo.jpg" class="img-clause">
-                <div class="title-clause">Bằng việc đặt hàng, bạn đồng ý rằng đơn hàng được uỷ thác, vận chuyển thông qua 1688 Global và đồng ý với điều khoản dịch vụ của 1688 Global và SaboMall</div>
-            </div>
-            <div class="line-two-left-bottom">
-                <div class="title-bottom-total-price">TỔNG CHI PHÍ <span>(2 đơn hàng)</span></div>
-                <div class="d-flex flex-column align-items-end">
-                    <span class="total-all-sp-price" style="font-weight: 600">¥8,40</span>
-                    <span class="total-all-sp-price-small">30.618₫</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="box-menu-pay-footer shadow-lg">
-            <div class="d-flex flex-column gap-3">
-                <div class="d-flex align-items-center gap-2 flex-wrap">
-                    <span class="name-pay">Thanh toán</span>
-                    <div class="btn-money-vn">
-                        <span>đ</span>
-                        Việt Nan Đồng
-                    </div>
-                    <div class="btn-money-tq">
-                        <span>¥</span>
-                        Nhân Dân Tệ <div>(¥1 = 3.645₫)</div>
-                    </div>
-                </div>
-                <div class="d-flex align-items-center gap-2 flex-wrap">
-                    <span class="name-pay">Đặt cọc trước vốn hàng hóa</span>
-                    <div class="d-flex align-items-center gap-3 flex-wrap">
-                        <div class="d-flex align-items-center">
-                            <input type="radio">
-                            <div class="name-price-percent">45% <span>| Phí </span> <b style="color:#1a1a1a;font-size: 12px">¥1,79</b><span>(6.525₫)</span></div>
-                        </div>
-                        <div class="d-flex align-items-center">
-                            <input type="radio">
-                            <div class="name-price-percent">70% </div>
-                        </div>
-                        <div class="d-flex align-items-center">
-                            <input type="radio">
-                            <div class="name-price-percent">Toàn bộ vốn hàng hóa</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="d-flex gap-3 justify-content-end line-mobile-pay-now">
-            <div class="box-name-note-pay">
-                <div class="text-note-pay">Đặt cọc <span><b class="total-price-order">¥80,73</b> (294.261₫)</span></div>
-                <div class="text-end-note-pay">Tiền hàng còn lại và phí vận chuyển sẽ thanh toán khi nhận hàng</div>
-            </div>
-            <a href="" class="btn-buy-now">Lên Đơn Ngay</a>
-            </div>
-
-        </div>
-
-    </div>
+    </form>
 
     <!-- Modal select address -->
     <div class="modal fade" id="staticBackdropSelectAddress" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropSelectAddress" aria-hidden="true">
@@ -413,4 +440,10 @@
 @stop
 @section('script_page')
     <script src="{{asset('assets/js/pay.js')}}"></script>
+    <script>
+        var totalChinesePriceAllProducts = {{ $totalChinesePriceAllProducts }};
+        var totalDepositPrice45CN = {{ $totalDepositPrice45CN }};
+        var totalDepositPrice70CN = {{ $totalDepositPrice70CN }};
+        var exchangeRate = {{$setting->exchange_rate}};
+    </script>
 @stop

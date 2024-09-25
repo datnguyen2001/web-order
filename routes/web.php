@@ -47,6 +47,7 @@ Route::middleware('auth')->group(function () {
     Route::get('gio-hang', [PaymentController::class, 'cart'])->name('cart');
     Route::get('xac-nhan-don', [PaymentController::class, 'confirmApplication'])->name('confirm-application');
     Route::get('thanh-toan', [PaymentController::class, 'payment'])->name('pay');
+    Route::post('create-order', [PaymentController::class, 'createOrder'])->name('create-order');
     Route::post('save-address', [AddressController::class, 'saveAddress'])->name('save-address');
     Route::post('address-new', [AddressController::class, 'addressNew'])->name('address-new');
     Route::post('update-default-address', [AddressController::class, 'updateDefaultAddress']);
