@@ -41,6 +41,9 @@ class SettingController extends Controller
             }
 
             $setting->exchange_rate = $request->get('exchange_rate');
+            $setting->insurance_fee = $request->get('insurance_fee');
+            $setting->partial_payment_fee = $request->get('partial_payment_fee');
+            $setting->tally_fee = $request->get('tally_fee');
             $setting->about_shop = $request->get('about_shop');
             $setting->facebook = $request->get('facebook');
             $setting->tiktok = $request->get('tiktok');
@@ -60,6 +63,9 @@ class SettingController extends Controller
             }
             $setting = new SettingModel([
                 'exchange_rate'=>$request->get('exchange_rate'),
+                'insurance_fee'=>$request->get('insurance_fee'),
+                'partial_payment_fee'=>$request->get('partial_payment_fee'),
+                'tally_fee'=>$request->get('tally_fee'),
                 'about_shop'=>$request->get('about_shop'),
                 'facebook'=>$request->get('facebook'),
                 'logo'=>$imagePath,

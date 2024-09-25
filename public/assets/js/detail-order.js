@@ -35,7 +35,6 @@ const statusMapping = {
 function renderOrders(orders) {
     const orderList = $('.box-list-order-user');
     orderList.empty();
-    console.log(18,orders)
 
     orders.forEach(order => {
         const orderCode = order.order_code || 'Đang cập nhật';
@@ -77,7 +76,7 @@ function renderOrders(orders) {
                         <a href="chi-tiet-don-hang/${order.id}" class="link-detail-order">Chi tiết</a>
                     </div>
                     <div class="name-work-order d-flex flex-column align-items-center">
-                    ${order.status_id === 2 ?`<a href="cancel-order/${order.id}" class="status-order-pay">Hủy đơn</a>`:''}
+                    ${order.status_id === 2 ?`<a href="cancel-order/${order.order_code}" class="status-order-pay">Hủy đơn</a>`:''}
                     </div>
                 </div>
             `;

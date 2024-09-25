@@ -15,6 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('logo')->nullable();
             $table->float('exchange_rate')->default(0);
+            $table->float('insurance_fee')->default(0);
+            $table->float('partial_payment_fee')->default(0);
+            $table->float('tally_fee')->default(0);
             $table->longText('about_shop')->nullable();
             $table->string('facebook')->nullable();
             $table->string('tiktok')->nullable();

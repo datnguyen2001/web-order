@@ -63,7 +63,7 @@ class ProfileController extends Controller
             if ($request->has('order_date') && !empty($request->order_date)) {
                 $query->whereDate('created_at', $request->order_date);
             }
-            $listData = $query->where('user_id',Auth::id())->with('orderItems')->get();
+            $listData = $query->where('user_id',Auth::id())->with('orderItems')->orderBy('created_at','desc')->get();
 
             return response()->json(['message'=>'Lấy thông tin thành công','data'=>$listData,'status'=>true]);
         }catch (\Exception $e){

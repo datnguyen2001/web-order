@@ -19,6 +19,24 @@
                     </div>
                 </div>
                 <div class="row mt-3">
+                    <div class="col-2">% Phí đảm bảo hàng hóa :</div>
+                    <div class="col-10">
+                        <input class="form-control" name="insurance_fee" value="{{@$data->insurance_fee}}" type="text">
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-2">% Phí thanh toán 1 phần :</div>
+                    <div class="col-10">
+                        <input class="form-control" name="partial_payment_fee" value="{{@$data->partial_payment_fee}}" type="text">
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-2">% Phí kiểm hàng :</div>
+                    <div class="col-10">
+                        <input class="form-control" name="tally_fee" value="{{@$data->tally_fee}}" type="text">
+                    </div>
+                </div>
+                <div class="row mt-3">
                     <div class="col-2">Logo :</div>
                     <div class="col-10">
                         @if(@$data->logo != null)

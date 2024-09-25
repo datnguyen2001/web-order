@@ -111,59 +111,60 @@
                 <div class="item-order-right">
                     <div class="item-child-price">
                         <div class="d-flex justify-content-between align-items-center w-100">
-                            <span class="title-item-child-price">Vốn Hàng Hóa (85%)</span>
+                            <span class="title-item-child-price">Vốn Hàng Hóa (98%)</span>
                             <div class="d-flex flex-column align-items-end">
-                                <span class="price-total-sp" style="font-weight: 600;font-size: 16px">¥8,40</span>
-                                <span class="price-total-sp">30.618₫</span>
+                                <span class="price-total-sp" style="font-weight: 600;font-size: 16px">¥{{$data->goods_money_chinese + $data->china_domestic_shipping_fee_chinese + $data->discount_chinese}}</span>
+                                <span class="price-total-sp">{{number_format($data->goods_money_vietnamese + $data->china_domestic_shipping_fee_vietnamese + $data->discount_vietnamese)}}₫</span>
                             </div>
                         </div>
                         <div class="line-title-item-child-price">
                             <span>1. Tiền hàng</span>
-                            <span>¥59,40</span>
+                            <span>¥{{$data->goods_money_chinese}}</span>
                         </div>
                         <div class="line-title-item-child-price">
                             <span>2. Phí vận chuyển nội địa TQ</span>
-                            <span>Đang cập nhật</span>
+                            <span>¥{{$data->china_domestic_shipping_fee_chinese}}</span>
                         </div>
                         <div class="line-title-item-child-price">
                             <span>3. Giảm giá</span>
-                            <span>Đang cập nhật</span>
+                            <span>¥{{$data->discount_chinese}}</span>
                         </div>
                     </div>
                     <div class="item-child-price line-top-child-price">
                         <div class="d-flex justify-content-between align-items-center w-100">
-                            <span class="title-item-child-price">Phí nhập hàng (15%)</span>
+                            <span class="title-item-child-price">Phí nhập hàng (2%)</span>
                             <div class="d-flex flex-column align-items-end">
-                                <span class="price-total-sp" style="font-weight: 600;font-size: 16px">¥8,40</span>
-                                <span class="price-total-sp">30.618₫</span>
+                                <span class="price-total-sp" style="font-weight: 600;font-size: 16px">¥{{$data->international_shipping_fee_chinese + $data->vietnam_domestic_shipping_fee_chinese + $data->insurance_fee_chinese + $data->partial_payment_fee_chinese + $data->tally_fee_chinese}}</span>
+                                <span class="price-total-sp">{{number_format($data->international_shipping_fee_vietnamese + $data->vietnam_domestic_shipping_fee_vietnamese + $data->insurance_fee_vietnamese + $data->partial_payment_fee_vietnamese + $data->tally_fee_vietnamese)}}₫</span>
                             </div>
                         </div>
                         <div class="line-title-item-child-price">
                             <span>1. Phí vận chuyển quốc tế</span>
-                            <span>¥59,40</span>
+                            <span>¥{{$data->international_shipping_fee_chinese}}</span>
                         </div>
                         <div class="line-title-item-child-price">
                             <span>2. Phí vận chuyển nội địa Việt Nam</span>
-                            <span>¥3,30</span>
+                            <span>¥{{$data->vietnam_domestic_shipping_fee_chinese}}</span>
                         </div>
                         <div class="line-title-item-child-price">
                             <span>3. Phí dịch vụ đảm bảo hàng hoá</span>
-                            <span>¥0,47</span>
+                            <span>¥{{$data->insurance_fee_chinese}}</span>
                         </div>
                         <div class="line-title-item-child-price">
-                            <span>3. Phí thanh toán 1 phần</span>
-                            <span>¥0,47</span>
+                            <span>4. Phí thanh toán 1 phần</span>
+                            <span>¥{{$data->partial_payment_fee_chinese}}</span>
+                        </div>
+                        <div class="line-title-item-child-price">
+                            <span>5. Phí kiểm hàng</span>
+                            <span>¥{{$data->tally_fee_chinese}}</span>
                         </div>
                     </div>
                     <div class="item-child-price line-top-child-price">
                         <div class="d-flex justify-content-between align-items-center w-100">
                             <span class="title-item-child-price-all">Tổng Chi Phí</span>
                             <div class="d-flex flex-column align-items-end">
-                                @if($data->payment_type == 2)
                                     <span class="price-total-sp-all-big">¥{{$data->total_payment_chinese}}</span>
-                                @else
-                                    <span class="price-total-sp-all-big">{{number_format($data->total_payment_vietnamese)}}₫</span>
-                                @endif
+                                    <span class="price-total-sp-all">{{number_format($data->total_payment_vietnamese)}}₫</span>
                             </div>
                         </div>
                     </div>
@@ -175,7 +176,7 @@
                                     <span class="price-total-sp-all-big"
                                           style="color: rgb(58 161 117/ 1);font-size: 15px">¥{{$data->deposit_money}}</span>
                                 @else
-                                    <span class="price-total-sp-all-big"
+                                    <span class="price-total-sp-all"
                                           style="color: rgb(58 161 117/ 1);font-size: 15px">{{number_format($data->deposit_money)}}₫</span>
                                 @endif
                             </div>

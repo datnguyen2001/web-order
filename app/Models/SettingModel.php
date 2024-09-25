@@ -12,6 +12,9 @@ class SettingModel extends Model
     protected $fillable = [
         'logo',
         'exchange_rate',
+        'insurance_fee',
+        'partial_payment_fee',
+        'tally_fee',
         'about_shop',
         'facebook',
         'tiktok',
