@@ -9,7 +9,7 @@
     <div class="box-content box-profile">
         <div class="menu-profile">
             <a href="{{route('profile')}}" class="menu-item-profile menu-profile-active"><i class="fa-regular fa-user"></i> Thông tin cá nhân</a>
-            <a href="#" class="menu-item-profile"><i class="fa-regular fa-clipboard"></i> Quản lý đơn hàng</a>
+            <a href="{{route('order')}}" class="menu-item-profile"><i class="fa-regular fa-clipboard"></i> Quản lý đơn hàng</a>
             <a href="{{url('lich-su-giao-dich/vi')}}" class="menu-item-profile"><i class="fa-regular fa-credit-card"></i> Tài khoản trả trước</a>
             <a href="{{route('logout')}}" class="menu-item-profile"><i class="fa-solid fa-arrow-right-from-bracket"></i> Đăng xuất</a>
         </div>

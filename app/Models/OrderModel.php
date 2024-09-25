@@ -37,4 +37,10 @@ class OrderModel extends Model
     {
         return $this->hasMany(OrderItemModel::class, 'order_id', 'id');
     }
+
+    public function shippingAddress()
+    {
+        return $this->hasMany(AddressModel::class, 'id', 'address_id');
+    }
+
 }
