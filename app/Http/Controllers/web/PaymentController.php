@@ -206,7 +206,7 @@ class PaymentController extends Controller
                 'district.name as district_name',
                 'wards.name as ward_name'
             )
-            ->where('orders.status_id', 0);
+            ->where('orders.status_id', 0)->where('orders.payment_type','!=', null);
 
         $key_search = $request->get('search');
         if (isset($key_search)) {

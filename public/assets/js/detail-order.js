@@ -40,7 +40,7 @@ function renderOrders(orders) {
         const orderCode = order.order_code || 'Đang cập nhật';
         const orderDate = order.created_at || 'N/A';
 
-        const totalChinesePrice = order.order_items.reduce((total, item) => total + item.total_chinese_price, 0).toFixed(2);
+        const totalChinesePrice = order.order_items.reduce((total, item) => total + item.total_chinese_price, 0);
         const totalVietnamesePrice = order.order_items.reduce((total, item) => total + item.total_vietnamese_price, 0);
         const totalQuantity = order.order_items.reduce((total, item) => total + item.quantity, 0);
         const orderStatus = statusMapping[order.status_id] || 'Đang cập nhật';
@@ -67,7 +67,7 @@ function renderOrders(orders) {
                     </div>
                     <div class="name-quantity-order price-cq">${totalQuantity}</div>
                     <div class="name-money-order d-flex flex-column align-items-end">
-                        <div class="price-cq">¥${order.total_payment_chinese.toFixed(2)}</div>
+                        <div class="price-cq">¥${order.total_payment_chinese}</div>
                         <div class="price-vn">${order.total_payment_vietnamese.toLocaleString()}₫</div>
                         <div class="price-vn">Đã TT:  <span style="color: #3AA175;font-weight: 600">${order.payment_type === 2 ?'¥':''}${order.deposit_money.toLocaleString()}${order.payment_type === 1 ?'₫':''}</span></div>
                     </div>
