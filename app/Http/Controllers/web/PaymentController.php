@@ -8,9 +8,11 @@ use App\Models\Cart;
 use App\Models\OrderItemModel;
 use App\Models\OrderModel;
 use App\Models\ProvinceModel;
+use App\Models\WalletsModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 
 class PaymentController extends Controller
 {
@@ -96,7 +98,10 @@ class PaymentController extends Controller
             $payment->product_names = OrderItemModel::where('order_id', $payment->id)
                 ->pluck('product_name')->toArray();
         });
-        return view('web.pay.payment', compact('payments'));
+
+        $currentWalletMoney = WalletsModel::where('user_id', $userID)->first();
+
+        return view('web.pay.payment', compact('payments', 'currentWalletMoney'));
     }
 
     public function createOrder(Request $request)
@@ -181,4 +186,124 @@ class PaymentController extends Controller
         return response()->json(['status' => 'success', 'message' => 'Cart items deleted successfully.']);
     }
 
+    public function updateDoneWalletTransfer(Request $request)
+    {
+        $totalPayment = $request->input('total_payment');
+
+        $currentWalletMoney = WalletsModel::where('user_id', Auth::id())->first();
+        $walletBalance = $currentWalletMoney->vietnamese_money - $totalPayment;
+
+        return response()->json(['status' => 'success', 'message' => 'Thanh toán thành công.']);
+    }
+    public function createOrderAPI(Request $request)
+    {
+        $token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6IjcwRHdFdWxrOU5oQTJkSGNZQUJSVGJFV1AyYURneXpKaV9tekdYV1U1WXcifQ.eyJpc3MiOiJodHRwczovL29pZGMtdm5zLmdvYml6ZGV2LmNvbSIsImF1ZCI6InRlc3QiLCJqdGkiOiI3YzJlYTM1ZC0zMzUyLTQ2NTUtODU5Ni00ZDMxYmE0NGQxNzUiLCJpYXQiOjE3MDE4MzM0NDEsImV4cCI6MTg1OTUxMzQ0MSwiYWdlbmN5X2lkIjozLCJhZ2VuY3lfY29kZSI6Im5oYXBoYW5nIiwicGFydG5lcl9pZCI6MSwicGFydG5lcl9jb2RlIjoieGxvZ2lzdGljcyIsInNjb3BlIjoiY3JlYXRvcjo1MCIsInN1YiI6IjUwIn0.qp_GoegjY8HNIlZgt8jHRoNhlV0onxc9GY7pHOBMO-Ckgoqzmy17znMlJo_BItQygZCqY9QeHzDGdUYfVEcMG0R4ujHmB67gJ7IHp06ujy0hw_Hve2viBkeqXoFlinxFKXfoT5_JhKJHWuplHrQrOhD570VyNgwwQD8cTJJSf2lF0vT8ZB0SuX4m-yCQ5RBZvDhF7FWTg7rrhChsisQ0FhdjKfxuOudj1u2GKe6w3sL6-uMKShpFZesH3gaG5XovMUUaX9JR3ZAKZyGJCJ6b019551vFdhJhk_ptF47nyxU3xvY5LLNvujFchXfXgCjQKXDCKd8LjEfL-vnO1GYpXA';
+
+        $data = [
+            "code" => $request->input('code', 'haiye123123'),
+            "customer_name" => $request->input('customer_name', 'Son Trinh'),
+            "customer_phone" => $request->input('customer_phone', '0900900800'),
+            "customer_username" => $request->input('customer_username', 'alohauser12'),
+            "destination_warehouse_code" => $request->input('destination_warehouse_code', 'CNGZ'),
+            "distribute_warehouse_code" => $request->input('distribute_warehouse_code', 'CNGZ'),
+            "items" => $request->input('items', [
+                [
+                    "brands" => [
+                        "original" => "thay đổi",
+                        "translate" => "thay đổi"
+                    ],
+                    "code_item" => "CODE1",
+                    "customer_note" => "SP Test",
+                    "manifest_original_name" => "SP Test",
+                    "manifest_translated_name" => "SP Test",
+                    "materials" => [
+                        "original" => "thay đổi",
+                        "translate" => "thay đổi"
+                    ],
+                    "merchant_code" => "SP Test",
+                    "merchant_contact" => "SP Test",
+                    "merchant_name" => "SP Test",
+                    "order_quantity" => 1,
+                    "original_name" => "SP Test",
+                    "product_image" => "SP Test",
+                    "purchase_quantity" => 1,
+                    "received_quantity" => 1,
+                    "sku" => "SP Test",
+                    "staff_note" => "SP Test",
+                    "total_amount" => 2000000,
+                    "translated_name" => "SP Test",
+                    "unit" => "chiếc",
+                    "unit_price" => 100000,
+                    "unit_price_origin" => 200,
+                    "url" => "http://google.com",
+                    "variant_properties" => [
+                        [
+                            "id" => "1627207:28320",
+                            "name" => "Màu sắc",
+                            "originalName" => "Màu sắc",
+                            "originalValue" => "白色",
+                            "value" => "白色"
+                        ]
+                    ]
+                ],
+                [
+                    "brands" => [
+                        "original" => "thay đổi",
+                        "translate" => "thay đổi"
+                    ],
+                    "code_item" => "CODE2",
+                    "customer_note" => "SP Test",
+                    "manifest_original_name" => "SP Test",
+                    "manifest_translated_name" => "SP Test",
+                    "materials" => [
+                        "original" => "thay đổi",
+                        "translate" => "thay đổi"
+                    ],
+                    "merchant_code" => "SP Test",
+                    "merchant_contact" => "SP Test",
+                    "merchant_name" => "SP Test",
+                    "order_quantity" => 5,
+                    "original_name" => "SP Test 2",
+                    "product_image" => "SP Test",
+                    "purchase_quantity" => 6,
+                    "received_quantity" => 3,
+                    "sku" => "SP Test",
+                    "staff_note" => "SP Test",
+                    "total_amount" => 3000000,
+                    "translated_name" => "SP Test",
+                    "unit" => "chiếc",
+                    "unit_price" => 150000,
+                    "unit_price_origin" => 150,
+                    "url" => "http://google.com",
+                    "variant_properties" => [
+                        [
+                            "id" => "1627207:28320",
+                            "name" => "Màu sắc",
+                            "originalName" => "Màu sắc",
+                            "originalValue" => "白色",
+                            "value" => "白色"
+                        ]
+                    ]
+                ]
+            ]),
+            "properties" => $request->input('properties', [4, 3]),
+            "receiver_address" => $request->input('receiver_address', 'dia chi nhan hang'),
+            "receiver_city_code" => $request->input('receiver_city_code', '48'),
+            "receiver_country_code" => $request->input('receiver_country_code', 'vietnam'),
+            "receiver_district_code" => $request->input('receiver_district_code', '491'),
+            "receiver_name" => $request->input('receiver_name', 'Dong Vi'),
+            "receiver_note" => $request->input('receiver_note', 'note nhe'),
+            "receiver_phone" => $request->input('receiver_phone', '0988999000'),
+            "receiver_ward_code" => $request->input('receiver_ward_code', '20203'),
+            "services" => $request->input('services', [1, 2]),
+            "tracking_numbers" => $request->input('tracking_numbers', ['aloha0412', 'aloha1407'])
+        ];
+        $response = Http::withToken($token)->post('https://m6-agency-api.vns.gobizdev.com/orders', $data);
+
+        if ($response->successful()) {
+            return response()->json(['message' => 'Tạo đơn hàng thành công', 'data' => $response->json()], 200);
+        } else {
+            return response()->json(['error' => 'Tạo đơn hàng thất bại, vui lòng thử lại', 'details' => $response->body()], $response->status());
+        }
+    }
 }

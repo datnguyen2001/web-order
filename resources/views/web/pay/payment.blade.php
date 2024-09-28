@@ -135,23 +135,39 @@
     <div class="modal fade" id="modalPrepaid" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalPrepaidLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header border-0">
-                    <button type="button" class="btn-close close-address" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="d-flex justify-content-center">
-                        <div class="box-img-qr">
-                            <img src="{{asset('assets/images/icon-sbpay-pw-unset.svg')}}" class="icon-qr-bank">
+                @if($totalDepositVietnamese > $currentWalletMoney->vietnamese_money)
+                    <div class="modal-header border-0">
+                        <button type="button" class="btn-close close-address" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="d-flex justify-content-center">
+                            <div class="box-img-qr">
+                                <img src="{{asset('assets/images/icon-sbpay-pw-unset.svg')}}" class="icon-qr-bank">
+                            </div>
+                        </div>
+                        <div class="name-money-bank">
+                            Số dư trong ví của bạn không đủ. </br>
+                            Vui lòng cập nhật ngay để tiếp tục
                         </div>
                     </div>
-                    <div class="name-money-bank">
-                        Số dư trong ví của bạn không đủ. </br>
-                        Vui lòng cập nhật ngay để tiếp tục
+                    <div class="modal-footer border-0 d-flex justify-content-center">
+                        <a href="{{route('wallet', ['vi'])}}" class="btn btn-transferred-money">Cập nhật ngay</a>
                     </div>
-                </div>
-                <div class="modal-footer border-0 d-flex justify-content-center">
-                    <a href="{{route('wallet', ['vi'])}}" class="btn btn-transferred-money">Cập nhật ngay</a>
-                </div>
+                @else
+                    <div class="modal-body mt-5">
+                        <div class="d-flex justify-content-center">
+                            <div class="box-img-qr">
+                                <img src="{{asset('assets/images/success.svg')}}" class="icon-qr-bank">
+                            </div>
+                        </div>
+                        <div class="name-money-bank mt-3">
+                            <h3 class="mb-0">Thanh toán thành công</h3>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-0 d-flex justify-content-center">
+                        <a href="{{route('home')}}" class="btn btn-transferred-money">Xác nhận</a>
+                    </div>
+                @endif
             </div>
         </div>
     </div>
