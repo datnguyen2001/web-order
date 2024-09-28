@@ -20,10 +20,10 @@ return new class extends Migration
             $table->integer('quantity')->nullable();
             $table->text('product_image')->nullable();
             $table->text('product_value_image')->nullable();
-            $table->float('chinese_price')->nullable();
-            $table->float('vietnamese_price')->nullable();
-            $table->float('total_chinese_price')->nullable();
-            $table->float('total_vietnamese_price')->nullable();
+            $table->decimal('chinese_price', 20, 2)->nullable();
+            $table->decimal('vietnamese_price', 20, 2)->nullable();
+            $table->decimal('total_chinese_price', 20, 2)->nullable();
+            $table->decimal('total_vietnamese_price', 20, 2)->nullable();
             $table->timestamps();
         });
     }

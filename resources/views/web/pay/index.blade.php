@@ -72,7 +72,7 @@
                         <span>Số lượng</span>
                         <span>Thành tiền</span>
                     </div>
-
+                    <input type="hidden" name="selected_product" value="{{$selectedProducts}}" />
                     @php
                         $groupedProducts = $selectedProducts->groupBy('product_name');
                     @endphp
@@ -150,17 +150,20 @@
                         <div class="line-title-item-child-price">
                             <span>1. Tiền hàng</span>
                             <span>¥{{ number_format($totalChinesePriceAllProducts, 2, ',', '.') }}</span>
-                            <input type="hidden" name="goods_money" class="goods_money" value="{{$totalChinesePriceAllProducts}}"/>
+                            <input type="hidden" name="goods_money_chinese" class="goods_money" value="{{$totalChinesePriceAllProducts}}"/>
+                            <input type="hidden" name="goods_money_vietnamese" value="{{$totalChinesePriceAllProducts * $setting->exchange_rate}}"/>
                         </div>
                         <div class="line-title-item-child-price">
                             <span>2. Phí vận chuyển nội địa TQ</span>
                             <span>¥0</span>
-                            <input type="hidden" name="china_domestic_shipping_fee" class="china_domestic_shipping_fee" value="0" />
+                            <input type="hidden" name="china_domestic_shipping_fee_chinese" class="china_domestic_shipping_fee" value="0" />
+                            <input type="hidden" name="china_domestic_shipping_fee_vietnamese" value="0" />
                         </div>
                         <div class="line-title-item-child-price">
                             <span>3. Giảm giá</span>
                             <span>¥0</span>
-                            <input type="hidden" name="discount" class="discount" value="0" />
+                            <input type="hidden" name="discount_chinese" class="discount" value="0" />
+                            <input type="hidden" name="discount_vietnamese" value="0" />
                         </div>
                     </div>
                     <div class="item-child-price line-top-child-price">
@@ -174,27 +177,32 @@
                         <div class="line-title-item-child-price">
                             <span>1. Phí vận chuyển quốc tế</span>
                             <span>¥0</span>
-                            <input type="hidden" name="international_shipping_fee" class="international_shipping_fee" value="0" />
+                            <input type="hidden" name="international_shipping_fee_chinese" class="international_shipping_fee" value="0" />
+                            <input type="hidden" name="international_shipping_fee_vietnamese" value="0" />
                         </div>
                         <div class="line-title-item-child-price">
                             <span>2. Phí vận chuyển nội địa Việt Nam</span>
                             <span>¥0</span>
-                            <input type="hidden" name="vietnam_domestic_shipping_fee" class="vietnam_domestic_shipping_fee" value="0" />
+                            <input type="hidden" name="vietnam_domestic_shipping_fee_chinese" class="vietnam_domestic_shipping_fee" value="0" />
+                            <input type="hidden" name="vietnam_domestic_shipping_fee_vietnamese" value="0" />
                         </div>
                         <div class="line-title-item-child-price">
                             <span>3. Phí dịch vụ đảm bảo hàng hoá</span>
-                            <span>¥{{ number_format($totalChinesePriceAllProducts * 0.008, 2, ',', '.') }}</span>
-                            <input type="hidden" name="insurance_fee" class="insurance_fee" value="{{$totalChinesePriceAllProducts * 0.008}}" />
+                            <span>¥{{ number_format($totalChinesePriceAllProducts * $setting->insurance_fee * 0.01, 2, ',', '.') }}</span>
+                            <input type="hidden" name="insurance_fee_chinese" class="insurance_fee" value="{{$totalChinesePriceAllProducts * $setting->insurance_fee * 0.01}}" />
+                            <input type="hidden" name="insurance_fee_vietnamese" value="{{$totalChinesePriceAllProducts * $setting->insurance_fee * 0.01 * $setting->exchange_rate}}" />
                         </div>
                         <div class="line-title-item-child-price">
                             <span>4. Phí thanh toán 1 phần</span>
                             <span class="partial_payment_fee_display">¥0</span>
-                            <input type="hidden" name="partial_payment_fee" class="partial_payment_fee" value="0" />
+                            <input type="hidden" name="partial_payment_fee_chinese" class="partial_payment_fee_chinese" value="0" />
+                            <input type="hidden" name="partial_payment_fee_vietnamese" class="partial_payment_fee_vietnamese" value="0" />
                         </div>
                         <div class="line-title-item-child-price">
                             <span>5. Phí kiểm hàng</span>
                             <span class="tally_fee_display">¥0</span>
-                            <input type="hidden" name="tally_fee" class="tally_fee" value="0" />
+                            <input type="hidden" name="tally_fee_chinese" class="tally_fee" value="0" />
+                            <input type="hidden" name="tally_fee_vietnamese" class="tally_fee" value="0" />
                         </div>
                     </div>
                     <div class="item-child-price line-top-child-price">
@@ -220,7 +228,7 @@
                 <div class="d-flex flex-column gap-3">
                     <div class="d-flex align-items-center gap-2 flex-wrap">
                         <span class="name-pay">Thanh toán</span>
-                        <div class="btn-money-vn btn-currency">
+                        <div class="btn-money-vn btn-currency btn-money-active">
                             <span>đ</span>
                             Việt Nan Đồng
                         </div>
