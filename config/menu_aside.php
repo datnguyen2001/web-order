@@ -50,5 +50,13 @@ return [
             'submenu' => [],
             'number' => 2
         ],
+        [
+            'name' => 'order',
+            'title' => 'Quản lý đơn hàng',
+            'icon' => 'bi bi-grid',
+            'route' => 'admin.order.index',
+            'submenu' => [],
+            'number' => 2
+        ],
 ]
 ];

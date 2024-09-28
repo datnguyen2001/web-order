@@ -181,4 +181,54 @@ class PaymentController extends Controller
         return response()->json(['status' => 'success', 'message' => 'Cart items deleted successfully.']);
     }
 
+    public function index(Request $request)
+    {
+        $titlePage = 'Quản lý đơn hàng';
+        $page_menu = 'order';
+        $page_sub = 'order';
+        $listData = OrderModel::query()
+            ->join('address', 'orders.address_id', '=', 'address.id')
+            ->join('province', 'address.province_id', '=', 'province.province_id')
+            ->join('district', 'address.district_id', '=', 'district.district_id')
+            ->join('wards', 'address.ward_id', '=', 'wards.wards_id')
+            ->select(
+                'orders.*',
+                'address.name',
+                'address.phone',
+                'address.detail_address',
+                'province.name as province_name',
+                'district.name as district_name',
+                'wards.name as ward_name'
+            )
+            ->where('orders.status_id', 0);
+
+        $key_search = $request->get('search');
+        if (isset($key_search)) {
+            $listData = $listData->where('order_code', 'LIKE', '%' . $key_search . '%');
+        }
+        $listData = $listData->orderBy('created_at', 'desc')->paginate(10);
+
+        return view('admin.order.index',compact('listData','titlePage','page_menu','page_sub'));
+    }
+
+    public function statusOrder($order_id, $status_id)
+    {
+        try {
+            $order = OrderModel::find($order_id);
+            if ($order) {
+                $order->status_id = $status_id;
+                $order->save();
+                if ($status_id == 2){
+                    toastr()->success('Xác nhận đơn hàng thành công');
+                }else{
+                    toastr()->success('Hủy đơn hàng thành công');
+                }
+
+                return \redirect()->route('admin.order.index');
+            }
+        } catch (\Exception $exception) {
+            dd($exception);
+        }
+    }
+
 }
