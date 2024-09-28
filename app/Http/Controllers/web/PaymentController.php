@@ -8,9 +8,12 @@ use App\Models\Cart;
 use App\Models\OrderItemModel;
 use App\Models\OrderModel;
 use App\Models\ProvinceModel;
+use App\Models\User;
+use App\Models\WalletsModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 
 class PaymentController extends Controller
 {
@@ -96,7 +99,10 @@ class PaymentController extends Controller
             $payment->product_names = OrderItemModel::where('order_id', $payment->id)
                 ->pluck('product_name')->toArray();
         });
-        return view('web.pay.payment', compact('payments'));
+
+        $currentWalletMoney = WalletsModel::where('user_id', $userID)->first();
+
+        return view('web.pay.payment', compact('payments', 'currentWalletMoney'));
     }
 
     public function createOrder(Request $request)
@@ -219,6 +225,10 @@ class PaymentController extends Controller
                 $order->status_id = $status_id;
                 $order->save();
                 if ($status_id == 2){
+                    $address = AddressModel::with('province', 'district', 'ward')->find($order->address_id);
+                    $user = User::find($order->user_id);
+                    $order_item = OrderItemModel::where('order_id',$order->id)->get();
+                    $this->createOrderAPI($order,$address,$user,$order_item);
                     toastr()->success('Xác nhận đơn hàng thành công');
                 }else{
                     toastr()->success('Hủy đơn hàng thành công');
@@ -228,6 +238,91 @@ class PaymentController extends Controller
             }
         } catch (\Exception $exception) {
             dd($exception);
+        }
+    }
+
+    public function updateDoneWalletTransfer(Request $request)
+    {
+        $totalPayment = $request->input('total_payment');
+
+        $currentWalletMoney = WalletsModel::where('user_id', Auth::id())->first();
+        $walletBalance = $currentWalletMoney->vietnamese_money - $totalPayment;
+
+        return response()->json(['status' => 'success', 'message' => 'Thanh toán thành công.']);
+    }
+    public function createOrderAPI($order,$address,$user,$order_items)
+    {
+        $token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6IjcwRHdFdWxrOU5oQTJkSGNZQUJSVGJFV1AyYURneXpKaV9tekdYV1U1WXcifQ.eyJpc3MiOiJodHRwczovL29pZGMtdm5zLmdvYml6ZGV2LmNvbSIsImF1ZCI6InRlc3QiLCJqdGkiOiI3YzJlYTM1ZC0zMzUyLTQ2NTUtODU5Ni00ZDMxYmE0NGQxNzUiLCJpYXQiOjE3MDE4MzM0NDEsImV4cCI6MTg1OTUxMzQ0MSwiYWdlbmN5X2lkIjozLCJhZ2VuY3lfY29kZSI6Im5oYXBoYW5nIiwicGFydG5lcl9pZCI6MSwicGFydG5lcl9jb2RlIjoieGxvZ2lzdGljcyIsInNjb3BlIjoiY3JlYXRvcjo1MCIsInN1YiI6IjUwIn0.qp_GoegjY8HNIlZgt8jHRoNhlV0onxc9GY7pHOBMO-Ckgoqzmy17znMlJo_BItQygZCqY9QeHzDGdUYfVEcMG0R4ujHmB67gJ7IHp06ujy0hw_Hve2viBkeqXoFlinxFKXfoT5_JhKJHWuplHrQrOhD570VyNgwwQD8cTJJSf2lF0vT8ZB0SuX4m-yCQ5RBZvDhF7FWTg7rrhChsisQ0FhdjKfxuOudj1u2GKe6w3sL6-uMKShpFZesH3gaG5XovMUUaX9JR3ZAKZyGJCJ6b019551vFdhJhk_ptF47nyxU3xvY5LLNvujFchXfXgCjQKXDCKd8LjEfL-vnO1GYpXA';
+
+        $items = [];
+        foreach ($order_items as $item) {
+            $items[] = [
+                "brands" => [
+                    "original" => "Thay đổi",
+                    "translate" => "Thay đổi"
+                ],
+                "code_item" => $item->sku,
+                "customer_note" => $order->note ?? "Không có",
+                "manifest_original_name" => $item->product_name ?? "Không có",
+                "manifest_translated_name" => $item->product_name ?? "Không có",
+                "materials" => [
+                    "original" => "Thay đổi",
+                    "translate" => "Thay đổi"
+                ],
+                "merchant_code" => "ILVietNam",
+                "merchant_contact" => "0123456789",
+                "merchant_name" => "Donny",
+                "order_quantity" => $item->quantity ?? 1,
+                "original_name" => $item->product_name ?? "Không có",
+                "product_image" => $item->product_image ?? "Không có",
+                "purchase_quantity" => $item->quantity ?? 1,
+                "received_quantity" => $item->quantity ?? 1,
+                "sku" => $item->product_name ?? "Không có",
+                "staff_note" => "Không có",
+                "total_amount" => $item->total_vietnamese_price ?? 100000,
+                "translated_name" => $item->product_name ?? "Không có",
+                "unit" => "chiếc",
+                "unit_price" => $item->vietnamese_price,
+                "unit_price_origin" => $item->vietnamese_price,
+                "url" => $item->url ?? "http://google.com",
+                "variant_properties" => [
+                    [
+                        "id" => $item->id,
+                        "name" => $item->product_value,
+                        "originalName" => $item->product_value,
+                        "originalValue" => $item->product_attribute,
+                        "value" => $item->product_attribute
+                    ]
+                ]
+            ];
+        }
+
+        $data = [
+            "code" => $order->order_code,
+            "customer_name" => $user->full_name,
+            "customer_phone" => $user->phone,
+            "customer_username" => $user->full_name,
+            "destination_warehouse_code" => 'CNGZ',
+            "distribute_warehouse_code" => 'CNGZ',
+            "items" => $items,
+            "properties" => [4, 3],
+            "receiver_address" => $address->detail_address.', '.$address->ward->name.', '.$address->district->name.', '.$address->province->name,
+            "receiver_city_code" => $address->province_id,
+            "receiver_country_code" => 'vietnam',
+            "receiver_district_code" => $address->district_id,
+            "receiver_name" => $address->name,
+            "receiver_note" => $order->note,
+            "receiver_phone" => $address->phone,
+            "receiver_ward_code" => $address->ward_id,
+            "services" => [1, 2],
+            "tracking_numbers" => ['aloha0412', 'aloha1407']
+        ];
+        $response = Http::withToken($token)->post('https://m6-agency-api.vns.gobizdev.com/orders', $data);
+
+        if ($response->successful()) {
+            return true;
+        } else {
+            return false;
         }
     }
 
