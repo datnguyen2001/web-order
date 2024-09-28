@@ -52,4 +52,9 @@ class OrderModel extends Model
         return $this->hasMany(AddressModel::class, 'id', 'address_id');
     }
 
+    public function items()
+    {
+        return $this->hasMany(OrderItemModel::class, 'order_id', 'id');
+    }
+
 }

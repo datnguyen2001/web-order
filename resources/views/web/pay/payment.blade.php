@@ -26,45 +26,85 @@
             <div class="content-item-pay-left">
                 <a href="#" class="btn-back-cart"><i class="fa-solid fa-arrow-left"></i> Quay lại giỏ hàng SaboMall</a>
                 <div class="d-flex justify-content-between align-items-center mt-3">
-                    <p class="title-header-payment">Tổng cộng <span>2</span> đơn hàng</p>
+                    <p class="title-header-payment">Tổng cộng <span>{{count($payments)}}</span> đơn hàng</p>
                     <p class="title-header-payment">*Tiền vốn bao gồm (tiền hàng + phí vận chuyển nội địa TQ)</p>
                 </div>
+                @php
+                    $totalMoneyVietnamese = 0;
+                    $totalDepositVietnamese = 0;
+                    $totalMoneyChinese = 0;
+                    $totalDepositChinese = 0;
+                @endphp
 
-                @for($i=0;$i<5;$i++)
+                @foreach($payments as $payment)
                     <div class="item-sp-payment">
                         <div class="d-flex align-items-center">
-                            <img src="https://cbu01.alicdn.com/img/ibank/O1CN01G8JYxA1OnY26I4PLG_!!1008171750-0-cib.jpg"
-                                 class="img-sp-payment">
+                            <img src="{{ $payment->product_image }}" class="img-sp-payment">
                             <div class="d-flex flex-column gap-2">
-                                <div class="name-col-sp">Đơn hàng: <span>SA85THU</span></div>
-                                <div class="name-col-sp">Số lượng: <span>8 sản phẩm</span></div>
+                                <div class="name-col-sp">Đơn hàng: <span>{{$payment->order_code ?? ''}}</span></div>
+                                <div class="name-col-sp">Số lượng: <span>{{$payment->total_quantity ?? 0 }} sản phẩm</span></div>
                             </div>
                         </div>
                         <div class="d-flex justify-content-between align-items-end flex-column gap-2">
-                            <div class="name-col-money">Tiền vốn: <span>139.968₫</span></div>
-                            <div class="name-col-money">Đặt cọc: <span>62.986₫</span></div>
+                            @if($payment->payment_currency == 1)
+                                @php
+                                    $totalMoneyVietnamese += $payment->total_payment_vietnamese;
+                                    $totalDepositVietnamese += $payment->deposit_money * $setting->exchange_rate;
+                                @endphp
+                                <div class="name-col-money">Tổng Chi Phí:
+                                    <span>{{ number_format($payment->total_payment_vietnamese, 0, ',', '.') }}₫</span>
+                                </div>
+                                <div class="name-col-money">Đặt cọc:
+                                    <span>{{ number_format($payment->deposit_money * $setting->exchange_rate, 0, ',', '.') }}₫</span>
+                                </div>
+                            @elseif($payment->payment_currency == 2)
+                                @php
+                                    $totalMoneyChinese += $payment->total_payment_chinese;
+                                    $totalDepositChinese += $payment->deposit_money;
+                                @endphp
+                                <div class="name-col-money">Tổng Chi Phí:
+                                    <span>¥{{ number_format($payment->total_payment_chinese, 2, ',', '.') }}</span>
+                                </div>
+                                <div class="name-col-money">Đặt cọc:
+                                    <span>¥{{ number_format($payment->deposit_money, 2, ',', '.') }}</span>
+                                </div>
+                            @endif
                         </div>
+                        <input type="hidden" class="product-names" value='@json($payment->product_names)'>
                     </div>
-                @endfor
+                @endforeach
 
-                <div class="line-money-payment">
-                    <div class="title-total-payment">Tổng cộng tiền vốn:</div>
-                    <div class="name-total-money-payment">251.505đ</div>
-                </div>
-                <div class="line-money-payment" style="margin-top: 13px">
-                    <div class="title-total-payment-big">CẦN ĐẶT CỌC TRƯỚC:</div>
-                    <div class="name-total-money-payment-big">251.505đ</div>
-                </div>
-
+                @if($payment->payment_currency == 1)
+                    <div class="line-money-payment">
+                        <div class="title-total-payment">Tổng cộng tiền vốn (VND):</div>
+                        <div class="name-total-money-payment">{{ number_format($totalMoneyVietnamese, 0, ',', '.') }}₫</div>
+                    </div>
+                    <div class="line-money-payment" style="margin-top: 13px">
+                        <div class="title-total-payment-big">CẦN ĐẶT CỌC TRƯỚC (VND):</div>
+                        <div class="name-total-money-payment-big">{{ number_format($totalDepositVietnamese, 0, ',', '.') }}₫</div>
+                    </div>
+                @elseif($payment->payment_currency == 2)
+                    <div class="line-money-payment">
+                        <div class="title-total-payment">Tổng cộng tiền vốn (CNY):</div>
+                        <div class="name-total-money-payment">¥{{ number_format($totalMoneyChinese, 2, ',', '.') }}</div>
+                    </div>
+                    <div class="line-money-payment" style="margin-top: 13px">
+                        <div class="title-total-payment-big">CẦN ĐẶT CỌC TRƯỚC (CNY):</div>
+                        <div class="name-total-money-payment-big">¥{{ number_format($totalDepositChinese, 2, ',', '.') }}</div>
+                    </div>
+                @endif
             </div>
             <div class="content-item-pay-right custom-shadow">
                 <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap">
                     <div class="title-payment-method">Phương Thức Thanh Toán</div>
-                    <div class="name-payment-method">Tiền tệ thanh toán: <span class="face-value">đ</span><span class="name-dv">VNĐ</span></div>
+                    <div class="name-payment-method">Tiền tệ thanh toán:
+                        <span class="face-value">{{$payment->payment_currency == 1 ? 'đ' : '¥'}}</span>
+                        <span class="name-dv">{{$payment->payment_currency == 1 ? 'VNĐ' : 'CNY'}}</span>
+                    </div>
                 </div>
 
                 <div class="payment-method-container">
-                    <div class="payment-method" onclick="selectPaymentMethod(this)">
+                    <div class="payment-method" data-method="prepaid" onclick="selectPaymentMethod(this)">
                         <img src="{{asset('assets/images/icon-payment-method-prepaid.png')}}" alt="Wallet" class="payment-method-icon">
                         <div class="payment-method-info">
                             <strong>Tài khoản trả trước</strong>
@@ -72,27 +112,51 @@
                         </div>
                         <span class="checkmark"></span>
                     </div>
-                    <div class="payment-method" onclick="selectPaymentMethod(this)">
-                        <i class="fa-solid fa-qrcode"></i>
-                        <div class="payment-method-info">
-                            <strong>Chuyển khoản ngân hàng</strong>
+                    @if($payment->payment_currency == 1)
+                        <div class="payment-method" data-method="bank" onclick="selectPaymentMethod(this)">
+                            <i class="fa-solid fa-qrcode"></i>
+                            <div class="payment-method-info">
+                                <strong>Chuyển khoản ngân hàng</strong>
+                            </div>
+                            <span class="checkmark"></span>
                         </div>
-                        <span class="checkmark"></span>
-                    </div>
+                    @endif
                 </div>
-
-
 
                 <div class="name-note-payment">Bằng việc đặt hàng, bạn đồng ý rằng đơn hàng được uỷ thác, vận chuyển thông qua 1688 Global và đồng ý với điều khoản dịch vụ của 1688 Global và SaboMall
                 </div>
-                <button class="btn-payment-now" data-bs-toggle="modal" data-bs-target="#switchBanks">Thanh Toán</button>
+                <button class="btn-payment-now" onclick="handlePayment()">Thanh Toán</button>
             </div>
         </div>
 
     </div>
 
-    <!-- Modal bank -->
-    <div class="modal fade" id="switchBanks" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="switchBanksLable" aria-hidden="true">
+    {{--    Modal trả trước--}}
+    <div class="modal fade" id="modalPrepaid" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalPrepaidLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header border-0">
+                    <button type="button" class="btn-close close-address" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="d-flex justify-content-center">
+                        <div class="box-img-qr">
+                            <img src="{{asset('assets/images/icon-sbpay-pw-unset.svg')}}" class="icon-qr-bank">
+                        </div>
+                    </div>
+                    <div class="name-money-bank">
+                        Số dư trong ví của bạn không đủ. </br>
+                        Vui lòng cập nhật ngay để tiếp tục
+                    </div>
+                </div>
+                <div class="modal-footer border-0 d-flex justify-content-center">
+                    <a href="{{route('wallet', ['vi'])}}" class="btn btn-transferred-money">Cập nhật ngay</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal chuyển khoản -->
+    <div class="modal fade" id="modalBankTransfer" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalBankTransferLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header border-0">
@@ -105,7 +169,7 @@
                             <img src="https://img.vietqr.io/image/bidv-8850377934-compact2.jpg?amount=100000&addInfo=CK%20ZGZ6C1YGQYQWT" class="icon-qr-bank">
                         </div>
                     </div>
-                    <div class="name-money-bank">Thanh toán trước: <span>55.259₫</span></div>
+                    <div class="name-money-bank">Thanh toán trước: <span>{{ number_format($totalDepositVietnamese, 0, ',', '.') }}₫</span></div>
                     <p class="note-banking">Vui lòng chỉ thanh toán qua hệ thống SaboMall để đảm bảo an toàn</p>
                     <div class="note-money-banking">
                         <i class="fa-solid fa-circle-info"></i>
@@ -114,7 +178,7 @@
                         </div>
                     </div>
                     <div class="line-info-banking">
-                        Số tiền: <input type="text" class="input-money-banking" id="amountInput" value="100.000" readonly>
+                        Số tiền: <input type="text" class="input-money-banking" id="amountInput" value="{{ number_format($totalDepositVietnamese, 0, ',', '.') }}" readonly>
                         <button class="btn-copy" onclick="copyToClipboard('amountInput')"><i class="fa-regular fa-copy"></i></button>
                     </div>
                     <div class="line-info-banking">
@@ -131,7 +195,7 @@
                     </div>
                 </div>
                 <div class="modal-footer border-0 d-flex justify-content-center">
-                    <button type="button" class="btn btn-transferred-money" data-bs-toggle="modal" data-bs-target="#bankComplete">Tôi Đã Chuyển Khoản</button>
+                    <button type="button" class="btn btn-transferred-money" id="done-bank-transfer">Tôi Đã Chuyển Khoản</button>
                 </div>
             </div>
         </div>
@@ -157,6 +221,8 @@
 @stop
 @section('script_page')
     <script>
+        let selectedPaymentMethod = null;
+
         function selectPaymentMethod(element) {
             document.querySelectorAll('.payment-method').forEach(method => {
                 method.classList.remove('selected');
@@ -164,6 +230,19 @@
             });
             element.classList.add('selected');
             element.querySelector('.checkmark').classList.add('selected');
+            selectedPaymentMethod = element.getAttribute('data-method');
+        }
+
+        function handlePayment() {
+            if (selectedPaymentMethod === 'prepaid') {
+                var prepaidModal = new bootstrap.Modal(document.getElementById('modalPrepaid'));
+                prepaidModal.show();
+            } else if (selectedPaymentMethod === 'bank') {
+                var bankModal = new bootstrap.Modal(document.getElementById('modalBankTransfer'));
+                bankModal.show();
+            } else {
+                alert('Vui lòng chọn phương thức thanh toán!');
+            }
         }
 
         function copyToClipboard(elementId) {
@@ -181,5 +260,37 @@
                 console.error("Failed to copy text: ", err);
             });
         }
+
+        $('#done-bank-transfer').on('click', function() {
+            var productNames = [];
+            $('.product-names').each(function() {
+                productNames.push($(this).val());
+            });
+
+            var modalBankTransfer = bootstrap.Modal.getInstance(document.getElementById('modalBankTransfer'));
+
+            $.ajax({
+                url: '/update-done-bank-transfer',
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data: {
+                    product_names: productNames
+                },
+                success: function(response) {
+                    console.log(response);
+                    if (modalBankTransfer) {
+                        modalBankTransfer.hide();
+                    }
+                    var bankCompleteModal = new bootstrap.Modal(document.getElementById('bankComplete'));
+                    bankCompleteModal.show();
+                },
+                error: function(xhr, status, error) {
+                    console.log('Error:', error);
+                }
+            });
+        });
+
     </script>
 @stop
