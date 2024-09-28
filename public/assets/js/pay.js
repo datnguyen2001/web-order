@@ -200,7 +200,8 @@ $('input[name="deposit"]').on('change', function() {
         $('#deposit_money').val((totalChinesePriceAllProducts * 0.45).toFixed(2));
         $('#deposit_money_cn').text('¥' + (totalChinesePriceAllProducts * 0.45).toFixed(2).replace('.', ','));
         $('#deposit_money_vn').text((Math.round(totalChinesePriceAllProducts * 0.45 * exchangeRate)).toLocaleString('vi-VN') + '₫');
-        $('.partial_payment_fee').val(totalDepositPrice45CN);
+        $('.partial_payment_fee_chinese').val(totalDepositPrice45CN);
+        $('.partial_payment_fee_vietnamese').val(totalDepositPrice45CN * exchangeRate);
         $('.partial_payment_fee_display').text('¥' + totalDepositPrice45CN.toFixed(2).replace('.', ','));
     } else if (depositValue === '70') {
         $('#fee-45').hide();
@@ -208,7 +209,8 @@ $('input[name="deposit"]').on('change', function() {
         $('#deposit_money').val((totalChinesePriceAllProducts * 0.70).toFixed(2));
         $('#deposit_money_cn').text('¥' + (totalChinesePriceAllProducts * 0.70).toFixed(2).replace('.', ','));
         $('#deposit_money_vn').text((Math.round(totalChinesePriceAllProducts * 0.70 * exchangeRate)).toLocaleString('vi-VN') + '₫');
-        $('.partial_payment_fee').val(totalDepositPrice70CN);
+        $('.partial_payment_fee_chinese').val(totalDepositPrice70CN);
+        $('.partial_payment_fee_vietnamese').val(totalDepositPrice70CN * exchangeRate);
         $('.partial_payment_fee_display').text('¥' + totalDepositPrice70CN.toFixed(2).replace('.', ','));
     } else if (depositValue === '100') {
         $('#fee-45').hide();
@@ -216,30 +218,35 @@ $('input[name="deposit"]').on('change', function() {
         $('#deposit_money').val(totalChinesePriceAllProducts.toFixed(2));
         $('#deposit_money_cn').text('¥' + (totalChinesePriceAllProducts).toFixed(2).replace('.', ','));
         $('#deposit_money_vn').text((Math.round(totalChinesePriceAllProducts * exchangeRate)).toLocaleString('vi-VN') + '₫');
-        $('.partial_payment_fee').val(0);
+        $('.partial_payment_fee_chinese').val(0);
+        $('.partial_payment_fee_vietnamese').val(0);
         $('.partial_payment_fee_display').text('¥0,00');
     }
-    $('.partial_payment_fee').trigger('change');
+    $('.partial_payment_fee_chinese').trigger('change');
+    $('.partial_payment_fee_vietnamese').trigger('change');
 });
 
 //Update tally value
 function calculateTallyValue() {
     var isChecked = $('#is-tally-checkbox').is(':checked');
     var tallyValue = 0;
+    var tallyValueVietnamese = 0
     if (isChecked) {
         tallyValue = totalChinesePriceAllProducts * 0.01;
+        tallyValueVietnamese = totalChinesePriceAllProducts * 0.01 * exchangeRate;
     }
 
-    $('input[name="tally_fee"]').val(tallyValue.toFixed(2));
+    $('input[name="tally_fee_chinese"]').val(tallyValue.toFixed(2));
+    $('input[name="tally_fee_vietnamese"]').val(tallyValueVietnamese.toFixed(2));
     $('.tally_fee_display').text('¥' + tallyValue.toFixed(2).replace('.', ','));
 
     return tallyValue;
 }
 // Function to calculate total cost of commodity
 function calculateTotalCommodityCost() {
-    var goodsMoney = parseFloat($('input[name="goods_money"]').val()) || 0;
-    var chinaShippingFee = parseFloat($('input[name="china_domestic_shipping_fee"]').val()) || 0;
-    var discount = parseFloat($('input[name="discount"]').val()) || 0;
+    var goodsMoney = parseFloat($('input[name="goods_money_chinese"]').val()) || 0;
+    var chinaShippingFee = parseFloat($('input[name="china_domestic_shipping_fee_chinese"]').val()) || 0;
+    var discount = parseFloat($('input[name="discount_chinese"]').val()) || 0;
     var totalChineseYuan = goodsMoney + chinaShippingFee - discount;
     var totalVietnameseDong = Math.round(totalChineseYuan * exchangeRate);
 
@@ -250,11 +257,11 @@ function calculateTotalCommodityCost() {
 
 // Function to calculate import total
 function calculateImportTotal() {
-    var internationalShippingFee = parseFloat($('input[name="international_shipping_fee"]').val()) || 0;
-    var vietnamDomesticShippingFee = parseFloat($('input[name="vietnam_domestic_shipping_fee"]').val()) || 0;
-    var insuranceFee = parseFloat($('input[name="insurance_fee"]').val()) || 0;
-    var partialPaymentFee = parseFloat($('.partial_payment_fee').val()) || 0;
-    var tallyFee = parseFloat($('input[name="tally_fee"]').val()) || 0;
+    var internationalShippingFee = parseFloat($('input[name="international_shipping_fee_chinese"]').val()) || 0;
+    var vietnamDomesticShippingFee = parseFloat($('input[name="vietnam_domestic_shipping_fee_chinese"]').val()) || 0;
+    var insuranceFee = parseFloat($('input[name="insurance_fee_chinese"]').val()) || 0;
+    var partialPaymentFee = parseFloat($('.partial_payment_fee_chinese').val()) || 0;
+    var tallyFee = parseFloat($('input[name="tally_fee_chinese"]').val()) || 0;
     var totalChineseYuan = internationalShippingFee + vietnamDomesticShippingFee + insuranceFee + partialPaymentFee + tallyFee;
     var totalVietnameseDong = Math.round(totalChineseYuan * exchangeRate);
 
@@ -281,6 +288,6 @@ function updateAllTotals() {
 }
 $(document).ready(function() {
     updateAllTotals();
-    $('input[name="international_shipping_fee"], input[name="vietnam_domestic_shipping_fee"], input[name="insurance_fee"], input[name="goods_money"], input[name="china_domestic_shipping_fee"], input[name="discount"], .partial_payment_fee').on('change', updateAllTotals);
+    $('input[name="international_shipping_fee_chinese"], input[name="vietnam_domestic_shipping_fee_chinese"], input[name="insurance_fee_chinese"], input[name="goods_money_chinese"], input[name="china_domestic_shipping_fee_chinese"], input[name="discount_chinese"], .partial_payment_fee_chinese').on('change', updateAllTotals);
     $('#is-tally-checkbox').on('change', updateAllTotals);
 });
