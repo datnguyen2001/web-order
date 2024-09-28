@@ -8,6 +8,7 @@ use \App\Http\Controllers\admin\EcommercePlatformController;
 use \App\Http\Controllers\admin\SettingController;
 use \App\Http\Controllers\admin\PostController;
 use \App\Http\Controllers\admin\WalletController;
+use \App\Http\Controllers\web\PaymentController;
 
 
 Route::get('/login', [LoginController::class, 'login'])->name('login');
@@ -53,6 +54,11 @@ Route::middleware('check-admin-auth')->group(function () {
         Route::get('', [WalletController::class, 'index'])->name('index');
         Route::get('create', [WalletController::class, 'create'])->name('create');
         Route::post('store', [WalletController::class, 'store'])->name('store');
+    });
+
+    Route::prefix('order')->name('order.')->group(function () {
+        Route::get('', [PaymentController::class, 'index'])->name('index');
+        Route::post('update-status', [PaymentController::class, 'updateStatus'])->name('update-status');
     });
 
 });
