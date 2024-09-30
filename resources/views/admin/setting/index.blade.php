@@ -25,15 +25,33 @@
                     </div>
                 </div>
                 <div class="row mt-3">
-                    <div class="col-2">% Phí thanh toán 1 phần :</div>
-                    <div class="col-10">
-                        <input class="form-control" name="partial_payment_fee" value="{{@$data->partial_payment_fee}}" type="text">
-                    </div>
-                </div>
-                <div class="row mt-3">
                     <div class="col-2">% Phí kiểm hàng :</div>
                     <div class="col-10">
                         <input class="form-control" name="tally_fee" value="{{@$data->tally_fee}}" type="text">
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-2">Giá trị cọc 1 :</div>
+                    <div class="col-10">
+                        <input class="form-control" name="partial_payment_key_1" value="{{@$data->partial_payment_key_1}}" type="text">
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-2">% Phí thanh toán 1 phần cọc 1 :</div>
+                    <div class="col-10">
+                        <input class="form-control" name="partial_payment_fee_1" value="{{@$data->partial_payment_fee_1}}" type="text">
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-2">Giá trị cọc 2 :</div>
+                    <div class="col-10">
+                        <input class="form-control" name="partial_payment_key_2" value="{{@$data->partial_payment_key_2}}" type="text">
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-2">% Phí thanh toán 1 phần cọc 2 :</div>
+                    <div class="col-10">
+                        <input class="form-control" name="partial_payment_fee_2" value="{{@$data->partial_payment_fee_2}}" type="text">
                     </div>
                 </div>
                 <div class="row mt-3">

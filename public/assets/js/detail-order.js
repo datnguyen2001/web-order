@@ -57,7 +57,7 @@ function renderOrders(orders) {
                     <div class="name-product-order d-flex gap-2">
                         <div class="d-flex flex-column">
                             <div class="name-sp-item">Số lượng vận đơn: ${order.order_items.length}</div>
-                            <div class="name-attr-product">Cần thanh toán: <span>${order.payment_type === 2 ?`¥${(order.total_payment_chinese - order.deposit_money).toLocaleString()}`:`${(order.total_payment_vietnamese - order.deposit_money).toLocaleString()}₫`}</span></div>
+                            <div class="name-attr-product">Cần thanh toán: <span>${order.payment_currency === 2 ?`¥${(order.total_payment_chinese - order.deposit_money).toLocaleString()}`:`${(order.total_payment_vietnamese - (order.deposit_money)).toLocaleString()}₫`}</span></div>
                         </div>
                     </div>
                     <div class="name-item-order d-flex flex-column align-items-end">
@@ -68,7 +68,7 @@ function renderOrders(orders) {
                     <div class="name-money-order d-flex flex-column align-items-end">
                         <div class="price-cq">¥${order.total_payment_chinese}</div>
                         <div class="price-vn">${order.total_payment_vietnamese.toLocaleString()}₫</div>
-                        <div class="price-vn">Đã TT:  <span style="color: #3AA175;font-weight: 600">${order.payment_type === 2 ?'¥':''}${order.deposit_money.toLocaleString()}${order.payment_type === 1 ?'₫':''}</span></div>
+                        <div class="price-vn">Đã TT:  <span style="color: #3AA175;font-weight: 600">${order.payment_currency === 2 ?'¥':''}${order.deposit_money.toLocaleString()}${order.payment_currency === 1 ?'₫':''}</span></div>
                     </div>
                     <div class="name-status-order d-flex flex-column align-items-center">
                         <div class="status-order">${orderStatus}</div>

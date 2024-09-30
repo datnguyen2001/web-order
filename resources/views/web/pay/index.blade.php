@@ -219,10 +219,10 @@
                 </div>
             </div>
             @php
-                $totalDepositPrice45CN = $totalChinesePriceAllProducts * 0.01;
-                $totalDepositPrice45VN = $totalChinesePriceAllProducts * $setting->exchange_rate * 0.01;
-                $totalDepositPrice70CN = $totalChinesePriceAllProducts * 0.003;
-                $totalDepositPrice70VN = $totalChinesePriceAllProducts * $setting->exchange_rate * 0.003;
+                $totalDepositPrice01CN = $totalChinesePriceAllProducts * $setting->partial_payment_fee_1 * 0.01;
+                $totalDepositPrice01VN = $totalChinesePriceAllProducts * $setting->exchange_rate * 0.01;
+                $totalDepositPrice02CN = $totalChinesePriceAllProducts * $setting->partial_payment_fee_2 * 0.01;
+                $totalDepositPrice02VN = $totalChinesePriceAllProducts * $setting->exchange_rate * 0.003;
             @endphp
             <div class="box-menu-pay-footer shadow-lg">
                 <div class="d-flex flex-column gap-3">
@@ -242,22 +242,22 @@
                         <span class="name-pay">Đặt cọc trước vốn hàng hóa</span>
                         <div class="d-flex align-items-center gap-3 flex-wrap">
                             <div class="d-flex align-items-center">
-                                <input type="radio" name="deposit" value="45" id="deposit-45">
-                                <div class="name-price-percent">45%
+                                <input type="radio" name="deposit" value="{{$setting->partial_payment_key_1 ?? 0}}" id="deposit-01">
+                                <div class="name-price-percent">{{$setting->partial_payment_key_1 ?? 0}}%
                                     <div id="fee-45">
                                         <span>| Phí </span>
-                                        <b style="color:#1a1a1a;font-size: 12px">¥{{number_format($totalDepositPrice45CN, 2, ',', '.')}}</b>
-                                        <span>({{number_format($totalDepositPrice45VN, 0, ',', '.')}}₫)</span>
+                                        <b style="color:#1a1a1a;font-size: 12px">¥{{number_format($totalDepositPrice01CN, 2, ',', '.')}}</b>
+                                        <span>({{number_format($totalDepositPrice01VN, 0, ',', '.')}}₫)</span>
                                     </div>
                                 </div>
                             </div>
                             <div class="d-flex align-items-center">
-                                <input type="radio" name="deposit" value="70" id="deposit-70">
-                                <div class="name-price-percent">70%
+                                <input type="radio" name="deposit" value="{{$setting->partial_payment_key_2 ?? 0}}" id="deposit-02">
+                                <div class="name-price-percent">{{$setting->partial_payment_key_2 ?? 0}}%
                                     <div id="fee-70">
                                         <span>| Phí </span>
-                                        <b style="color:#1a1a1a;font-size: 12px">¥{{number_format($totalDepositPrice70CN, 2, ',', '.')}}</b>
-                                        <span>({{number_format($totalDepositPrice70VN, 0, ',', '.')}}₫)</span>
+                                        <b style="color:#1a1a1a;font-size: 12px">¥{{number_format($totalDepositPrice02CN, 2, ',', '.')}}</b>
+                                        <span>({{number_format($totalDepositPrice02VN, 0, ',', '.')}}₫)</span>
                                     </div>
                                 </div>
                             </div>
@@ -450,8 +450,10 @@
     <script src="{{asset('assets/js/pay.js')}}"></script>
     <script>
         var totalChinesePriceAllProducts = {{ $totalChinesePriceAllProducts }};
-        var totalDepositPrice45CN = {{ $totalDepositPrice45CN }};
-        var totalDepositPrice70CN = {{ $totalDepositPrice70CN }};
+        var totalDepositPrice01CN = {{ $totalDepositPrice01CN }};
+        var totalDepositPrice02CN = {{ $totalDepositPrice02CN }};
+        var partialSettingKey01 = {{$setting->partial_payment_key_1 ?? 0}};
+        var partialSettingKey02 = {{$setting->partial_payment_key_2 ?? 0}};
         var exchangeRate = {{$setting->exchange_rate}};
         var tallySettingRate = parseFloat({{$setting->tally_fee * 0.01}});
     </script>

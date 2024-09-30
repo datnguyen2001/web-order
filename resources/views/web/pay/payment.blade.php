@@ -49,7 +49,7 @@
                             @if($payment->payment_currency == 1)
                                 @php
                                     $totalMoneyVietnamese += $payment->total_payment_vietnamese;
-                                    $totalDepositVietnamese += $payment->deposit_money * $setting->exchange_rate;
+                                    $totalDepositVietnamese += $payment->deposit_money;
                                 @endphp
                                 <div class="name-col-money">Tổng Chi Phí:
                                     <span>{{ number_format($payment->total_payment_vietnamese, 0, ',', '.') }}₫</span>
@@ -398,7 +398,8 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 data: {
-                    product_names: productNames
+                    product_names: productNames,
+                    order_id: orderID
                 },
                 success: function(response) {
                     console.log(response);

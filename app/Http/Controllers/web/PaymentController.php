@@ -8,6 +8,7 @@ use App\Models\Cart;
 use App\Models\OrderItemModel;
 use App\Models\OrderModel;
 use App\Models\ProvinceModel;
+use App\Models\SettingModel;
 use App\Models\User;
 use App\Models\WalletsModel;
 use Illuminate\Http\Request;
@@ -142,6 +143,13 @@ class PaymentController extends Controller
         for ($i = 0; $i < 9; $i++) {
             $orderCode .= $characters[rand(0, strlen($characters) - 1)];
         }
+        $setting = SettingModel::first();
+        $paymentCurrency = $request->input('payment_currency');
+        $depositMoney = $request->input('deposit_money');
+        if($paymentCurrency === '1'){
+            $depositMoney = $depositMoney * $setting->exchange_rate;
+        }
+
         try {
             $orderId = DB::table('orders')->insertGetId([
                 'user_id' => $userID,
@@ -166,9 +174,9 @@ class PaymentController extends Controller
                 'tally_fee_vietnamese' => $request->input('tally_fee_vietnamese'),
                 'total_payment_chinese' => $request->input('total_payment_chinese'),
                 'total_payment_vietnamese' => $request->input('total_payment_vietnamese'),
-                'payment_currency' => $request->input('payment_currency'),
+                'payment_currency' => $paymentCurrency,
                 'deposit' => $request->input('deposit'),
-                'deposit_money' => $request->input('deposit_money'),
+                'deposit_money' => $depositMoney,
                 'payment_type' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -208,6 +216,7 @@ class PaymentController extends Controller
         $order = OrderModel::where('id', $orderID)->first();
         if ($order) {
             $order->payment_type = 2; //payment_type = 2 (thanh toan CK)
+            $order->status_id = 0;
             $order->save();
         }
 
@@ -253,7 +262,7 @@ class PaymentController extends Controller
             $order = OrderModel::where('id', $orderID)->first();
             if ($order) {
                 $order->payment_type = 1; //payment_type = 1 (thanh toan vi)
-                $order->status_id = 0;
+                $order->status_id = 2;
                 $order->save();
             }
 
