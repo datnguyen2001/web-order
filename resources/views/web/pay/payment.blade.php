@@ -71,8 +71,9 @@
                             @endif
                         </div>
                         <input type="hidden" class="product-names" value='@json($payment->product_names)'>
+                        <input type="hidden" class="payment_currency" value='{{$payment->payment_currency}}'>
+                        <input type="hidden" class="order_id" value='{{$payment->id}}'>
                     </div>
-                @endforeach
 
                 @if($payment->payment_currency == 1)
                     <div class="line-money-payment">
@@ -108,7 +109,11 @@
                         <img src="{{asset('assets/images/icon-payment-method-prepaid.png')}}" alt="Wallet" class="payment-method-icon">
                         <div class="payment-method-info">
                             <strong>Tài khoản trả trước</strong>
-                            <small>Số dư: 0₫ </small>
+                            @if($payment->payment_currency == 1)
+                                <small>Số dư: {{ number_format($currentWalletMoney->vietnamese_money, 0, ',', '.') }}₫ </small>
+                            @elseif($payment->payment_currency == 2)
+                                <small>Số dư: ¥{{ number_format($currentWalletMoney->middle_money, 2, ',', '.') }} </small>
+                            @endif
                         </div>
                         <span class="checkmark"></span>
                     </div>
@@ -122,7 +127,7 @@
                         </div>
                     @endif
                 </div>
-
+                @endforeach
                 <div class="name-note-payment">Bằng việc đặt hàng, bạn đồng ý rằng đơn hàng được uỷ thác, vận chuyển thông qua 1688 Global và đồng ý với điều khoản dịch vụ của 1688 Global và SaboMall
                 </div>
                 <button class="btn-payment-now" onclick="handlePayment()">Thanh Toán</button>
@@ -135,39 +140,76 @@
     <div class="modal fade" id="modalPrepaid" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalPrepaidLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                @if($totalDepositVietnamese > $currentWalletMoney->vietnamese_money)
-                    <div class="modal-header border-0">
-                        <button type="button" class="btn-close close-address" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="d-flex justify-content-center">
-                            <div class="box-img-qr">
-                                <img src="{{asset('assets/images/icon-sbpay-pw-unset.svg')}}" class="icon-qr-bank">
+                @if($payment->payment_currency == 1)
+                    @if($totalDepositVietnamese > $currentWalletMoney->vietnamese_money)
+                        <div class="modal-header border-0">
+                            <button type="button" class="btn-close close-address" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="d-flex justify-content-center">
+                                <div class="box-img-qr">
+                                    <img src="{{asset('assets/images/icon-sbpay-pw-unset.svg')}}" class="icon-qr-bank">
+                                </div>
+                            </div>
+                            <div class="name-money-bank">
+                                Số dư trong ví của bạn không đủ. </br>
+                                Vui lòng cập nhật ngay để tiếp tục
                             </div>
                         </div>
-                        <div class="name-money-bank">
-                            Số dư trong ví của bạn không đủ. </br>
-                            Vui lòng cập nhật ngay để tiếp tục
+                        <div class="modal-footer border-0 d-flex justify-content-center">
+                            <a href="{{route('wallet', ['vi'])}}" class="btn btn-transferred-money">Cập nhật ngay</a>
                         </div>
-                    </div>
-                    <div class="modal-footer border-0 d-flex justify-content-center">
-                        <a href="{{route('wallet', ['vi'])}}" class="btn btn-transferred-money">Cập nhật ngay</a>
-                    </div>
-                @else
-                    <div class="modal-body mt-5">
-                        <div class="d-flex justify-content-center">
-                            <div class="box-img-qr">
-                                <img src="{{asset('assets/images/success.svg')}}" class="icon-qr-bank">
+                    @else
+                        <div class="modal-body mt-5">
+                            <div class="d-flex justify-content-center">
+                                <div class="box-img-qr">
+                                    <img src="{{asset('assets/images/success.svg')}}" class="icon-qr-bank">
+                                </div>
+                            </div>
+                            <div class="name-money-bank mt-3">
+                                <h3 class="mb-0">Thanh toán thành công</h3>
                             </div>
                         </div>
-                        <div class="name-money-bank mt-3">
-                            <h3 class="mb-0">Thanh toán thành công</h3>
+                        <div class="modal-footer border-0 d-flex justify-content-center">
+                            <a href="{{route('home')}}" class="btn btn-transferred-money">Xác nhận</a>
                         </div>
-                    </div>
-                    <div class="modal-footer border-0 d-flex justify-content-center">
-                        <a href="{{route('home')}}" class="btn btn-transferred-money">Xác nhận</a>
-                    </div>
+                    @endif
+                @elseif($payment->payment_currency == 2)
+                    @if($totalDepositChinese > $currentWalletMoney->middle_money)
+                        <div class="modal-header border-0">
+                            <button type="button" class="btn-close close-address" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="d-flex justify-content-center">
+                                <div class="box-img-qr">
+                                    <img src="{{asset('assets/images/icon-sbpay-pw-unset.svg')}}" class="icon-qr-bank">
+                                </div>
+                            </div>
+                            <div class="name-money-bank">
+                                Số dư trong ví của bạn không đủ. </br>
+                                Vui lòng cập nhật ngay để tiếp tục
+                            </div>
+                        </div>
+                        <div class="modal-footer border-0 d-flex justify-content-center">
+                            <a href="{{route('wallet', ['vi'])}}" class="btn btn-transferred-money">Cập nhật ngay</a>
+                        </div>
+                    @else
+                        <div class="modal-body mt-5">
+                            <div class="d-flex justify-content-center">
+                                <div class="box-img-qr">
+                                    <img src="{{asset('assets/images/success.svg')}}" class="icon-qr-bank">
+                                </div>
+                            </div>
+                            <div class="name-money-bank mt-3">
+                                <h3 class="mb-0">Thanh toán thành công</h3>
+                            </div>
+                        </div>
+                        <div class="modal-footer border-0 d-flex justify-content-center">
+                            <a href="{{route('home')}}" class="btn btn-transferred-money">Xác nhận</a>
+                        </div>
+                    @endif
                 @endif
+
             </div>
         </div>
     </div>
@@ -238,6 +280,8 @@
 @section('script_page')
     <script>
         let selectedPaymentMethod = null;
+        var paymentCurrency = $('.payment_currency').val();
+        var orderID = $('.order_id').val();
 
         function selectPaymentMethod(element) {
             document.querySelectorAll('.payment-method').forEach(method => {
@@ -250,7 +294,69 @@
         }
 
         function handlePayment() {
+
             if (selectedPaymentMethod === 'prepaid') {
+                var productNames = [];
+                $('.product-names').each(function() {
+                    productNames.push($(this).val());
+                });
+                if(paymentCurrency === '1'){
+                    var totalMoneyDepositVN = parseInt({{$totalDepositVietnamese}}, 10);
+                    var walletMoneyVN = parseInt({{$currentWalletMoney->vietnamese_money}}, 10);
+
+                    if (walletMoneyVN > totalMoneyDepositVN) {
+                        $.ajax({
+                            url: '{{ route("update-done-wallet-transfer") }}',
+                            method: 'POST',
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            data: {
+                                total_payment_deposit_vn: totalMoneyDepositVN,
+                                product_names: productNames,
+                                order_id: orderID,
+                                payment_currency: paymentCurrency,
+                            },
+                            success: function(response) {
+                                if (response.status === 'success') {
+                                    console.log(response.message);
+                                }
+                            },
+                            error: function(xhr, status, error) {
+                                console.error(error);
+                            }
+                        });
+                    }
+                }else if(paymentCurrency === '2'){
+                    var totalMoneyDepositCN = parseInt({{$totalDepositChinese}}, 10);
+                    var walletMoneyCN = parseInt({{$currentWalletMoney->middle_money}}, 10);
+
+                    if(walletMoneyCN > totalMoneyDepositCN){
+                        $.ajax({
+                            url: '{{ route("update-done-wallet-transfer") }}',
+                            method: 'POST',
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            data: {
+                                total_payment_deposit_cn: totalMoneyDepositCN,
+                                product_names: productNames,
+                                order_id: orderID,
+                                payment_currency: paymentCurrency,
+                            },
+                            success: function(response) {
+                                if (response.status === 'success') {
+                                    console.log(response.message);
+                                }
+                            },
+                            error: function(xhr, status, error) {
+                                console.error(error);
+                            }
+                        });
+                    }
+                }
+
+
                 var prepaidModal = new bootstrap.Modal(document.getElementById('modalPrepaid'));
                 prepaidModal.show();
             } else if (selectedPaymentMethod === 'bank') {

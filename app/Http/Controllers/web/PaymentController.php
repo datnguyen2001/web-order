@@ -17,6 +17,35 @@ use Illuminate\Support\Facades\Http;
 
 class PaymentController extends Controller
 {
+    public function index(Request $request)
+    {
+        $titlePage = 'Quản lý đơn hàng';
+        $page_menu = 'order';
+        $page_sub = 'order';
+        $listData = OrderModel::query()
+            ->join('address', 'orders.address_id', '=', 'address.id')
+            ->join('province', 'address.province_id', '=', 'province.province_id')
+            ->join('district', 'address.district_id', '=', 'district.district_id')
+            ->join('wards', 'address.ward_id', '=', 'wards.wards_id')
+            ->select(
+                'orders.*',
+                'address.name',
+                'address.phone',
+                'address.detail_address',
+                'province.name as province_name',
+                'district.name as district_name',
+                'wards.name as ward_name'
+            )
+            ->where('orders.status_id', 0);
+
+        $key_search = $request->get('search');
+        if (isset($key_search)) {
+            $listData = $listData->where('order_code', 'LIKE', '%' . $key_search . '%');
+        }
+        $listData = $listData->orderBy('created_at', 'desc')->paginate(10);
+
+        return view('admin.order.index',compact('listData','titlePage','page_menu','page_sub'));
+    }
     public function cart()
     {
         $province = ProvinceModel::all();
@@ -175,6 +204,12 @@ class PaymentController extends Controller
     public function updateDoneBankTransfer(Request $request)
     {
         $productNames = $request->input('product_names');
+        $orderID = $request->input('order_id');
+        $order = OrderModel::where('id', $orderID)->first();
+        if ($order) {
+            $order->payment_type = 2; //payment_type = 2 (thanh toan CK)
+            $order->save();
+        }
 
         if (!empty($productNames)) {
             $decodedProductNames = [];
@@ -185,36 +220,6 @@ class PaymentController extends Controller
         }
 
         return response()->json(['status' => 'success', 'message' => 'Cart items deleted successfully.']);
-    }
-
-    public function index(Request $request)
-    {
-        $titlePage = 'Quản lý đơn hàng';
-        $page_menu = 'order';
-        $page_sub = 'order';
-        $listData = OrderModel::query()
-            ->join('address', 'orders.address_id', '=', 'address.id')
-            ->join('province', 'address.province_id', '=', 'province.province_id')
-            ->join('district', 'address.district_id', '=', 'district.district_id')
-            ->join('wards', 'address.ward_id', '=', 'wards.wards_id')
-            ->select(
-                'orders.*',
-                'address.name',
-                'address.phone',
-                'address.detail_address',
-                'province.name as province_name',
-                'district.name as district_name',
-                'wards.name as ward_name'
-            )
-            ->where('orders.status_id', 0)->where('orders.payment_type','!=', null);
-
-        $key_search = $request->get('search');
-        if (isset($key_search)) {
-            $listData = $listData->where('order_code', 'LIKE', '%' . $key_search . '%');
-        }
-        $listData = $listData->orderBy('created_at', 'desc')->paginate(10);
-
-        return view('admin.order.index',compact('listData','titlePage','page_menu','page_sub'));
     }
 
     public function statusOrder($order_id, $status_id)
@@ -243,13 +248,52 @@ class PaymentController extends Controller
 
     public function updateDoneWalletTransfer(Request $request)
     {
-        $totalPayment = $request->input('total_payment');
+        try {
+            $orderID = $request->input('order_id');
+            $order = OrderModel::where('id', $orderID)->first();
+            if ($order) {
+                $order->payment_type = 1; //payment_type = 1 (thanh toan vi)
+                $order->status_id = 0;
+                $order->save();
+            }
 
-        $currentWalletMoney = WalletsModel::where('user_id', Auth::id())->first();
-        $walletBalance = $currentWalletMoney->vietnamese_money - $totalPayment;
+            $paymentCurrency = $request->input('payment_currency');
+            if ($paymentCurrency === '1'){
+                $totalPaymentDepositVN = $request->input('total_payment_deposit_vn');
+                $currentWalletMoney = WalletsModel::where('user_id', Auth::id())->first();
+                $walletBalanceVN = $currentWalletMoney->vietnamese_money - $totalPaymentDepositVN;
 
-        return response()->json(['status' => 'success', 'message' => 'Thanh toán thành công.']);
+                $currentWalletMoney->vietnamese_money = $walletBalanceVN;
+                $currentWalletMoney->save();
+            }else if($paymentCurrency === '2'){
+                $totalPaymentDepositCN = $request->input('total_payment_deposit_cn');
+                $currentWalletMoney = WalletsModel::where('user_id', Auth::id())->first();
+                $walletBalanceCN = $currentWalletMoney->middle_money - $totalPaymentDepositCN;
+
+                $currentWalletMoney->middle_money = $walletBalanceCN;
+                $currentWalletMoney->save();
+            }
+
+            // Handle product names and delete from the cart
+            $productNames = $request->input('product_names');
+            if (!empty($productNames)) {
+                $decodedProductNames = [];
+                foreach ($productNames as $productNameJson) {
+                    $decodedProductNames = array_merge($decodedProductNames, json_decode($productNameJson, true));
+                }
+
+                if (!empty($decodedProductNames)) {
+                    Cart::whereIn('product_name', $decodedProductNames)->delete();
+                }
+            }
+
+            return response()->json(['status' => 'success', 'message' => 'Thanh toán thành công.']);
+
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'error', 'message' => 'Có lỗi xảy ra, vui lòng thử lại.'], 500);
+        }
     }
+
     public function createOrderAPI($order,$address,$user,$order_items)
     {
         $token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6IjcwRHdFdWxrOU5oQTJkSGNZQUJSVGJFV1AyYURneXpKaV9tekdYV1U1WXcifQ.eyJpc3MiOiJodHRwczovL29pZGMtdm5zLmdvYml6ZGV2LmNvbSIsImF1ZCI6InRlc3QiLCJqdGkiOiI3YzJlYTM1ZC0zMzUyLTQ2NTUtODU5Ni00ZDMxYmE0NGQxNzUiLCJpYXQiOjE3MDE4MzM0NDEsImV4cCI6MTg1OTUxMzQ0MSwiYWdlbmN5X2lkIjozLCJhZ2VuY3lfY29kZSI6Im5oYXBoYW5nIiwicGFydG5lcl9pZCI6MSwicGFydG5lcl9jb2RlIjoieGxvZ2lzdGljcyIsInNjb3BlIjoiY3JlYXRvcjo1MCIsInN1YiI6IjUwIn0.qp_GoegjY8HNIlZgt8jHRoNhlV0onxc9GY7pHOBMO-Ckgoqzmy17znMlJo_BItQygZCqY9QeHzDGdUYfVEcMG0R4ujHmB67gJ7IHp06ujy0hw_Hve2viBkeqXoFlinxFKXfoT5_JhKJHWuplHrQrOhD570VyNgwwQD8cTJJSf2lF0vT8ZB0SuX4m-yCQ5RBZvDhF7FWTg7rrhChsisQ0FhdjKfxuOudj1u2GKe6w3sL6-uMKShpFZesH3gaG5XovMUUaX9JR3ZAKZyGJCJ6b019551vFdhJhk_ptF47nyxU3xvY5LLNvujFchXfXgCjQKXDCKd8LjEfL-vnO1GYpXA';

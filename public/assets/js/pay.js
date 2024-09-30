@@ -232,8 +232,8 @@ function calculateTallyValue() {
     var tallyValue = 0;
     var tallyValueVietnamese = 0
     if (isChecked) {
-        tallyValue = totalChinesePriceAllProducts * 0.01;
-        tallyValueVietnamese = totalChinesePriceAllProducts * 0.01 * exchangeRate;
+        tallyValue = totalChinesePriceAllProducts * tallySettingRate;
+        tallyValueVietnamese = totalChinesePriceAllProducts * tallySettingRate * exchangeRate;
     }
 
     $('input[name="tally_fee_chinese"]').val(tallyValue.toFixed(2));
