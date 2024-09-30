@@ -151,8 +151,9 @@ $(document).ready(function() {
             },
             success: function(response) {
                 if (response.status){
+                    toastr.success('Tạo địa chỉ thành công');
                     $('#address-form')[0].reset();
-                    window.location.href = confirmApplicationURL;
+                    $('#staticBackdropAddress').modal('hide');
                 }else {
                     toastr.error(response.message);
                 }
