@@ -453,5 +453,6 @@
         var totalDepositPrice45CN = {{ $totalDepositPrice45CN }};
         var totalDepositPrice70CN = {{ $totalDepositPrice70CN }};
         var exchangeRate = {{$setting->exchange_rate}};
+        var tallySettingRate = parseFloat({{$setting->tally_fee * 0.01}});
     </script>
 @stop
