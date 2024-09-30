@@ -41,7 +41,6 @@ function renderOrders(orders) {
         const orderDate = order.created_at || 'N/A';
 console.log(order.order_items);
         const totalChinesePrice = order.order_items.reduce((total, item) => total + item.total_chinese_price, 0);
-
         const totalVietnamesePrice = order.order_items.reduce((total, item) => total + item.total_vietnamese_price, 0);
         const totalQuantity = order.order_items.reduce((total, item) => total + item.quantity, 0);
         const orderStatus = statusMapping[order.status_id] || 'Đang cập nhật';
