@@ -37,7 +37,7 @@
             <div class="box-one-info">
                 <p class="title-info-order">Cần Thanh Toán</p>
                 <div
-                    class="price-info-order text-end">@if($data->payment_type == 1) {{number_format(($data->total_payment_vietnamese - $data->deposit_money))}}
+                    class="price-info-order text-end">@if($data->payment_currency == 1) {{number_format(($data->total_payment_vietnamese - $data->deposit_money))}}
                     ₫ @else ¥{{($data->total_payment_chinese - $data->deposit_money)}}@endif </div>
             </div>
         </div>
@@ -172,7 +172,7 @@
                         <div class="d-flex justify-content-between align-items-center w-100">
                             <span class="title-item-child-price-all" style="font-size: 15px">Đã Thanh Toán:</span>
                             <div class="d-flex flex-column align-items-end">
-                                @if($data->payment_type == 2)
+                                @if($data->payment_currency == 2)
                                     <span class="price-total-sp-all-big"
                                           style="color: rgb(58 161 117/ 1);font-size: 15px">¥{{$data->deposit_money}}</span>
                                 @else

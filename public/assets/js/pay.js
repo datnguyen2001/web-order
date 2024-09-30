@@ -192,27 +192,27 @@ $('input[name="deposit"]').attr('required', true);
 $('#fee-45').hide();
 $('#fee-70').hide();
 $('input[name="deposit"]').on('change', function() {
-    var depositValue = $(this).val();
+    var depositID = $(this).attr('id');
 
-    if (depositValue === '45') {
+    if (depositID === 'deposit-01') {
         $('#fee-45').show();
         $('#fee-70').hide();
-        $('#deposit_money').val((totalChinesePriceAllProducts * 0.45).toFixed(2));
-        $('#deposit_money_cn').text('¥' + (totalChinesePriceAllProducts * 0.45).toFixed(2).replace('.', ','));
-        $('#deposit_money_vn').text((Math.round(totalChinesePriceAllProducts * 0.45 * exchangeRate)).toLocaleString('vi-VN') + '₫');
-        $('.partial_payment_fee_chinese').val(totalDepositPrice45CN);
-        $('.partial_payment_fee_vietnamese').val(totalDepositPrice45CN * exchangeRate);
-        $('.partial_payment_fee_display').text('¥' + totalDepositPrice45CN.toFixed(2).replace('.', ','));
-    } else if (depositValue === '70') {
+        $('#deposit_money').val((totalChinesePriceAllProducts * partialSettingKey01 * 0.01).toFixed(2));
+        $('#deposit_money_cn').text('¥' + (totalChinesePriceAllProducts * partialSettingKey01 * 0.01).toFixed(2).replace('.', ','));
+        $('#deposit_money_vn').text((Math.round(totalChinesePriceAllProducts * partialSettingKey01 * 0.01 * exchangeRate)).toLocaleString('vi-VN') + '₫');
+        $('.partial_payment_fee_chinese').val(totalDepositPrice01CN);
+        $('.partial_payment_fee_vietnamese').val(totalDepositPrice01CN * exchangeRate);
+        $('.partial_payment_fee_display').text('¥' + totalDepositPrice01CN.toFixed(2).replace('.', ','));
+    } else if (depositID === 'deposit-02') {
         $('#fee-45').hide();
         $('#fee-70').show();
-        $('#deposit_money').val((totalChinesePriceAllProducts * 0.70).toFixed(2));
-        $('#deposit_money_cn').text('¥' + (totalChinesePriceAllProducts * 0.70).toFixed(2).replace('.', ','));
-        $('#deposit_money_vn').text((Math.round(totalChinesePriceAllProducts * 0.70 * exchangeRate)).toLocaleString('vi-VN') + '₫');
-        $('.partial_payment_fee_chinese').val(totalDepositPrice70CN);
-        $('.partial_payment_fee_vietnamese').val(totalDepositPrice70CN * exchangeRate);
-        $('.partial_payment_fee_display').text('¥' + totalDepositPrice70CN.toFixed(2).replace('.', ','));
-    } else if (depositValue === '100') {
+        $('#deposit_money').val((totalChinesePriceAllProducts * partialSettingKey02 * 0.01).toFixed(2));
+        $('#deposit_money_cn').text('¥' + (totalChinesePriceAllProducts * partialSettingKey02 * 0.01).toFixed(2).replace('.', ','));
+        $('#deposit_money_vn').text((Math.round(totalChinesePriceAllProducts * partialSettingKey02 * 0.01 * exchangeRate)).toLocaleString('vi-VN') + '₫');
+        $('.partial_payment_fee_chinese').val(totalDepositPrice02CN);
+        $('.partial_payment_fee_vietnamese').val(totalDepositPrice02CN * exchangeRate);
+        $('.partial_payment_fee_display').text('¥' + totalDepositPrice02CN.toFixed(2).replace('.', ','));
+    } else if (depositID === 'deposit-100') {
         $('#fee-45').hide();
         $('#fee-70').hide();
         $('#deposit_money').val(totalChinesePriceAllProducts.toFixed(2));
