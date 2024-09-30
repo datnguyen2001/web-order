@@ -19,6 +19,7 @@ function fetchOrders(status) {
 }
 
 const statusMapping = {
+    0: 'Chờ duyệt',
     1: 'Đã ký gửi',          // ACCEPTED
     2: 'Chờ duyệt',          // PENDING
     3: 'Người bán giao',     // MERCHANT_DELIVERING
@@ -58,6 +59,7 @@ function renderOrders(orders) {
                         <div class="d-flex flex-column">
                             <div class="name-sp-item">Số lượng vận đơn: ${order.order_items.length}</div>
                             <div class="name-attr-product">Cần thanh toán: <span>${order.payment_currency === 2 ?`¥${(order.total_payment_chinese - order.deposit_money).toLocaleString()}`:`${(order.total_payment_vietnamese - (order.deposit_money)).toLocaleString()}₫`}</span></div>
+                            <div class="name-attr-product">Phương thức thanh toán: <span>${order.payment_type === 2 ?`Chuyển khoản`:`Ví`}</span></div>
                         </div>
                     </div>
                     <div class="name-item-order d-flex flex-column align-items-end">
@@ -75,7 +77,7 @@ function renderOrders(orders) {
                         <a href="chi-tiet-don-hang/${order.id}" class="link-detail-order">Chi tiết</a>
                     </div>
                     <div class="name-work-order d-flex flex-column align-items-center">
-                    ${order.status_id === 2 ?`<a href="cancel-order/${order.order_code}" class="status-order-pay">Hủy đơn</a>`:''}
+                    ${order.status_id === 0 ?`<a href="cancel-order/${order.order_code}" class="status-order-pay">Hủy đơn</a>`:''}
                     </div>
                 </div>
             `;

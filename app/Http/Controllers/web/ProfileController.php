@@ -124,6 +124,7 @@ class ProfileController extends Controller
     public static function getStatusNames()
     {
         return [
+            0 => 'Chờ duyệt',
             1 => 'Đã ký gửi',
             2 => 'Chờ duyệt',
             3 => 'Người bán giao',

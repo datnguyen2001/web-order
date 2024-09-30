@@ -24,6 +24,9 @@
                 <div class="content-info-order">Mã đơn hàng: <span
                         style="color:#F9471B;font-weight: 500;margin-left: 15px">{{$data->order_code??'Đang cập nhật'}}</span>
                 </div>
+                <div class="content-info-order">Phương thức thanh toán: <span
+                        style="color:#F9471B;font-weight: 500;margin-left: 15px">{{$data->payment_type == 2?'Chuyển khoản':'Ví'}}</span>
+                </div>
             </div>
             <div class="box-one-info">
                 <p class="title-info-order">Thông Tin Người Nhận</p>
