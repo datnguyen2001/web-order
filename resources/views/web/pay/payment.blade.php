@@ -73,6 +73,8 @@
                         <input type="hidden" class="product-names" value='@json($payment->product_names)'>
                         <input type="hidden" class="payment_currency" value='{{$payment->payment_currency}}'>
                         <input type="hidden" class="order_id" value='{{$payment->id}}'>
+                        <input type="hidden" class="address_id" value="{{$payment->address_id}}">
+                        <input type="hidden" class="user_buying_id" value="{{$payment->user_id}}">
                     </div>
 
                 @if($payment->payment_currency == 1)
@@ -282,6 +284,8 @@
         let selectedPaymentMethod = null;
         var paymentCurrency = $('.payment_currency').val();
         var orderID = $('.order_id').val();
+        var addressID = $('.address_id').val();
+        var userBuyingID = $('.user_buying_id').val();
 
         function selectPaymentMethod(element) {
             document.querySelectorAll('.payment-method').forEach(method => {
@@ -355,7 +359,18 @@
                         });
                     }
                 }
-
+                $.ajax({
+                    url: '{{ url("admin/order/status") }}/' + orderID + '/2',
+                    method: 'GET',
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            console.log(response.message);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(error);
+                    }
+                });
 
                 var prepaidModal = new bootstrap.Modal(document.getElementById('modalPrepaid'));
                 prepaidModal.show();

@@ -58,5 +58,13 @@ return [
             'submenu' => [],
             'number' => 2
         ],
+        [
+            'name' => 'order',
+            'title' => 'Theo dõi đơn hàng',
+            'icon' => 'bi bi-grid',
+            'route' => 'admin.tracking.home.index',
+            'submenu' => [],
+            'number' => 2
+        ],
 ]
 ];
