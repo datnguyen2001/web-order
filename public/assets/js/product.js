@@ -259,7 +259,7 @@ $('.btn-add-cart').click(function() {
         },
         success: function(response) {
             if (response.status) {
-                alert(response.message);
+                toastr.success(response.message);
                 localStorage.removeItem('cart_items');
                 window.location.href = cartUrl;
             } else {
@@ -271,7 +271,7 @@ $('.btn-add-cart').click(function() {
                 window.location.href = loginUrl;
             } else {
                 console.error('AJAX error:', error);
-                alert('Có lỗi xảy ra: ' + error);
+                toastr.success('Có lỗi xảy ra: ' + error);
             }
         }
     });
