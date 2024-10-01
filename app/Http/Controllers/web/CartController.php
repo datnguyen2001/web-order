@@ -52,7 +52,8 @@ class CartController extends Controller
 
             return response()->json(['message' => 'Thêm vào giỏ hàng thành công', 'status' => true]);
         } catch (\Exception $e) {
-            return response()->json(['message' => $e->getMessage(), 'status' => false]);
+            toastr()->error('Thêm vào giỏ hàng thất bại, vui lòng thử lại');
+            return back();
         }
     }
 
