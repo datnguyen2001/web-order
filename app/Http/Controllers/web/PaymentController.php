@@ -138,11 +138,13 @@ class PaymentController extends Controller
     public function createOrder(Request $request)
     {
         $userID = Auth::id();
+        $datePart = date('dmy');
         $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-        $orderCode = '';
-        for ($i = 0; $i < 9; $i++) {
-            $orderCode .= $characters[rand(0, strlen($characters) - 1)];
+        $randomPart = '';
+        for ($i = 0; $i < 6; $i++) {
+            $randomPart .= $characters[rand(0, strlen($characters) - 1)];
         }
+        $orderCode = $datePart . '_' . $randomPart;
         $setting = SettingModel::first();
         $paymentCurrency = $request->input('payment_currency');
         $depositMoney = $request->input('deposit_money');

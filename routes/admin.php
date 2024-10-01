@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\tracking\CustomerController;
+use App\Http\Controllers\tracking\HomeController;
+use App\Http\Controllers\tracking\OrderController;
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\admin\LoginController;
 use \App\Http\Controllers\admin\DashboardController;
@@ -61,6 +64,15 @@ Route::middleware('check-admin-auth')->group(function () {
         Route::get('status/{order_id}/{status_id}', [PaymentController::class,'statusOrder'])->name('status');
     });
 
+    Route::prefix('tracking')->name('tracking.')->group(function (){
+        Route::get('/', [HomeController::class, 'index'])->name('home.index');
+        Route::get('/export', [HomeController::class, 'exportExcel'])->name('home.export');
+        Route::get('/details/{id?}', [HomeController::class, 'show'])->name('home.details');
+        Route::post('/details/notes/{id?}', [HomeController::class, 'submitNote'])->name('submit.notes');
+        Route::get('/update-order-status', [HomeController::class, 'updateOrderStatus'])->name('home.update-order-status');
+        Route::resource('customer', CustomerController::class);
+    });
 });
+Route::post('/packages', [OrderController::class, 'getPackage'])->name('api.package');
 
 Route::post('ckeditor/upload', [DashboardController::class, 'upload'])->name('ckeditor.image-upload');
