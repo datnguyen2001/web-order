@@ -55,8 +55,8 @@
             </tbody>
         </table>
         @if (!empty($customers) && $customers->total() > ($request['per_page'] ?? 10))
-            <div class="pagination-center d-flex justify-content-center mt-3">
-                {{$customers->links() }}
+            <div class="d-flex justify-content-center mt-3">
+                {{ $customers->appends(request()->all())->links('admin.pagination_custom.index') }}
             </div>
         @endif
     </div>

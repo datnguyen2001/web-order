@@ -154,8 +154,8 @@
                 </div>
             @endforeach
             @if (!empty($trackingOrders) && $trackingOrders->total() > ($request['per_page'] ?? 10))
-                <div class="pagination-center d-flex justify-content-center">
-                    {{$trackingOrders->links() }}
+                <div class="d-flex justify-content-center">
+                    {{ $trackingOrders->appends(request()->all())->links('admin.pagination_custom.index') }}
                 </div>
             @endif
         @else
