@@ -349,7 +349,7 @@ class PaymentController extends Controller
                     "original" => "Thay đổi",
                     "translate" => "Thay đổi"
                 ],
-                "code_item" => $item->sku,
+                "code_item" => $item->product_name ?? "Không có",
                 "customer_note" => $order->note ?? "Không có",
                 "manifest_original_name" => $item->product_name ?? "Không có",
                 "manifest_translated_name" => $item->product_name ?? "Không có",
