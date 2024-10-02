@@ -50,6 +50,7 @@ Route::middleware('auth')->group(function () {
     Route::post('create-order', [PaymentController::class, 'createOrder'])->name('create-order');
     Route::post('update-done-bank-transfer', [PaymentController::class, 'updateDoneBankTransfer'])->name('update-done-bank-transfer');
     Route::post('update-done-wallet-transfer', [PaymentController::class, 'updateDoneWalletTransfer'])->name('update-done-wallet-transfer');
+    Route::get('status-order-wallet/{order_id}/{status_id}', [PaymentController::class, 'statusOrderWallet'])->name('status-order-wallet');
     Route::post('create-order-API', [PaymentController::class, 'createOrderAPI'])->name('create-order-API');
     Route::post('save-address', [AddressController::class, 'saveAddress'])->name('save-address');
     Route::post('address-new', [AddressController::class, 'addressNew'])->name('address-new');

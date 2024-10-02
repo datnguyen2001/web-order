@@ -238,14 +238,18 @@ class PaymentController extends Controller
         try {
             $order = OrderModel::find($order_id);
             if ($order) {
-                $order->status_id = $status_id;
-                $order->save();
                 if ($status_id == 2){
                     $address = AddressModel::with('province', 'district', 'ward')->find($order->address_id);
                     $user = User::find($order->user_id);
                     $order_item = OrderItemModel::where('order_id',$order->id)->get();
-                    $this->createOrderAPI($order,$address,$user,$order_item);
-                    toastr()->success('Xác nhận đơn hàng thành công');
+                    $data = $this->createOrderAPI($order,$address,$user,$order_item);
+                    if($data){
+                        $order->status_id = $status_id;
+                        $order->save();
+                        toastr()->success('Xác nhận đơn hàng thành công');
+                    }else{
+                        toastr()->error('Xác nhận đơn hàng thất bại');
+                    }
                 }else{
                     toastr()->success('Hủy đơn hàng thành công');
                 }
@@ -254,6 +258,35 @@ class PaymentController extends Controller
             }
         } catch (\Exception $exception) {
             dd($exception);
+        }
+    }
+
+    public function statusOrderWallet($order_id, $status_id)
+    {
+        try {
+            $order = OrderModel::find($order_id);
+            if ($order) {
+                $address = AddressModel::with('province', 'district', 'ward')->find($order->address_id);
+                $user = User::find($order->user_id);
+                $order_item = OrderItemModel::where('order_id',$order->id)->get();
+                $data = $this->createOrderAPI($order,$address,$user,$order_item);
+
+                if($data){
+                    $order->status_id = $status_id;
+                    $order->save();
+                }
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Order status updated and processed successfully.',
+                    'data' => $data
+                ], 200);
+            }
+        } catch (\Exception $exception) {
+            return response()->json([
+                'status' => false,
+                'message' => 'An error occurred while updating the order status.',
+                'error' => $exception->getMessage()
+            ], 500);
         }
     }
 
