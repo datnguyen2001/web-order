@@ -34,7 +34,7 @@ class SettingController extends Controller
             if ($request->hasFile('img_qr')){
                 $file = $request->file('img_qr');
                 $imageQr = Storage::url($file->store('banner', 'public'));
-                if (isset($setting->image_address) && Storage::exists(str_replace('/storage', 'public', $setting->img_qr))) {
+                if (isset($setting->img_qr) && Storage::exists(str_replace('/storage', 'public', $setting->img_qr))) {
                     Storage::delete(str_replace('/storage', 'public', $setting->img_qr));
                 }
                 $setting->img_qr = $imageQr;
