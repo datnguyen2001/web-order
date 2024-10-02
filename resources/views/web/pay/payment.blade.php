@@ -304,73 +304,76 @@
                 $('.product-names').each(function() {
                     productNames.push($(this).val());
                 });
-                if(paymentCurrency === '1'){
-                    var totalMoneyDepositVN = parseInt({{$totalDepositVietnamese}}, 10);
-                    var walletMoneyVN = parseInt({{$currentWalletMoney->vietnamese_money}}, 10);
-
-                    if (walletMoneyVN > totalMoneyDepositVN) {
-                        $.ajax({
-                            url: '{{ route("update-done-wallet-transfer") }}',
-                            method: 'POST',
-                            headers: {
-                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                            },
-                            data: {
-                                total_payment_deposit_vn: totalMoneyDepositVN,
-                                product_names: productNames,
-                                order_id: orderID,
-                                payment_currency: paymentCurrency,
-                            },
-                            success: function(response) {
-                                if (response.status === 'success') {
-                                    console.log(response.message);
-                                }
-                            },
-                            error: function(xhr, status, error) {
-                                console.error(error);
-                            }
-                        });
-                    }
-                }else if(paymentCurrency === '2'){
-                    var totalMoneyDepositCN = parseInt({{$totalDepositChinese}}, 10);
-                    var walletMoneyCN = parseInt({{$currentWalletMoney->middle_money}}, 10);
-
-                    if(walletMoneyCN > totalMoneyDepositCN){
-                        $.ajax({
-                            url: '{{ route("update-done-wallet-transfer") }}',
-                            method: 'POST',
-                            headers: {
-                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                            },
-                            data: {
-                                total_payment_deposit_cn: totalMoneyDepositCN,
-                                product_names: productNames,
-                                order_id: orderID,
-                                payment_currency: paymentCurrency,
-                            },
-                            success: function(response) {
-                                if (response.status === 'success') {
-                                    console.log(response.message);
-                                }
-                            },
-                            error: function(xhr, status, error) {
-                                console.error(error);
-                            }
-                        });
-                    }
-                }
                 $.ajax({
-                    url: '{{ url("admin/order/status") }}/' + orderID + '/2',
+                    url: '{{ url("status-order-wallet") }}/' + orderID + '/2',
                     method: 'GET',
                     success: function(response) {
-                        if (response.status === 'success') {
-                            console.log(response.message);
+                        if (response.status) {
+                            console.log(response);
+                            proccessChangeWalletBalance();
                         }
                     },
                     error: function(xhr, status, error) {
                         console.error(error);
                     }
                 });
+                function proccessChangeWalletBalance(){
+                    if(paymentCurrency === '1'){
+                        var totalMoneyDepositVN = parseInt({{$totalDepositVietnamese}}, 10);
+                        var walletMoneyVN = parseInt({{$currentWalletMoney->vietnamese_money}}, 10);
+
+                        if (walletMoneyVN > totalMoneyDepositVN) {
+                            $.ajax({
+                                url: '{{ route("update-done-wallet-transfer") }}',
+                                method: 'POST',
+                                headers: {
+                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                },
+                                data: {
+                                    total_payment_deposit_vn: totalMoneyDepositVN,
+                                    product_names: productNames,
+                                    order_id: orderID,
+                                    payment_currency: paymentCurrency,
+                                },
+                                success: function(response) {
+                                    if (response.status === 'success') {
+                                        console.log(response.message);
+                                    }
+                                },
+                                error: function(xhr, status, error) {
+                                    console.error(error);
+                                }
+                            });
+                        }
+                    }else if(paymentCurrency === '2'){
+                        var totalMoneyDepositCN = parseInt({{$totalDepositChinese}}, 10);
+                        var walletMoneyCN = parseInt({{$currentWalletMoney->middle_money}}, 10);
+
+                        if(walletMoneyCN > totalMoneyDepositCN){
+                            $.ajax({
+                                url: '{{ route("update-done-wallet-transfer") }}',
+                                method: 'POST',
+                                headers: {
+                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                },
+                                data: {
+                                    total_payment_deposit_cn: totalMoneyDepositCN,
+                                    product_names: productNames,
+                                    order_id: orderID,
+                                    payment_currency: paymentCurrency,
+                                },
+                                success: function(response) {
+                                    if (response.status === 'success') {
+                                        console.log(response.message);
+                                    }
+                                },
+                                error: function(xhr, status, error) {
+                                    console.error(error);
+                                }
+                            });
+                        }
+                    }
+                }
 
                 var prepaidModal = new bootstrap.Modal(document.getElementById('modalPrepaid'));
                 prepaidModal.show();
