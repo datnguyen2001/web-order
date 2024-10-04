@@ -60,7 +60,7 @@ Route::middleware('check-admin-auth')->group(function () {
     });
 
     Route::prefix('order')->name('order.')->group(function () {
-        Route::get('', [PaymentController::class, 'index'])->name('index');
+        Route::get('index/{status}', [PaymentController::class, 'index'])->name('index');
         Route::get('status/{order_id}/{status_id}', [PaymentController::class,'statusOrder'])->name('status');
     });
 

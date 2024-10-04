@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Http;
 
 class PaymentController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request,$status)
     {
         $titlePage = 'Quản lý đơn hàng';
         $page_menu = 'order';
@@ -36,17 +36,43 @@ class PaymentController extends Controller
                 'province.name as province_name',
                 'district.name as district_name',
                 'wards.name as ward_name'
-            )
-            ->where('orders.status_id', 0);
+            );
 
         $key_search = $request->get('search');
+        if ($status !== 'all') {
+            $listData = $listData->where('orders.status_id', $status);
+        }
         if (isset($key_search)) {
             $listData = $listData->where('order_code', 'LIKE', '%' . $key_search . '%');
         }
         $listData = $listData->orderBy('created_at', 'desc')->paginate(10);
+        foreach ($listData as $item){
+            $item->name_status = $this->nameStatus($item->status_id);
+        }
 
-        return view('admin.order.index',compact('listData','titlePage','page_menu','page_sub'));
+        return view('admin.order.index',compact('listData','titlePage','page_menu','page_sub','status'));
     }
+
+    public function nameStatus($status_id){
+        $statusNames = [
+            '0' => 'Chờ Xác nhận thanh toán',
+            '1' => 'Đã ký gửi',
+            '2' => 'Chờ duyệt',
+            '3' => 'Người bán giao',
+            '4' => 'Hàng về kho trung quốc',
+            '5' => 'Vận chuyển quốc tế',
+            '6' => 'Chờ giao',
+            '7' => 'Đang giao',
+            '8' => 'Đã nhận hàng',
+            '9' => 'Đã hủy',
+            '10' => 'Thất lạc',
+            '11' => 'Không nhận hàng',
+        ];
+
+        return isset($statusNames[$status_id]) ? $statusNames[$status_id] : 'Không xác định';
+
+    }
+
     public function cart()
     {
         $province = ProvinceModel::all();

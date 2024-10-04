@@ -55,11 +55,12 @@ return [
             'title' => 'Quản lý đơn hàng',
             'icon' => 'bi bi-grid',
             'route' => 'admin.order.index',
+            'parameters' => ['status' => 'all'],
             'submenu' => [],
             'number' => 2
         ],
         [
-            'name' => 'order',
+            'name' => 'order_tracking',
             'title' => 'Theo dõi đơn hàng',
             'icon' => 'bi bi-grid',
             'route' => 'admin.tracking.home.index',
