@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\CategoryModel;
+use App\Models\CategoryTaobaoModel;
 use App\Models\PostModel;
 use App\Models\SettingModel;
 use Illuminate\Support\ServiceProvider;
@@ -29,14 +30,18 @@ class DataServiceProvider extends ServiceProvider
                 'children.grandchildren'
             ])
             ->get();
+        $categoryTaobao = CategoryTaobaoModel::where('type', 1)->with([
+            'children.grandchildren'
+        ])
+            ->get();
         $setting = SettingModel::first();
         $post1 = PostModel::where('type',1)->get();
         $post2 = PostModel::where('type',2)->get();
 
         view()->share('category', $category);
+        view()->share('categoryTaobao', $categoryTaobao);
         view()->share('setting', $setting);
         view()->share('post1', $post1);
         view()->share('post2', $post2);
-
     }
 }

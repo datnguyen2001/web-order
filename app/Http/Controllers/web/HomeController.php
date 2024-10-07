@@ -15,6 +15,17 @@ use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
+    public function homeMain()
+    {
+        $banner = BannerModel::where('display',1)->get();
+        $eCommerce = EcommercePlatformModel::where('display',1)->get();
+        $user = Auth::user();
+        $wallet = null;
+        if ($user){
+            $wallet = WalletsModel::where('user_id',$user->id)->first();
+        }
+        return view('web.home.index-main',compact('banner','eCommerce','wallet'));
+    }
     public function home()
     {
         $banner = BannerModel::where('display',1)->get();

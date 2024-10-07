@@ -42,11 +42,11 @@ var productSwiper = new Swiper(".productSwiper", {
     }
 });
 
-$('.box-item-color').click(function() {
+$('.box-item-color').click(function () {
     let currentActiveColor = $('.box-item-color-active');
     if (currentActiveColor.length) {
         let quantities = {};
-        $('.box-item-size').each(function() {
+        $('.box-item-size').each(function () {
             let index = $(this).data('index');
             let quantityInput = $(this).find('.input-quntity');
             let currentQuantity = parseInt(quantityInput.val()) || 0;
@@ -59,20 +59,32 @@ $('.box-item-color').click(function() {
     $('.box-item-color').removeClass('box-item-color-active');
     $(this).addClass('box-item-color-active');
 
+    //Case no attribute yes value
+    let valueName = $(this).data('value-name');
+    let productValueImage = $(this).find('img').attr('src');
+    // Update the #quantity-no-attribute-yes-value section with the new values
+    $('#quantity-no-attribute-yes-value')
+        .attr('data-value-name', valueName)
+        .attr('data-product-value-image', productValueImage);
+
+    // Reset the input quantity when switching the active color
+    $('#quantity-no-attribute-yes-value .input-quntity').val(0);
+    $('#quantity-no-attribute-yes-value').data('quantity', 0);
+
     let valueID = $(this).data('value-id');
     let exchangeRate = $(this).data('exchange-rate');
     let storedQuantities = $(this).data('quantities') || {};
 
     $.ajax({
-        url: `/api/get-attribute/${valueID}`,
+        url: `/api/taobao/get-attribute/${valueID}`,
         type: 'GET',
-        success: function(response) {
+        success: function (response) {
             if (response.status !== false) {
                 let attributes = response.data;
 
                 $('#box-size').empty();
 
-                attributes.forEach(function(item, index) {
+                attributes.forEach(function (item, index) {
                     let priceVND = parseFloat(item.price * exchangeRate).toFixed(0);
                     let storedQuantity = storedQuantities[index] || 0; // Retrieve stored quantity by index
 
@@ -99,11 +111,12 @@ $('.box-item-color').click(function() {
                 });
 
                 attachPlusMinusEvents();
+                attachPlusMinusEventsNoAttributeYesValue();
             } else {
                 alert(response.message);
             }
         },
-        error: function(xhr, status, error) {
+        error: function (xhr, status, error) {
             console.error('AJAX error:', error);
         }
     });
@@ -111,20 +124,18 @@ $('.box-item-color').click(function() {
 
 function saveToLocalStorage(productName, valueName, attributeName, quantity, productImage, productValueImage, chinesePrice, vietnamesePrice) {
     let cartItems = JSON.parse(localStorage.getItem('cart_items')) || [];
-
     let existingItemIndex = cartItems.findIndex(item =>
         item.product_name === productName &&
         item.value_name === valueName &&
         item.attribute_name === attributeName
     );
-
     if (existingItemIndex !== -1) {
         cartItems[existingItemIndex].quantity = quantity;
         cartItems[existingItemIndex].chinese_price = chinesePrice;
         cartItems[existingItemIndex].vietnamese_price = vietnamesePrice;
     } else {
         cartItems.push({
-            product_channel: 1,
+            product_channel: 2,
             product_name: productName,
             value_name: valueName,
             attribute_name: attributeName,
@@ -140,7 +151,7 @@ function saveToLocalStorage(productName, valueName, attributeName, quantity, pro
     localStorage.setItem('cart_items', JSON.stringify(cartItems));
 }
 
-//UPDATE PRODUCT WITH ATTRIBUE
+//UPDATE PRODUCT WITH ATTRIBUTE
 function updateQuantity(parentBox, type) {
     let quantityInput = parentBox.find('.input-quntity');
     let currentQuantity = parseInt(quantityInput.val()) || 0;
@@ -164,7 +175,7 @@ function updateQuantity(parentBox, type) {
     saveToLocalStorage(productName, valueName, attributeName, currentQuantity, productImage, productValueImage, chinesePrice, vietnamesePrice);
 
     let totalQuantity = 0;
-    $('.input-quntity').each(function() {
+    $('.input-quntity').each(function () {
         totalQuantity += parseInt($(this).val()) || 0;
     });
 
@@ -173,8 +184,9 @@ function updateQuantity(parentBox, type) {
     propItemTotal.text('x' + totalQuantity);
     propItemTotal.css('display', 'block');
 }
+
 function attachPlusMinusEvents() {
-    $('.box-item-size').each(function() {
+    $('.box-item-size').each(function () {
         const $item = $(this);
         const $btnMinus = $item.find('.btn-minus-plus[data-type="minus"]');
         const $btnPlus = $item.find('.btn-minus-plus[data-type="plus"]');
@@ -183,15 +195,16 @@ function attachPlusMinusEvents() {
         let storedQuantity = $item.data('quantity') || 0;
         $inputQuantity.val(storedQuantity);
 
-        $btnMinus.off('click').on('click', function() {
+        $btnMinus.off('click').on('click', function () {
             updateQuantity($item, 'minus');
         });
 
-        $btnPlus.off('click').on('click', function() {
+        $btnPlus.off('click').on('click', function () {
             updateQuantity($item, 'plus');
         });
     });
 }
+
 attachPlusMinusEvents();
 
 //UPDATE PRODUCT WITH NO ATTRIBUTE
@@ -217,8 +230,9 @@ function updateQuantityNoAttribute(parentBox, type) {
 
     saveToLocalStorage(productName, valueName, attributeName, currentQuantity, productImage, productValueImage, chinesePrice, vietnamesePrice);
 }
+
 function attachPlusMinusEventsNoAttribute() {
-    $('#quantity-no-attribute').each(function() {
+    $('#quantity-no-attribute').each(function () {
         const $item = $(this);
         const $btnMinus = $item.find('.btn-minus-plus[data-type="minus"]');
         const $btnPlus = $item.find('.btn-minus-plus[data-type="plus"]');
@@ -227,16 +241,71 @@ function attachPlusMinusEventsNoAttribute() {
         let storedQuantity = $item.data('quantity') || 0;
         $inputQuantity.val(storedQuantity);
 
-        $btnMinus.off('click').on('click', function() {
+        $btnMinus.off('click').on('click', function () {
             updateQuantityNoAttribute($item, 'minus');
         });
 
-        $btnPlus.off('click').on('click', function() {
+        $btnPlus.off('click').on('click', function () {
             updateQuantityNoAttribute($item, 'plus');
         });
     });
 }
+
 attachPlusMinusEventsNoAttribute();
+
+//UPDATE PRODUCT WITH NO ATTRIBUTE BUT YES VALUE
+function updateQuantityNoAttributeYesValue(parentBox, type) {
+    let quantityInput = parentBox.find('.input-quntity');
+    let currentQuantity = parseInt(quantityInput.val()) || 0;
+    let productName = parentBox.data('product-name');
+    let valueName = parentBox[0].dataset.valueName;
+    let attributeName = parentBox.data('attribute-name');
+    let productImage = parentBox.data('product-image');
+    let productValueImage = parentBox[0].dataset.productValueImage;
+    let chinesePrice = parentBox.data('attribute-chinese-price');
+    let vietnamesePrice = parentBox.data('attribute-vietnamese-price');
+    if (type === 'plus') {
+        currentQuantity += 1;
+    } else if (type === 'minus' && currentQuantity > 0) {
+        currentQuantity -= 1;
+    }
+
+    quantityInput.val(currentQuantity);
+    parentBox.data('quantity', currentQuantity);
+
+    saveToLocalStorage(productName, valueName, attributeName, currentQuantity, productImage, productValueImage, chinesePrice, vietnamesePrice);
+
+    let totalQuantity = 0;
+    $('.input-quntity').each(function () {
+        totalQuantity += parseInt($(this).val()) || 0;
+    });
+
+    let activeColorBox = $('.box-item-color-active');
+    let propItemTotal = activeColorBox.find('.prop-item-total');
+    propItemTotal.text('x' + totalQuantity);
+    propItemTotal.css('display', 'block');
+}
+
+function attachPlusMinusEventsNoAttributeYesValue() {
+    $('#quantity-no-attribute-yes-value').each(function () {
+        const $item = $(this);
+        const $btnMinus = $item.find('.btn-minus-plus[data-type="minus"]');
+        const $btnPlus = $item.find('.btn-minus-plus[data-type="plus"]');
+        const $inputQuantity = $item.find('.input-quntity');
+        let storedQuantity = $item.data('quantity') || 0;
+        $inputQuantity.val(storedQuantity);
+
+        $btnMinus.off('click').on('click', function () {
+            updateQuantityNoAttributeYesValue($item, 'minus');
+        });
+
+        $btnPlus.off('click').on('click', function () {
+            updateQuantityNoAttributeYesValue($item, 'plus');
+        });
+    });
+}
+
+attachPlusMinusEventsNoAttributeYesValue();
 
 $.ajaxSetup({
     headers: {
@@ -244,7 +313,7 @@ $.ajaxSetup({
     }
 });
 
-$('.btn-add-cart').click(function() {
+$('.btn-add-cart').click(function () {
     let cartItems = JSON.parse(localStorage.getItem('cart_items')) || [];
     if (cartItems.length === 0) {
         alert('Vui lòng chọn sản phẩm.');
@@ -258,7 +327,7 @@ $('.btn-add-cart').click(function() {
         data: {
             cartItems: cartItems
         },
-        success: function(response) {
+        success: function (response) {
             if (response.status) {
                 toastr.success(response.message);
                 localStorage.removeItem('cart_items');
@@ -267,7 +336,7 @@ $('.btn-add-cart').click(function() {
                 alert('Có lỗi xảy ra: ' + response.message);
             }
         },
-        error: function(xhr, status, error) {
+        error: function (xhr, status, error) {
             if (xhr.status === 401) {
                 window.location.href = loginUrl;
             } else {
@@ -278,6 +347,6 @@ $('.btn-add-cart').click(function() {
     });
 });
 
-window.onbeforeunload = function() {
+window.onbeforeunload = function () {
     localStorage.removeItem('cart_items');
 };

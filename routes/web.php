@@ -2,6 +2,9 @@
 
 use App\Http\Controllers\web\CartController;
 use App\Http\Controllers\web\LoginController;
+use App\Http\Controllers\web\TaobaoCategoryController;
+use App\Http\Controllers\web\TaobaoHomeController;
+use App\Http\Controllers\web\TaobaoProductController;
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\web\HomeController;
 use \App\Http\Controllers\web\CategoryController;
@@ -20,15 +23,29 @@ use \App\Http\Controllers\web\PaymentController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+Route::get('/', [HomeController::class, 'homeMain'])->name('home.main');
 
-Route::get('/', [HomeController::class, 'home'])->name('home');
-Route::get('danh-muc/{status}', [CategoryController::class, 'category'])->name('category');
-Route::get('danh-muc/{status}/{name}',[CategoryController::class, 'categoryTwo'])->name('category.two');
-Route::get('danh-muc/{status}/{name}/{slug}',[CategoryController::class, 'categoryThree'])->name('category.three');
-Route::get('tim-kiem', [HomeController::class, 'search'])->name('search');
-Route::get('deal-hot', [HomeController::class, 'dealHot'])->name('deal-hot');
-Route::get('de-xuat-cho-ban', [HomeController::class, 'recommendedYou'])->name('recommended-you');
-Route::get('chi-tiet-san-pham/{slug}', [ProductController::class, 'detailProduct'])->name('detail-product');
+Route::prefix('1688')->group(function (){
+    Route::get('/', [HomeController::class, 'home'])->name('home');
+    Route::get('danh-muc/{status}', [CategoryController::class, 'category'])->name('category');
+    Route::get('danh-muc/{status}/{name}',[CategoryController::class, 'categoryTwo'])->name('category.two');
+    Route::get('danh-muc/{status}/{name}/{slug}',[CategoryController::class, 'categoryThree'])->name('category.three');
+    Route::get('tim-kiem', [HomeController::class, 'search'])->name('search');
+    Route::get('deal-hot', [HomeController::class, 'dealHot'])->name('deal-hot');
+    Route::get('de-xuat-cho-ban', [HomeController::class, 'recommendedYou'])->name('recommended-you');
+    Route::get('chi-tiet-san-pham/{slug}', [ProductController::class, 'detailProduct'])->name('detail-product');
+});
+
+Route::prefix('taobao')->name('taobao.')->group(function (){
+    Route::get('/', [TaobaoHomeController::class, 'home'])->name('home');
+    Route::get('danh-muc/{status}', [TaobaoCategoryController::class, 'category'])->name('category');
+    Route::get('danh-muc/{status}/{name}',[TaobaoCategoryController::class, 'categoryTwo'])->name('category.two');
+    Route::get('danh-muc/{status}/{name}/{slug}',[TaobaoCategoryController::class, 'categoryThree'])->name('category.three');
+    Route::get('tim-kiem', [TaobaoHomeController::class, 'search'])->name('search');
+    Route::get('deal-hot', [TaobaoHomeController::class, 'dealHot'])->name('deal-hot');
+    Route::get('de-xuat-cho-ban', [TaobaoHomeController::class, 'recommendedYou'])->name('recommended-you');
+    Route::get('chi-tiet-san-pham/{slug}', [TaobaoProductController::class, 'detailProduct'])->name('detail-product');
+});
 
 Route::get('ve-chung-toi', [HomeController::class, 'about'])->name('about');
 Route::get('bai-viet/{slug}', [HomeController::class, 'post'])->name('post');
@@ -76,3 +93,4 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::get('/api/get-attribute/{value_id}', [ProductController::class, 'getAttribute'])->name('api.get-attribute');
+Route::get('/api/taobao/get-attribute/{value_id}', [TaobaoProductController::class, 'getAttribute'])->name('api.taobao.get-attribute');

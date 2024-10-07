@@ -121,6 +121,7 @@
                                         <span class="price-total-sp">{{ number_format(floatval($product->vietnamese_price ?? 0) * ($product->quantity ?? 1), 0, ',', '.') }}₫</span>
                                     </div>
                                 </div>
+{{--                                <input type="hidden" name="product_channel" value="{{$product->product_channel}}" />--}}
                             @endforeach
                         </div>
                     @endforeach
