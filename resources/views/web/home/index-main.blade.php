@@ -1,0 +1,118 @@
+@extends('web.index')
+@section('title','Trang chủ')
+
+@section('style_page')
+    <link rel="stylesheet" href="{{asset('assets/css/home.css')}}">
+@stop
+{{--content of page--}}
+@section('content')
+    <div class="box-content">
+
+        <div class="menu-banner-info">
+            <div class="menu custom-shadow">
+                <div class="d-flex align-center gap-3">
+                    <i class="fa-solid fa-bars d-flex align-items-center"></i>
+                    <span class="title-menu">Kênh bán</span>
+                </div>
+                <div class="box-category position-relative">
+                    <div class="category-wrapper">
+                        <a href="{{route('home')}}" class="d-flex align-center gap-3 py-1">
+                            <span class="item-category">1688</span>
+                        </a>
+                    </div>
+                    <div class="category-wrapper">
+                        <a href="{{route('taobao.home')}}" class="d-flex align-center gap-3 py-1">
+                            <span class="item-category">TaoBao</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="box-banner">
+                <div class="list-banner custom-shadow w-100">
+                    <div class="swiper bannerSwiper">
+                        <div class="swiper-wrapper">
+                            @foreach($banner as $banners)
+                                <div class="swiper-slide"><a @if($banners->link) href="{{$banners->link}}" @endif>
+                                        <img src="{{$banners->src}}" class="w-100" style="object-fit: cover">
+                                    </a></div>
+                            @endforeach
+                        </div>
+                        <div class="swiper-button-next"></div>
+                        <div class="swiper-button-prev"></div>
+                        <div class="swiper-pagination"></div>
+                    </div>
+                </div>
+                <div class=" bg-white box-distributor d-flex gap-5 align-items-center">
+                    <div class="swiper distributorSwiper">
+                        <div class="swiper-wrapper">
+                            @foreach($eCommerce as $eCommerces)
+                                <div class="swiper-slide">
+                                    <a @if($eCommerces->link) href="{{$eCommerces->link}}" @endif class="d-flex flex-column align-center justify-content-center">
+                                        <img
+                                            src="{{asset($eCommerces->src)}}"
+                                            alt="" class="img-distributor">
+                                        <span class="title-distributor">{{@$eCommerces->name}}</span>
+                                    </a></div>
+                            @endforeach
+                        </div>
+                        <div class="swiper-button-next next-distributor"></div>
+                        <div class="swiper-button-prev prev-distributor"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="box-info">
+                <div class="bg-white info-top p-3 custom-shadow ">
+                    <div class="d-flex gap-3 align-items-center">
+                        @if(!\Illuminate\Support\Facades\Auth::check())
+                            <img src="{{asset('assets/images/icon-avatar-signup.svg')}}" alt="">
+                            <span class="title-info-top">Đăng nhập ngay để bắt đầu mua sắm!!!</span>
+                        @else
+                            <img src="{{asset(\Illuminate\Support\Facades\Auth::user()->avatar)}}" alt="" style="border-radius: 50%;width: 40px;height: 40px;object-fit: cover">
+                            <div class="d-flex flex-column">
+                                <div class="title-hello">Xin chào <span>{{\Illuminate\Support\Facades\Auth::user()->full_name}}</span></div>
+                                <div class="text-tg">
+                                    <span>Tỷ giá hôm nay:</span>
+                                    <span style="color: rgb(249,71,27,1);margin-left: 5px">¥1 = {{number_format(@$setting->exchange_rate)}}₫</span>
+                                </div>
+                            </div>
+
+                        @endif
+                    </div>
+                    <div class="ant-divider my-3"></div>
+                    @if(!\Illuminate\Support\Facades\Auth::check())
+                        <div class="text-tg">
+                            <span>Tỷ giá hôm nay:</span>
+                            <span style="color: rgb(249,71,27,1);margin-left: 5px">¥1 = {{number_format(@$setting->exchange_rate)}}₫</span>
+                        </div>
+                    @else
+                        <div class="d-flex flex-column gap-2">
+                            <div class="title-hello">Tài khoản trả trước:</div>
+                            <div class="d-flex align-items-center gap-4">
+                                <div class="d-flex align-items-center gap-2"> <span class="unit-price">đ</span> <span class="price-wallet">{{number_format($wallet->vietnamese_money)}}đ</span></div>
+                                <div class="d-flex align-items-center gap-2"> <span class="unit-price-2">¥</span> <span class="price-wallet">¥{{number_format($wallet->middle_money)}}</span></div>
+                            </div>
+                        </div>
+                    @endif
+                    @if(!\Illuminate\Support\Facades\Auth::check())
+                        <div class="w-100 box-btn">
+                            <a href="{{route('login')}}" class="btn-link-dn">Đăng nhập</a>
+                            <a href="{{route('register')}}" class="btn-link-dk">Đăng ký</a>
+                        </div>
+                    @endif
+                </div>
+                <div class="info-bottom custom-shadow p-3 bg-white">
+                    <span style="color:  rgb(26 26 26 / 1);font-size: .785rem;font-weight: 600">Về SaboMall</span>
+                    <div class="content-info-shop custom-content-4-line">{!! @$setting->about_shop !!}
+                    </div>
+                    <a href="{{route('about')}}" class="link-more-info">Xem thêm về chúng tôi <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+        <img src="https://sabomall-chapi-dream.s3.ap-southeast-1.amazonaws.com/Frame_1000003523_9405c7e9ba.png" alt=""
+             class="img-banner-home">
+    </div>
+
+@stop
+@section('script_page')
+    <script src="{{asset('assets/js/home.js')}}"></script>
+@stop

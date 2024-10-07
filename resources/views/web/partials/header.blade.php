@@ -2,7 +2,7 @@
     <div class="header-top">
         <div class="box-content header-content header-content-top">
             <div class="header-content-item">
-                <a href="{{route('home')}}">Trang chủ</a>
+                <a href="{{route('home.main')}}">Trang chủ</a>
                 <a href="">Biểu phí</a>
                 <a href="">Tải công cụ đặt hàng</a>
                 <a href="">1688.com</a>

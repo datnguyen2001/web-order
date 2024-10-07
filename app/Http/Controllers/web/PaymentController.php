@@ -211,10 +211,10 @@ class PaymentController extends Controller
             ]);
 
             $selectedProducts = json_decode($request->input('selected_product'), true);
-
             foreach ($selectedProducts as $product) {
                 DB::table('order_items')->insert([
                     'order_id' => $orderId,
+                    'product_channel' => $product['product_channel'],
                     'product_name' => $product['product_name'],
                     'product_value' => $product['product_value'],
                     'product_attribute' => $product['product_attribute'],

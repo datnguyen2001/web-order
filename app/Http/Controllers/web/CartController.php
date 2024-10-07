@@ -36,6 +36,7 @@ class CartController extends Controller
                     // If the product doesn't exist, insert a new record
                     DB::table('carts')->insert([
                         'user_id' => auth()->id(),
+                        'product_channel' => $item['product_channel'],
                         'product_name' => $item['product_name'],
                         'product_value' => $item['value_name'],
                         'product_attribute' => $item['attribute_name'],
