@@ -110,6 +110,92 @@
         </div>
         <img src="https://sabomall-chapi-dream.s3.ap-southeast-1.amazonaws.com/Frame_1000003523_9405c7e9ba.png" alt=""
              class="img-banner-home">
+
+        <div class="box-list-content">
+            <div class="line-home-title">
+                <div class="title-big-deal">Sản phẩm 1688</div>
+                <a href="{{route('home')}}" class="link-more-deal">Xem thêm <i class="fa-solid fa-chevron-right"
+                                                                                   style="padding-left: 7px"></i></a>
+            </div>
+            <div class="box-slide-product">
+                <div class="swiper productSwiper">
+                    <div class="swiper-wrapper">
+                        @foreach($hotDealProducts as $hotDeal)
+                            <div class="swiper-slide">
+                                <a href="{{route('detail-product',$hotDeal->slug)}}" class="box-product-item">
+                                    <div class="w-100 position-relative">
+                                        <img
+                                            src="{{$hotDeal->src}}"
+                                            class="w-100" style="object-fit: cover">
+                                        <div class="box-super-cheap">
+                                            <img src="https://sabomall.com/tag.png" alt="" class="icon-cheap">
+                                            SIÊU RẺ
+                                        </div>
+                                    </div>
+                                    <div class="content-item-sp">
+                                        <div class="title-product-item custom-content-2-line">
+                                            {{$hotDeal->name}}
+                                        </div>
+                                        <div class="d-flex align-items-baseline">
+                                            <div class="text-price-big-red">¥{{number_format($hotDeal->price,2)}}</div>
+                                        </div>
+                                        <div class="d-flex align-items-baseline">
+                                            <div class="text-price-big">{{number_format($hotDeal->price * $setting->exchange_rate)}}đ</div>
+                                        </div>
+                                        <div class="title-sold">Đã bán {{number_format($hotDeal->sold)}} sản phẩm</div>
+                                    </div>
+                                </a>
+                            </div>
+                        @endforeach
+                    </div>
+                    <div class="swiper-button-next next-distributor"></div>
+                    <div class="swiper-button-prev prev-distributor"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="box-list-content">
+            <div class="line-home-title">
+                <div class="title-big-deal">Sản phẩm TaoBao</div>
+                <a href="{{route('taobao.home')}}" class="link-more-deal">Xem thêm <i class="fa-solid fa-chevron-right"
+                                                                               style="padding-left: 7px"></i></a>
+            </div>
+            <div class="box-slide-product">
+                <div class="swiper productSwiper">
+                    <div class="swiper-wrapper">
+                        @foreach($hotDealProductsTaobao as $hotDeal)
+                            <div class="swiper-slide">
+                                <a href="{{route('detail-product',$hotDeal->slug)}}" class="box-product-item">
+                                    <div class="w-100 position-relative">
+                                        <img
+                                            src="{{$hotDeal->src}}"
+                                            class="w-100" style="object-fit: cover">
+                                        <div class="box-super-cheap">
+                                            <img src="https://sabomall.com/tag.png" alt="" class="icon-cheap">
+                                            SIÊU RẺ
+                                        </div>
+                                    </div>
+                                    <div class="content-item-sp">
+                                        <div class="title-product-item custom-content-2-line">
+                                            {{$hotDeal->name}}
+                                        </div>
+                                        <div class="d-flex align-items-baseline">
+                                            <div class="text-price-big-red">¥{{number_format($hotDeal->price,2)}}</div>
+                                        </div>
+                                        <div class="d-flex align-items-baseline">
+                                            <div class="text-price-big">{{number_format($hotDeal->price * $setting->exchange_rate)}}đ</div>
+                                        </div>
+                                        <div class="title-sold">Đã bán {{number_format($hotDeal->sold)}} sản phẩm</div>
+                                    </div>
+                                </a>
+                            </div>
+                        @endforeach
+                    </div>
+                    <div class="swiper-button-next next-distributor"></div>
+                    <div class="swiper-button-prev prev-distributor"></div>
+                </div>
+            </div>
+        </div>
     </div>
 
 @stop
