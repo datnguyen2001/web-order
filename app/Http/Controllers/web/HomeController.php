@@ -8,7 +8,9 @@ use App\Models\Cart;
 use App\Models\EcommercePlatformModel;
 use App\Models\PostModel;
 use App\Models\ProductImagesModel;
+use App\Models\ProductImageTaobaoModel;
 use App\Models\ProductModel;
+use App\Models\ProductTaobaoModel;
 use App\Models\SettingModel;
 use App\Models\WalletsModel;
 use Illuminate\Support\Facades\Auth;
@@ -24,8 +26,47 @@ class HomeController extends Controller
         if ($user){
             $wallet = WalletsModel::where('user_id',$user->id)->first();
         }
-        return view('web.home.index-main',compact('banner','eCommerce','wallet'));
+
+        //Product 1688
+        $products = ProductModel::whereHas('productValues.productAttributes')
+            ->with(['productValues.productAttributes'])
+            ->get()
+            ->sortBy(function ($product) {
+                $minPrice = $product->productValues->flatMap(function ($productValue) {
+                    return $productValue->productAttributes->pluck('price');
+                })->min();
+                return $minPrice;
+            });
+        $hotDealProducts = $products->shuffle()->take(12);
+        $hotDealProducts->transform(function ($product) {
+            $product->src = ProductImagesModel::where('product_id', $product->id)->orderBy('id')->first()->src ?? null;
+            $product->price = floatval($product->productValues->flatMap(function ($productValue) {
+                return $productValue->productAttributes->pluck('price');
+            })->min() ?? 0);
+            return $product;
+        });
+
+        //Product TaoBao
+        $productsTaobao = ProductTaobaoModel::whereHas('productValues.productAttributes')
+            ->with(['productValues.productAttributes'])
+            ->get()
+            ->sortBy(function ($product) {
+                $minPrice = $product->productValues->flatMap(function ($productValue) {
+                    return $productValue->productAttributes->pluck('price');
+                })->min();
+                return $minPrice;
+            });
+        $hotDealProductsTaobao = $productsTaobao->shuffle()->take(12);
+        $hotDealProductsTaobao->transform(function ($product) {
+            $product->src = ProductImageTaobaoModel::where('product_id', $product->id)->orderBy('id')->first()->src ?? null;
+            $product->price = floatval($product->productValues->flatMap(function ($productValue) {
+                return $productValue->productAttributes->pluck('price');
+            })->min() ?? 0);
+            return $product;
+        });
+        return view('web.home.index-main',compact('banner','eCommerce','wallet', 'hotDealProducts', 'hotDealProductsTaobao'));
     }
+
     public function home()
     {
         $banner = BannerModel::where('display',1)->get();
