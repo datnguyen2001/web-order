@@ -64,7 +64,9 @@ class HomeController extends Controller
             })->min() ?? 0);
             return $product;
         });
-        return view('web.home.index-main',compact('banner','eCommerce','wallet', 'hotDealProducts', 'hotDealProductsTaobao'));
+        $activeHeader = false;
+
+        return view('web.home.index-main',compact('banner','eCommerce','wallet', 'hotDealProducts', 'hotDealProductsTaobao','activeHeader'));
     }
 
     public function home()
@@ -111,14 +113,16 @@ class HomeController extends Controller
 
             $product->price = floatval($minPrice ?? $product->price);
         }
+        $activeHeader = 1;
 
-        return view('web.home.index',compact('banner','eCommerce','wallet','hotDealProducts','randomProducts'));
+        return view('web.home.index',compact('banner','eCommerce','wallet','hotDealProducts','randomProducts','activeHeader'));
     }
 
 
     public function search()
     {
-        return view('web.search.index');
+        $activeHeader = 1;
+        return view('web.search.index',compact('activeHeader'));
     }
 
     public function dealHot()
@@ -140,8 +144,9 @@ class HomeController extends Controller
         });
 
         $nameCate = 'Deal Hot';
+        $activeHeader = 1;
 
-        return view('web.search.more',compact('listData','nameCate'));
+        return view('web.search.more',compact('listData','nameCate','activeHeader'));
     }
 
     public function recommendedYou()
@@ -161,28 +166,37 @@ class HomeController extends Controller
             $product->price = floatval($minPrice ?? $product->price);
         }
         $nameCate = 'Đề xuất cho bạn';
+        $activeHeader = 1;
 
-        return view('web.search.more',compact('listData','nameCate'));
+        return view('web.search.more',compact('listData','nameCate','activeHeader'));
     }
 
     public function confirmApplication()
     {
-        return view('web.pay.index');
+        $activeHeader = 1;
+
+        return view('web.pay.index',compact('activeHeader'));
     }
     public function Payment()
     {
-        return view('web.pay.payment');
+        $activeHeader = 1;
+
+        return view('web.pay.payment',compact('activeHeader'));
     }
 
     public function about()
     {
         $data = SettingModel::select('about_shop')->first();
-        return view('web.about.index',compact('data'));
+        $activeHeader = false;
+
+        return view('web.about.index',compact('data','activeHeader'));
     }
 
     public function post($slug)
     {
         $data = PostModel::where('slug',$slug)->first();
-        return view('web.post.index',compact('data'));
+        $activeHeader=false;
+
+        return view('web.post.index',compact('data','activeHeader'));
     }
 }

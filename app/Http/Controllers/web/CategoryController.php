@@ -48,8 +48,9 @@ class CategoryController extends Controller
                 }
             }
         }
+        $activeHeader = 1;
 
-        return view('web.category_taobao.index',compact('cate','dataCategory','listData','status','name','slug','name_category'));
+        return view('web.category_taobao.index',compact('cate','dataCategory','listData','status','name','slug','name_category','activeHeader'));
     }
 
     public function categoryTwo($status,$name,Request $request)
@@ -85,8 +86,9 @@ class CategoryController extends Controller
                 }
             }
         }
+        $activeHeader = 1;
 
-        return view('web.category_taobao.index',compact('cate','dataCategory','listData','status','name','slug','name_category'));
+        return view('web.category_taobao.index',compact('cate','dataCategory','listData','status','name','slug','name_category','activeHeader'));
     }
 
     public function categoryThree($status,$name,$slug,Request $request)
@@ -114,8 +116,9 @@ class CategoryController extends Controller
                 }
             }
         }
+        $activeHeader = 1;
 
-        return view('web.category_taobao.index',compact('cate','dataCategory','listData','status','name','slug','name_category'));
+        return view('web.category_taobao.index',compact('cate','dataCategory','listData','status','name','slug','name_category','activeHeader'));
     }
 
 }

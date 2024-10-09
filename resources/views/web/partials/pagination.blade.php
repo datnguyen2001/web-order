@@ -1,53 +1,89 @@
 @if ($paginator->hasPages())
     <!-- Pagination -->
-    <div class="flex justify-center align-center">
-      @if ($paginator->onFirstPage())
-                <a href="{{ $paginator->previousPageUrl() }}" class="disabled">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="48" height="38" viewBox="0 0 48 38">
-                      <g transform="translate(-877.5 -600)">
-                          <path d="M-19057.816-16469.5l-5,5,5,5" transform="translate(19961.816 17083)" fill="none" stroke="#000" stroke-width="1"></path>
-                          <rect width="48" height="38" transform="translate(877.5 600)" fill="none"></rect>
-                      </g>
-                  </svg></a>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            {{-- Previous Page Link --}}
+            @if ($paginator->onFirstPage())
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" aria-label="Previous">
+                        <span aria-hidden="true">«</span>
+                    </a>
+                </li>
             @else
-            <a href="{{ $paginator->previousPageUrl() }}">
-               <svg xmlns="http://www.w3.org/2000/svg" width="48" height="38" viewBox="0 0 48 38">
-                   <g transform="translate(-877.5 -600)">
-                       <path d="M-19057.816-16469.5l-5,5,5,5" transform="translate(19961.816 17083)" fill="none" stroke="#000" stroke-width="1"></path>
-                       <rect width="48" height="38" transform="translate(877.5 600)" fill="none"></rect>
-                   </g>
-               </svg></a>
+                <li class="page-item">
+                    <a class="page-link" href="{{ $paginator->previousPageUrl() }}" aria-label="Previous">
+                        <span aria-hidden="true">«</span>
+                    </a>
+                </li>
             @endif
-      
-            <ol class="flex justify-center align-center">
-                {{-- Pagination Elements --}}
+
+            {{-- Pagination Elements --}}
+            {{-- Hiển thị các trang đầu tiên: trang 1, 2, 3 --}}
+            @if ($paginator->lastPage() > 5)
+                @for ($i = 1; $i <= 3; $i++)
+                    @if ($i == $paginator->currentPage())
+                        <li class="page-item active"><span class="page-link">{{ $i }}</span></li>
+                    @else
+                        <li class="page-item"><a class="page-link" href="{{ $paginator->url($i) }}">{{ $i }}</a></li>
+                    @endif
+                @endfor
+
+                {{-- Hiển thị dấu ... nếu trang hiện tại > 4 --}}
+                @if ($paginator->currentPage() > 4)
+                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                @endif
+
+                {{-- Hiển thị trang hiện tại và trang kề cận --}}
+                @for ($i = max(4, $paginator->currentPage() - 1); $i <= min($paginator->lastPage() - 2, $paginator->currentPage() + 1); $i++)
+                    @if ($i == $paginator->currentPage())
+                        <li class="page-item active"><span class="page-link">{{ $i }}</span></li>
+                    @else
+                        <li class="page-item"><a class="page-link" href="{{ $paginator->url($i) }}">{{ $i }}</a></li>
+                    @endif
+                @endfor
+
+                {{-- Hiển thị dấu ... nếu trang hiện tại cách xa trang cuối --}}
+                @if ($paginator->currentPage() < $paginator->lastPage() - 3)
+                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                @endif
+
+                {{-- Hiển thị 2 trang cuối cùng --}}
+                @for ($i = $paginator->lastPage() - 1; $i <= $paginator->lastPage(); $i++)
+                    @if ($i == $paginator->currentPage())
+                        <li class="page-item active"><span class="page-link">{{ $i }}</span></li>
+                    @else
+                        <li class="page-item"><a class="page-link" href="{{ $paginator->url($i) }}">{{ $i }}</a></li>
+                    @endif
+                @endfor
+            @else
+                {{-- Trường hợp số trang nhỏ hơn 5, hiển thị toàn bộ các trang --}}
                 @foreach ($elements as $element)
-                    {{-- Array Of Links --}}
                     @if (is_array($element))
                         @foreach ($element as $page => $url)
                             @if ($page == $paginator->currentPage())
-                            <li class="xans-record-"><a class="this">{{ $page }}</a></li>
+                                <li class="page-item active"><span class="page-link">{{ $page }}</span></li>
                             @else
-                            <li class="xans-record- "><a href="{{ $url }}">{{ $page }}</a></li>
+                                <li class="page-item"><a class="page-link" href="{{ $url }}">{{ $page }}</a></li>
                             @endif
                         @endforeach
                     @endif
                 @endforeach
-         </ol>
-         @if ($paginator->hasMorePages())
-         <li class="page-item">
-             <a href="{{ $paginator->nextPageUrl() }}">
-               <svg xmlns="http://www.w3.org/2000/svg" width="48" height="38" viewBox="0 0 48 38">
-                  <g transform="translate(-540 -859)">
-                      <path d="M-19062.814-16469.5l5,5-5,5" transform="translate(19624.314 17342)" fill="none" stroke="#000" stroke-width="1"></path>
-                      <rect width="48" height="38" transform="translate(540 859)" fill="none"></rect>
-                  </g>
-              </svg>
-             </a>
-         </li>
-     @else
-             
-     @endif
-      </div>
-    <!-- Pagination -->
+            @endif
+
+            {{-- Next Page Link --}}
+            @if ($paginator->hasMorePages())
+                <li class="page-item">
+                    <a class="page-link" href="{{ $paginator->nextPageUrl() }}" aria-label="Next">
+                        <span aria-hidden="true">»</span>
+                    </a>
+                </li>
+            @else
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" aria-label="Next">
+                        <span aria-hidden="true">»</span>
+                    </a>
+                </li>
+            @endif
+        </ul>
+    </nav>
 @endif

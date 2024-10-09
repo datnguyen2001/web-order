@@ -57,8 +57,9 @@ class ProductController extends Controller
                 }
             }
         }
+        $activeHeader = 1;
 
-        return view('web.product.index', compact('data', 'productImg', 'productValue', 'productAttribute', 'SimilarProducts'));
+        return view('web.product.index', compact('data', 'productImg', 'productValue', 'productAttribute', 'SimilarProducts','activeHeader'));
     }
 
     public function getAttribute($valueID)
@@ -87,4 +88,32 @@ class ProductController extends Controller
             return response()->json(['message' => $e->getMessage(), 'status' => false]);
         }
     }
+
+    public function search1688(Request $request)
+    {
+        $searchQuery = $request->get('keySearch');
+        $minPrice = intval($request->input('min_price', 0));
+        $maxPrice = intval($request->input('max_price', PHP_INT_MAX));
+
+        $listData = ProductModel::with(['productImages', 'productValues'])
+            ->whereNotNull('price')
+            ->when($searchQuery, function ($query, $searchQuery) {
+                $query->where('name', 'like', '%' . $searchQuery . '%');
+            })->whereBetween('price', [$minPrice, $maxPrice])
+            ->paginate(24);
+
+        foreach ($listData as $product) {
+            $product->src = optional($product->productImages->first())->src;
+
+            $minPrice = $product->productValues->flatMap(function ($productValue) {
+                return $productValue->productAttributes->pluck('price');
+            })->min();
+
+            $product->price = floatval($minPrice ?? $product->price);
+        }
+        $activeHeader = 1;
+
+        return view('web.search.index', compact('listData', 'searchQuery','activeHeader'));
+    }
+
 }

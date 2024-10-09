@@ -57,13 +57,15 @@ class TaobaoHomeController extends Controller
 
             $product->price = floatval($minPrice ?? $product->price);
         }
+        $activeHeader = 2;
 
-        return view('web.home_taobao.index',compact('banner','eCommerce','wallet','hotDealProducts','randomProducts'));
+        return view('web.home_taobao.index',compact('banner','eCommerce','wallet','hotDealProducts','randomProducts','activeHeader'));
     }
 
     public function search()
     {
-        return view('web.search_taobao.index');
+        $activeHeader = 2;
+        return view('web.search_taobao.index',compact('activeHeader'));
     }
 
     public function dealHot()
@@ -85,8 +87,9 @@ class TaobaoHomeController extends Controller
         });
 
         $nameCate = 'Deal Hot';
+        $activeHeader = 2;
 
-        return view('web.search_taobao.more',compact('listData','nameCate'));
+        return view('web.search_taobao.more',compact('listData','nameCate','activeHeader'));
     }
 
     public function recommendedYou()
@@ -106,7 +109,8 @@ class TaobaoHomeController extends Controller
             $product->price = floatval($minPrice ?? $product->price);
         }
         $nameCate = 'Đề xuất cho bạn';
+        $activeHeader=2;
 
-        return view('web.search_taobao.more',compact('listData','nameCate'));
+        return view('web.search_taobao.more',compact('listData','nameCate','activeHeader'));
     }
 }

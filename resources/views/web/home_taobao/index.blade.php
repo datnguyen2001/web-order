@@ -192,8 +192,8 @@
                     </a>
                     @endforeach
             </div>
-            <div class="d-flex justify-content-center mt-3">
-                {{ $randomProducts->appends(request()->all())->links('admin.pagination_custom.index') }}
+            <div class="d-flex justify-content-center mt-4">
+                {{ $randomProducts->appends(request()->all())->links('web.partials.pagination') }}
             </div>
         </div>
             @endif

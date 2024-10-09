@@ -86,8 +86,9 @@ class PaymentController extends Controller
         $orderIds = $orders->pluck('id');
         OrderItemModel::whereIn('order_id', $orderIds)->delete();
         OrderModel::whereIn('id', $orderIds)->delete();
+        $activeHeader=false;
 
-        return view('web.cart.index',compact('province', 'cartItems'));
+        return view('web.cart.index',compact('province', 'cartItems','activeHeader'));
     }
 
     public function confirmApplication()
@@ -114,8 +115,9 @@ class PaymentController extends Controller
         $orderIds = $orders->pluck('id');
         OrderItemModel::whereIn('order_id', $orderIds)->delete();
         OrderModel::whereIn('id', $orderIds)->delete();
+        $activeHeader = false;
 
-        return view('web.pay.index',compact('address','province','listAddress', 'selectedProducts'));
+        return view('web.pay.index',compact('address','province','listAddress', 'selectedProducts','activeHeader'));
     }
 
     public function Payment()
@@ -157,8 +159,9 @@ class PaymentController extends Controller
         });
 
         $currentWalletMoney = WalletsModel::where('user_id', $userID)->first();
+        $activeHeader = false;
 
-        return view('web.pay.payment', compact('payments', 'currentWalletMoney'));
+        return view('web.pay.payment', compact('payments', 'currentWalletMoney','activeHeader'));
     }
 
     public function createOrder(Request $request)

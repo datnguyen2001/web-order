@@ -9,6 +9,7 @@
     <div class="box-content">
 
         <div class="menu-banner-info">
+            @if($activeHeader)
             <div class="menu custom-shadow">
                 <div class="d-flex align-center gap-3">
                     <i class="fa-solid fa-bars d-flex align-items-center"></i>
@@ -27,9 +28,10 @@
                     </div>
                 </div>
             </div>
-            <div class="box-banner">
+            @endif
+            <div class="box-banner box-banner-main">
                 <div class="list-banner custom-shadow w-100">
-                    <div class="swiper bannerSwiper">
+                    <div class="swiper bannerSwiper bannerSwiperMain">
                         <div class="swiper-wrapper">
                             @foreach($banner as $banners)
                                 <div class="swiper-slide"><a @if($banners->link) href="{{$banners->link}}" @endif>

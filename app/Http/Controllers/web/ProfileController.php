@@ -16,8 +16,9 @@ class ProfileController extends Controller
     public function profile()
     {
         $data = Auth::user();
+        $activeHeader = false;
 
-        return view('web.profile.index',compact('data'));
+        return view('web.profile.index',compact('data','activeHeader'));
     }
 
     public function saveProfile(Request $request)
@@ -46,7 +47,8 @@ class ProfileController extends Controller
 
     public function order()
     {
-        return view('web.profile.order');
+        $activeHeader = false;
+        return view('web.profile.order',compact('activeHeader'));
     }
 
     public function getOrder(Request $request,$status){
@@ -117,8 +119,9 @@ class ProfileController extends Controller
                 'image' => $items[0]->product_image
             ];
         });
+        $activeHeader = false;
 
-        return view('web.profile.detail-order',compact('data','groupedItems'));
+        return view('web.profile.detail-order',compact('data','groupedItems','activeHeader'));
     }
 
     public static function getStatusNames()
@@ -164,7 +167,8 @@ class ProfileController extends Controller
         }
 
         $listData = $query->orderBy('created_at', 'desc')->paginate(30);
+        $activeHeader = false;
 
-        return view('web.wallet.index',compact('wallet','listData','user','walletType','name'));
+        return view('web.wallet.index',compact('wallet','listData','user','walletType','name','activeHeader'));
     }
 }

@@ -41,13 +41,13 @@
                             <div class="box-number-search-menu">
                                 <input type="text" placeholder="Giá thấp nhất" name="min_price"
                                        class="input-search-price-menu text-center" value="{{request()->get('min_price')}}">
-                                <span class="title-đ">đ</span>
+                                <span class="title-đ">¥</span>
                             </div>
                             <div style="width: .375rem;height: 1px;background-color: rgba(85, 85, 85, .5)"></div>
                             <div class="box-number-search-menu">
                                 <input type="text" placeholder="Giá cao nhất" name="max_price"
                                        class="input-search-price-menu text-center" value="{{request()->get('max_price')}}">
-                                <span class="title-đ">đ</span>
+                                <span class="title-đ">¥</span>
                             </div>
                             <button class="btn-search-price-menu">Tìm kiếm</button>
                             @if(request()->filled('min_price') || request()->filled('max_price'))
@@ -97,7 +97,7 @@
                             @endforeach
                         </div>
                         <div class="d-flex justify-content-center mt-3">
-                            {{ $listData->appends(request()->all())->links('admin.pagination_custom.index') }}
+                            {{ $listData->appends(request()->all())->links('web.partials.pagination') }}
                         </div>
                     @else
                         <div class="d-flex justify-content-center mt-3" style="color: #F9471B">
@@ -144,12 +144,12 @@
                 <div class="d-flex align-items-center justify-content-between">
                     <div class="box-number-search-menu">
                         <input type="text" placeholder="Giá thấp nhất" class="input-search-price-menu text-center" name="min_price" value="{{request()->get('min_price')}}">
-                        <span class="title-đ">đ</span>
+                        <span class="title-đ">¥</span>
                     </div>
                     <div style="width: 10px;height: 1px;background-color: rgba(85, 85, 85, .5)"></div>
                     <div class="box-number-search-menu">
                         <input type="text" placeholder="Giá cao nhất" class="input-search-price-menu text-center" name="max_price" value="{{request()->get('max_price')}}">
-                        <span class="title-đ">đ</span>
+                        <span class="title-đ">¥</span>
                     </div>
                 </div>
                 <button type="submit" class="btn-search-price-menu">Tìm kiếm</button>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\web;
 use App\Http\Controllers\Controller;
 use App\Models\ProductAttributeTaobaoModel;
 use App\Models\ProductImageTaobaoModel;
+use App\Models\ProductModel;
 use App\Models\ProductTaobaoModel;
 use App\Models\ProductValueTaobaoModel;
 use Illuminate\Http\Request;
@@ -57,8 +58,9 @@ class TaobaoProductController extends Controller
                 }
             }
         }
+        $activeHeader = 2;
 
-        return view('web.product_taobao.index', compact('data', 'productImg', 'productValue', 'productAttribute', 'SimilarProducts'));
+        return view('web.product_taobao.index', compact('data', 'productImg', 'productValue', 'productAttribute', 'SimilarProducts','activeHeader'));
     }
 
     public function getAttribute($valueID)
@@ -87,4 +89,32 @@ class TaobaoProductController extends Controller
             return response()->json(['message' => $e->getMessage(), 'status' => false]);
         }
     }
+
+    public function searchTaobao(Request $request)
+    {
+        $searchQuery = $request->get('keySearch');
+        $minPrice = intval($request->input('min_price', 0));
+        $maxPrice = intval($request->input('max_price', PHP_INT_MAX));
+
+        $listData = ProductTaobaoModel::with(['productImages', 'productValues'])
+            ->whereNotNull('price')
+            ->when($searchQuery, function ($query, $searchQuery) {
+                $query->where('name', 'like', '%' . $searchQuery . '%');
+            })->whereBetween('price', [$minPrice, $maxPrice])
+            ->paginate(24);
+
+        foreach ($listData as $product) {
+            $product->src = optional($product->productImages->first())->src;
+
+            $minPrice = $product->productValues->flatMap(function ($productValue) {
+                return $productValue->productAttributes->pluck('price');
+            })->min();
+
+            $product->price = floatval($minPrice ?? $product->price);
+        }
+        $activeHeader = 2;
+
+        return view('web.search_taobao.index', compact('listData', 'searchQuery','activeHeader'));
+    }
+
 }

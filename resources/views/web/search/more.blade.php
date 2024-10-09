@@ -39,7 +39,7 @@
                 @endforeach
             </div>
                 <div class="d-flex justify-content-center mt-3">
-                    {{ $listData->appends(request()->all())->links('admin.pagination_custom.index') }}
+                    {{ $listData->appends(request()->all())->links('web.partials.pagination') }}
                 </div>
                 @endif
         </div>

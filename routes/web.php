@@ -34,6 +34,7 @@ Route::prefix('1688')->group(function (){
     Route::get('deal-hot', [HomeController::class, 'dealHot'])->name('deal-hot');
     Route::get('de-xuat-cho-ban', [HomeController::class, 'recommendedYou'])->name('recommended-you');
     Route::get('chi-tiet-san-pham/{slug}', [ProductController::class, 'detailProduct'])->name('detail-product');
+    Route::get('tim-kiem', [ProductController::class, 'search1688'])->name('product.search');
 });
 
 Route::prefix('taobao')->name('taobao.')->group(function (){
@@ -45,6 +46,7 @@ Route::prefix('taobao')->name('taobao.')->group(function (){
     Route::get('deal-hot', [TaobaoHomeController::class, 'dealHot'])->name('deal-hot');
     Route::get('de-xuat-cho-ban', [TaobaoHomeController::class, 'recommendedYou'])->name('recommended-you');
     Route::get('chi-tiet-san-pham/{slug}', [TaobaoProductController::class, 'detailProduct'])->name('detail-product');
+    Route::get('tim-kiem', [TaobaoProductController::class, 'searchTaobao'])->name('product.search');
 });
 
 Route::get('ve-chung-toi', [HomeController::class, 'about'])->name('about');
