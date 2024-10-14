@@ -283,7 +283,7 @@ class PaymentController extends Controller
                     toastr()->success('Hủy đơn hàng thành công');
                 }
 
-                return \redirect()->route('admin.order.index');
+                return \redirect()->route('admin.order.index', ['all']);
             }
         } catch (\Exception $exception) {
             dd($exception);
@@ -369,7 +369,7 @@ class PaymentController extends Controller
 
     public function createOrderAPI($order,$address,$user,$order_items)
     {
-        $token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6IjcwRHdFdWxrOU5oQTJkSGNZQUJSVGJFV1AyYURneXpKaV9tekdYV1U1WXcifQ.eyJpc3MiOiJodHRwczovL29pZGMtdm5zLmdvYml6ZGV2LmNvbSIsImF1ZCI6InRlc3QiLCJqdGkiOiI3YzJlYTM1ZC0zMzUyLTQ2NTUtODU5Ni00ZDMxYmE0NGQxNzUiLCJpYXQiOjE3MDE4MzM0NDEsImV4cCI6MTg1OTUxMzQ0MSwiYWdlbmN5X2lkIjozLCJhZ2VuY3lfY29kZSI6Im5oYXBoYW5nIiwicGFydG5lcl9pZCI6MSwicGFydG5lcl9jb2RlIjoieGxvZ2lzdGljcyIsInNjb3BlIjoiY3JlYXRvcjo1MCIsInN1YiI6IjUwIn0.qp_GoegjY8HNIlZgt8jHRoNhlV0onxc9GY7pHOBMO-Ckgoqzmy17znMlJo_BItQygZCqY9QeHzDGdUYfVEcMG0R4ujHmB67gJ7IHp06ujy0hw_Hve2viBkeqXoFlinxFKXfoT5_JhKJHWuplHrQrOhD570VyNgwwQD8cTJJSf2lF0vT8ZB0SuX4m-yCQ5RBZvDhF7FWTg7rrhChsisQ0FhdjKfxuOudj1u2GKe6w3sL6-uMKShpFZesH3gaG5XovMUUaX9JR3ZAKZyGJCJ6b019551vFdhJhk_ptF47nyxU3xvY5LLNvujFchXfXgCjQKXDCKd8LjEfL-vnO1GYpXA';
+        $token = env('API_LOGISTICS_AGENCY_KEY');
 
         $items = [];
         foreach ($order_items as $item) {
@@ -434,8 +434,7 @@ class PaymentController extends Controller
             "services" => [1, 2],
             "tracking_numbers" => ['aloha0412', 'aloha1407']
         ];
-        $response = Http::withToken($token)->post('https://m6-agency-api.vns.gobizdev.com/orders', $data);
-
+        $response = Http::withToken($token)->post(env('API_LOGISTICS_AGENCY_URL') . '/orders', $data);
         if ($response->successful()) {
             return true;
         } else {
