@@ -167,7 +167,7 @@
                     <div class="swiper-wrapper">
                         @foreach($hotDealProductsTaobao as $hotDeal)
                             <div class="swiper-slide">
-                                <a href="{{route('detail-product',$hotDeal->slug)}}" class="box-product-item">
+                                <a href="{{route('taobao.detail-product',$hotDeal->slug)}}" class="box-product-item">
                                     <div class="w-100 position-relative">
                                         <img
                                             src="{{$hotDeal->src}}"
