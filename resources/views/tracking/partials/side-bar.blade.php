@@ -1,6 +1,15 @@
 <!-- sidebar -->
+<style>
+    .logo-ilvietnam{
+        width: 135px;
+        height: 135px;
+        border-radius: 50%;
+        margin: 0 auto 10px;
+    }
+</style>
 <div class="sidebar px-4 py-4 py-md-4 me-0">
     <div class="d-flex flex-column h-100">
+        <img src="{{asset('assets/images/logo-ilvn.jpg')}}" alt="Logo IL Vietnam" class="logo-ilvietnam"/>
         <a href="{{route('admin.tracking.home.index')}}" class="mb-0 brand-icon">
                     <span class="logo-icon">
                         <i class="bi bi-bag-check-fill fs-4"></i>
