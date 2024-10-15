@@ -12,6 +12,7 @@ use \App\Http\Controllers\admin\SettingController;
 use \App\Http\Controllers\admin\PostController;
 use \App\Http\Controllers\admin\WalletController;
 use \App\Http\Controllers\web\PaymentController;
+use \App\Http\Controllers\admin\FeeScheduleController;
 
 
 Route::get('/login', [LoginController::class, 'login'])->name('login');
@@ -71,6 +72,11 @@ Route::middleware('check-admin-auth')->group(function () {
         Route::post('/details/notes/{id?}', [HomeController::class, 'submitNote'])->name('submit.notes');
         Route::get('/update-order-status', [HomeController::class, 'updateOrderStatus'])->name('home.update-order-status');
         Route::resource('customer', CustomerController::class);
+    });
+
+    Route::prefix('fee_schedule')->name('fee_schedule.')->group(function () {
+        Route::get('', [FeeScheduleController::class, 'index'])->name('index');
+        Route::post('update', [FeeScheduleController::class, 'save'])->name('update');
     });
 });
 Route::post('/packages', [OrderController::class, 'getPackage'])->name('api.package');

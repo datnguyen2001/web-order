@@ -51,6 +51,7 @@ Route::prefix('taobao')->name('taobao.')->group(function (){
 
 Route::get('ve-chung-toi', [HomeController::class, 'about'])->name('about');
 Route::get('bai-viet/{slug}', [HomeController::class, 'post'])->name('post');
+Route::get('bieu-phi', [HomeController::class, 'feeSchedule'])->name('fee-schedule');
 
 Route::get('get-district/{province_id}', [AddressController::class, 'district']);
 Route::get('get-wards/{district_id}', [AddressController::class, 'wards']);

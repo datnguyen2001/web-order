@@ -3,11 +3,18 @@
         <div class="box-content header-content header-content-top">
             <div class="header-content-item">
                 <a href="{{route('home.main')}}">Trang chủ</a>
-                <a href="">Biểu phí</a>
-                <a href="">Tải công cụ đặt hàng</a>
-                <a href="">1688.com</a>
-                <a href="">Liên hệ</a>
-                <a href="">Góp ý dịch vụ</a>
+                <a href="{{route('fee-schedule')}}">Biểu phí</a>
+                <a href="https://www.1688.com/?spm=fxg_4437992.offer-search.0.0.4585669bjBVYXX" target="_blank">1688.com</a>
+                <div class="dropdown" style="top: -2px">
+                    <a data-bs-toggle="dropdown" aria-expanded="false" style="color:#7D7E7E;">
+                        Liên hệ
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="http://zalo.me/0908134772" target="_blank"><img src="{{asset('assets/images/icon-zalo.svg')}}" alt=""><span style="color: #7D7E7E;margin-left: 8px;font-weight: 400">chat với chúng tôi</span></a></li>
+                        <li><a class="dropdown-item" href="mailto:support@il.com" target="_blank"><img src="{{asset('assets/images/icon-mail.svg')}}" alt=""> <span style="color: #7D7E7E;margin-left: 8px;font-weight: 400">support@il.com</span></a></li>
+                    </ul>
+                </div>
+                <a href="http://zalo.me/0908134772" target="_blank">Góp ý dịch vụ</a>
             </div>
             <div class="header-content-item">
                 @if(!\Illuminate\Support\Facades\Auth::check())

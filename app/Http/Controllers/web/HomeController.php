@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\BannerModel;
 use App\Models\Cart;
 use App\Models\EcommercePlatformModel;
+use App\Models\FeeScheduleModel;
 use App\Models\PostModel;
 use App\Models\ProductImagesModel;
 use App\Models\ProductImageTaobaoModel;
@@ -198,5 +199,13 @@ class HomeController extends Controller
         $activeHeader=false;
 
         return view('web.post.index',compact('data','activeHeader'));
+    }
+
+    public function feeSchedule()
+    {
+        $data = FeeScheduleModel::first();
+        $activeHeader=false;
+
+        return view('web.post.fee_schedule',compact('data','activeHeader'));
     }
 }

@@ -27,6 +27,14 @@ return [
             'number' => 2
         ],
         [
+            'name' => 'fee_schedule',
+            'title' => 'Biểu phí',
+            'icon' => 'bi bi-grid',
+            'route' => 'admin.fee_schedule.index',
+            'submenu' => [],
+            'number' => 2
+        ],
+        [
             'name' => 'setting',
             'title' => 'Cài đặt',
             'icon' => 'bi bi-grid',
@@ -67,5 +75,6 @@ return [
             'submenu' => [],
             'number' => 2
         ],
+
 ]
 ];
