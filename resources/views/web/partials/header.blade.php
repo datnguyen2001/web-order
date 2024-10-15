@@ -10,11 +10,11 @@
                         Liên hệ
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="http://zalo.me/0908134772" target="_blank"><img src="{{asset('assets/images/icon-zalo.svg')}}" alt=""><span style="color: #7D7E7E;margin-left: 8px;font-weight: 400">chat với chúng tôi</span></a></li>
+                        <li><a class="dropdown-item" href="http://zalo.me/0978129116" target="_blank"><img src="{{asset('assets/images/icon-zalo.svg')}}" alt=""><span style="color: #7D7E7E;margin-left: 8px;font-weight: 400">chat với chúng tôi</span></a></li>
                         <li><a class="dropdown-item" href="mailto:support@il.com" target="_blank"><img src="{{asset('assets/images/icon-mail.svg')}}" alt=""> <span style="color: #7D7E7E;margin-left: 8px;font-weight: 400">support@il.com</span></a></li>
                     </ul>
                 </div>
-                <a href="http://zalo.me/0908134772" target="_blank">Góp ý dịch vụ</a>
+                <a href="http://zalo.me/0978129116" target="_blank">Góp ý dịch vụ</a>
             </div>
             <div class="header-content-item">
                 @if(!\Illuminate\Support\Facades\Auth::check())
