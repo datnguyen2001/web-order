@@ -266,11 +266,11 @@
                          aria-labelledby="heading_{{$index}}" data-bs-parent="#accordionExample">
                         <div class="accordion-body">
                             @foreach($cate->children as $cate2)
-                                <a href="{{url('danh-muc/'.$cate->slug.'/'.$cate2->slug)}}" class="title-big-category"
+                                <a href="{{url('1688/danh-muc/'.$cate->slug.'/'.$cate2->slug)}}" class="title-big-category"
                                    style="font-weight: 600;color: #1a1a1a">{{$cate2->name}}</a>
                                 <div class="d-flex align-items-center flex-wrap mb-2 gap-2">
                                     @foreach($cate2->grandchildren as $cate3)
-                                        <a href="{{url('danh-muc/'.$cate->slug.'/'.$cate2->slug.'/'.$cate3->slug)}}"
+                                        <a href="{{url('1688/danh-muc/'.$cate->slug.'/'.$cate2->slug.'/'.$cate3->slug)}}"
                                            class="title-small-category">{{$cate3->name}}</a>
                                     @endforeach
                                 </div>
